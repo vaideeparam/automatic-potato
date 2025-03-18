@@ -7,153 +7,216 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Code Review Tracker</h1>
-            <div class="user-info">
-                <span class="user-name">Jane Developer</span>
-                <span class="user-role">Developer</span>
+<button id="menuToggle" class="menu-toggle">
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="3" y1="12" x2="21" y2="12"></line>
+    <line x1="3" y1="6" x2="21" y2="6"></line>
+    <line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</button>
+    <div class="app-container">
+        <!-- Left Sidebar - Project Explorer -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h1>CR Tracker</h1>
+                <div class="user-info">
+                    <span class="user-name">Jane Developer</span>
+                    <span class="user-role">Developer</span>
+                </div>
             </div>
-        </header>
 
-        <main>
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="input">Update Status</button>
-                <button class="tab-btn" data-tab="report">Report View</button>
+            <div class="project-explorer">
+                <div class="explorer-header">
+                    <h2>Project Explorer</h2>
+                </div>
+
+                <div class="explorer-search">
+                    <input type="text" id="explorerSearch" placeholder="Search projects...">
+                </div>
+
+                <div class="project-tree" id="projectTree">
+                    <!-- Populated by JavaScript -->
+                </div>
             </div>
 
-            <div class="tab-content">
-                <!-- Input Form Tab -->
-                <div id="input" class="tab-pane active">
-                    <div class="card">
-                        <h2>Update Code Review Status</h2>
-                        <form id="cr-update-form">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="project">Project</label>
-                                    <select id="project" required>
-                                        <option value="">Select Project</option>
-                                        <!-- Populated by JavaScript -->
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="milestone">Milestone</label>
-                                    <select id="milestone" required>
-                                        <option value="">Select Milestone</option>
-                                        <!-- Populated by JavaScript -->
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="codeDrop">Code Drop</label>
-                                    <select id="codeDrop" required>
-                                        <option value="">Select Code Drop</option>
-                                        <!-- Populated by JavaScript -->
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="status">Current Stage</label>
-                                    <select id="status" required>
-                                        <option value="">Select Status</option>
-                                        <!-- Populated by JavaScript -->
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="reviewer">Code Review Buddy</label>
-                                    <select id="reviewer">
-                                        <option value="">Select Reviewer</option>
-                                        <!-- Populated by JavaScript -->
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="date">Completion Date</label>
-                                    <input type="date" id="date" required>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="notes">Notes</label>
-                                <textarea id="notes" rows="3" placeholder="Add any relevant details or blockers..."></textarea>
-                            </div>
-                            
-                            <div class="form-actions">
-                                <button type="submit" class="btn btn-primary">Update Status</button>
-                            </div>
-                        </form>
+            <div class="sidebar-footer">
+    <button id="addCodeDropBtn" class="btn btn-primary">+ Add Code Drop</button>
+    <button id="viewReportBtn" class="btn btn-secondary">View Timeline</button>
+    <div class="sidebar-actions">
+        <button id="exportDataBtn" class="btn btn-icon" title="Export All Data">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        </button>
+        <button id="importDataBtn" class="btn btn-icon" title="Import Data">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+        </button>
+        <button id="resetDataBtn" class="btn btn-icon" title="Reset All Data">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+        </button>
+    </div>
+</div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div id="codeDropsView" class="content-view active">
+                <div class="content-header">
+                    <h2 id="currentPathTitle">All Projects</h2>
+                    <div class="view-controls">
+                        <button id="refreshBtn" class="btn btn-icon" title="Refresh">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38"/></svg>
+                        </button>
                     </div>
                 </div>
 
-                <!-- Report View Tab -->
-                <div id="report" class="tab-pane">
-                    <div class="card">
-                        <div class="report-header">
-                            <h2>Code Review Status Report</h2>
-                            <div class="report-actions">
-                                <div class="search-container">
-                                    <input type="text" id="searchInput" placeholder="Search...">
-                                </div>
-                                <div class="filter-container">
-                                    <select id="projectFilter">
-                                        <option value="">All Projects</option>
-                                        <!-- Populated by JavaScript -->
-                                    </select>
-                                    <select id="milestoneFilter">
-                                        <option value="">All Milestones</option>
-                                        <!-- Populated by JavaScript -->
-                                    </select>
-                                    <select id="statusFilter">
-                                        <option value="">All Statuses</option>
-                                        <!-- Populated by JavaScript -->
-                                    </select>
-                                </div>
-                                <button id="exportBtn" class="btn btn-secondary">Export</button>
-                            </div>
-                        </div>
-                        
-                        <div class="table-container">
-                            <table id="reportTable">
-                                <thead>
-                                    <tr>
-                                        <th>Project</th>
-                                        <th>Milestone</th>
-                                        <th>Code Drop</th>
-                                        <th>Current Stage</th>
-                                        <th>Review Buddy</th>
-                                        <th>Last Updated</th>
-                                        <th>Days in Stage</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Populated by JavaScript -->
-                                </tbody>
-                            </table>
-                        </div>
+                <div id="codeDropCards" class="code-drop-cards">
+                    <!-- Populated by JavaScript -->
+                    <div class="empty-state">
+                        <p>Select a project and milestone from the explorer to view code drops</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="timelineView" class="content-view">
+                <div class="content-header">
+                    <h2>Timeline Report</h2>
+                    <div class="view-controls">
+                        <select id="timelineProjectFilter">
+                            <option value="">All Projects</option>
+                            <!-- Populated by JavaScript -->
+                        </select>
+                        <select id="timelineMilestoneFilter">
+                            <option value="">All Milestones</option>
+                            <!-- Populated by JavaScript -->
+                        </select>
+                        <button id="exportTimelineBtn" class="btn btn-primary">Export</button>
+                        <button id="backToDropsBtn" class="btn btn-secondary">Back to Code Drops</button>
+                    </div>
+                </div>
+
+                <div class="timeline-container">
+                    <div id="timelineChart" class="timeline-chart">
+                        <!-- Populated by JavaScript -->
                     </div>
                 </div>
             </div>
         </main>
-
-        <footer>
-            <p>Amazon CR Tracker - v1.0</p>
-        </footer>
     </div>
 
-    <!-- Status Update Modal -->
-    <div id="statusModal" class="modal">
+    <!-- Add Code Drop Modal -->
+    <div id="addCodeDropModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Status Updated Successfully</h2>
-            <p>The code review status has been updated.</p>
+            <h2>Add New Code Drop</h2>
+            <form id="addCodeDropForm">
+                <div class="form-group">
+                    <label for="newDropProject">Project</label>
+                    <select id="newDropProject" required>
+                        <option value="">Select Project</option>
+                        <!-- Populated by JavaScript -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="newDropMilestone">Milestone</label>
+                    <select id="newDropMilestone" required>
+                        <option value="">Select Milestone</option>
+                        <!-- Populated by JavaScript -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="newDropName">Code Drop Name</label>
+                    <input type="text" id="newDropName" required placeholder="e.g., Drop 1.3">
+                </div>
+                <div class="form-group">
+                    <label for="newDropReviewer">Code Review Buddy</label>
+                    <select id="newDropReviewer" required>
+                        <option value="">Select Reviewer</option>
+                        <!-- Populated by JavaScript -->
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Create Code Drop</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Update Status Modal -->
+    <div id="updateStatusModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Update Status</h2>
+            <h3 id="statusModalTitle"></h3>
+            <p id="statusModalCurrentStage"></p>
+
+            <form id="updateStatusForm">
+                <input type="hidden" id="updateDropId">
+
+                <div class="form-group">
+                    <label>Select Date</label>
+                    <div class="date-selector">
+                        <label class="date-option">
+                            <input type="radio" name="dateOffset" value="-3">
+                            <span>-3 days</span>
+                        </label>
+                        <label class="date-option">
+                            <input type="radio" name="dateOffset" value="-2">
+                            <span>-2 days</span>
+                        </label>
+                        <label class="date-option">
+                            <input type="radio" name="dateOffset" value="-1">
+                            <span>Yesterday</span>
+                        </label>
+                        <label class="date-option">
+                            <input type="radio" name="dateOffset" value="0" checked>
+                            <span>Today</span>
+                        </label>
+                        <label class="date-option">
+                            <input type="radio" name="dateOffset" value="1">
+                            <span>Tomorrow</span>
+                        </label>
+                        <label class="date-option">
+                            <input type="radio" name="dateOffset" value="2">
+                            <span>+2 days</span>
+                        </label>
+                        <label class="date-option">
+                            <input type="radio" name="dateOffset" value="3">
+                            <span>+3 days</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="updateNotes">Notes (Optional)</label>
+                    <textarea id="updateNotes" rows="3" placeholder="Add any relevant details..."></textarea>
+                </div>
+
+<div class="form-group">
+    <label for="newDropCompletion">Milestone Completion (%)</label>
+    <input type="number" id="newDropCompletion" min="1" max="100" value="25" required>
+    <small>Estimate what percentage of the milestone this code drop represents</small>
+</div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Advance to Next Stage</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content success-modal">
+            <span class="close">&times;</span>
+            <div class="success-icon">✓</div>
+            <h2 id="successModalTitle">Status Updated</h2>
+            <p id="successModalMessage">The code review status has been updated successfully.</p>
             <button class="btn btn-primary modal-close-btn">Close</button>
         </div>
     </div>
 
     <script src="script.js"></script>
+    <!-- Add this line after your script.js inclusion -->
+    <script src="timeline.js"></script>
+
 </body>
 </html>
