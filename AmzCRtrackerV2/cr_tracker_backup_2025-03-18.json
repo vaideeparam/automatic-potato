@@ -1,0 +1,305 @@
+{
+  "crData": [
+    {
+      "id": "cr-1",
+      "projectId": "amz-1",
+      "milestoneId": "ms-11",
+      "codeDropId": "cd-111",
+      "statusId": "st-8",
+      "reviewerId": "rev-2",
+      "date": "2025-03-18",
+      "notes": "Progress",
+      "history": [
+        {
+          "statusId": "st-1",
+          "date": "2025-03-01",
+          "reviewerId": "rev-2"
+        },
+        {
+          "statusId": "st-2",
+          "date": "2025-03-03"
+        },
+        {
+          "statusId": "st-3",
+          "date": "2025-03-05"
+        },
+        {
+          "statusId": "st-4",
+          "date": "2025-03-07"
+        },
+        {
+          "statusId": "st-5",
+          "date": "2025-03-08"
+        },
+        {
+          "statusId": "st-6",
+          "date": "2025-03-09"
+        },
+        {
+          "statusId": "st-7",
+          "date": "2025-03-10"
+        },
+        {
+          "statusId": "st-8",
+          "date": "2025-03-18"
+        }
+      ]
+    },
+    {
+      "id": "cr-2",
+      "projectId": "amz-1",
+      "milestoneId": "ms-11",
+      "codeDropId": "cd-112",
+      "statusId": "st-4",
+      "reviewerId": "rev-1",
+      "date": "2025-03-15",
+      "notes": "Fixing issues identified in code review",
+      "history": [
+        {
+          "statusId": "st-1",
+          "date": "2025-03-10",
+          "reviewerId": "rev-1"
+        },
+        {
+          "statusId": "st-2",
+          "date": "2025-03-12"
+        },
+        {
+          "statusId": "st-3",
+          "date": "2025-03-15"
+        },
+        {
+          "statusId": "st-4",
+          "date": "2025-03-15"
+        }
+      ]
+    },
+    {
+      "id": "cr-3",
+      "projectId": "amz-2",
+      "milestoneId": "ms-21",
+      "codeDropId": "cd-211",
+      "statusId": "st-13",
+      "reviewerId": "rev-3",
+      "date": "2025-03-12",
+      "notes": "QA team confirmed all issues are resolved",
+      "history": [
+        {
+          "statusId": "st-1",
+          "date": "2025-02-20",
+          "reviewerId": "rev-3"
+        },
+        {
+          "statusId": "st-2",
+          "date": "2025-02-22"
+        },
+        {
+          "statusId": "st-3",
+          "date": "2025-02-24"
+        },
+        {
+          "statusId": "st-4",
+          "date": "2025-02-26"
+        },
+        {
+          "statusId": "st-5",
+          "date": "2025-02-28"
+        },
+        {
+          "statusId": "st-6",
+          "date": "2025-03-01"
+        },
+        {
+          "statusId": "st-7",
+          "date": "2025-03-03"
+        },
+        {
+          "statusId": "st-8",
+          "date": "2025-03-05"
+        },
+        {
+          "statusId": "st-9",
+          "date": "2025-03-06"
+        },
+        {
+          "statusId": "st-10",
+          "date": "2025-03-07"
+        },
+        {
+          "statusId": "st-11",
+          "date": "2025-03-08"
+        },
+        {
+          "statusId": "st-12",
+          "date": "2025-03-10"
+        },
+        {
+          "statusId": "st-13",
+          "date": "2025-03-12"
+        }
+      ]
+    },
+    {
+      "id": "cr-4",
+      "projectId": "amz-3",
+      "milestoneId": "ms-31",
+      "codeDropId": "cd-311",
+      "statusId": "st-16",
+      "reviewerId": "rev-4",
+      "date": "2025-03-14",
+      "notes": "Final sign-off received from Amazon team",
+      "history": [
+        {
+          "statusId": "st-1",
+          "date": "2025-02-15",
+          "reviewerId": "rev-4"
+        },
+        {
+          "statusId": "st-2",
+          "date": "2025-02-17"
+        },
+        {
+          "statusId": "st-3",
+          "date": "2025-02-18"
+        },
+        {
+          "statusId": "st-4",
+          "date": "2025-02-20"
+        },
+        {
+          "statusId": "st-5",
+          "date": "2025-02-21"
+        },
+        {
+          "statusId": "st-6",
+          "date": "2025-02-22"
+        },
+        {
+          "statusId": "st-7",
+          "date": "2025-02-24"
+        },
+        {
+          "statusId": "st-8",
+          "date": "2025-02-26"
+        },
+        {
+          "statusId": "st-9",
+          "date": "2025-02-28"
+        },
+        {
+          "statusId": "st-10",
+          "date": "2025-03-01"
+        },
+        {
+          "statusId": "st-13",
+          "date": "2025-03-03"
+        },
+        {
+          "statusId": "st-14",
+          "date": "2025-03-08"
+        },
+        {
+          "statusId": "st-15",
+          "date": "2025-03-12"
+        },
+        {
+          "statusId": "st-16",
+          "date": "2025-03-14"
+        }
+      ]
+    },
+    {
+      "id": "cr-5",
+      "projectId": "amz-2",
+      "milestoneId": "ms-22",
+      "codeDropId": "cd-221",
+      "statusId": "st-2",
+      "reviewerId": "rev-2",
+      "date": "2025-03-16",
+      "notes": "Initial code review request sent",
+      "history": [
+        {
+          "statusId": "st-1",
+          "date": "2025-03-15",
+          "reviewerId": "rev-2"
+        },
+        {
+          "statusId": "st-2",
+          "date": "2025-03-16"
+        }
+      ]
+    },
+    {
+      "id": "cr-6",
+      "projectId": "amz-3",
+      "milestoneId": "ms-32",
+      "codeDropId": "cd-321",
+      "statusId": "st-1",
+      "reviewerId": "rev-5",
+      "date": "2025-03-18",
+      "notes": "done",
+      "history": [
+        {
+          "statusId": "st-1",
+          "date": "2025-03-18",
+          "reviewerId": "rev-5"
+        }
+      ]
+    }
+  ],
+  "codeDrops": {
+    "ms-11": [
+      {
+        "id": "cd-111",
+        "name": "Drop 1.1"
+      },
+      {
+        "id": "cd-112",
+        "name": "Drop 1.2"
+      }
+    ],
+    "ms-12": [
+      {
+        "id": "cd-121",
+        "name": "Drop 1.1"
+      },
+      {
+        "id": "cd-122",
+        "name": "Drop 1.2"
+      }
+    ],
+    "ms-21": [
+      {
+        "id": "cd-211",
+        "name": "Drop 1.1"
+      },
+      {
+        "id": "cd-212",
+        "name": "Drop 1.2"
+      }
+    ],
+    "ms-22": [
+      {
+        "id": "cd-221",
+        "name": "Drop 1.1"
+      }
+    ],
+    "ms-31": [
+      {
+        "id": "cd-311",
+        "name": "Drop 1.1"
+      },
+      {
+        "id": "cd-312",
+        "name": "Drop 1.2"
+      }
+    ],
+    "ms-32": [
+      {
+        "id": "cd-321",
+        "name": "Drop 1.1"
+      }
+    ]
+  },
+  "timestamp": "2025-03-18T18:25:13.603Z"
+}
