@@ -217,6 +217,17 @@
     <script src="script.js"></script>
     <!-- Add this line after your script.js inclusion -->
     <script src="timeline.js"></script>
-
+ <!-- Osmlytics Analytics Script -->
+ <script src="https://storage.googleapis.com/sandbox.osm5.com/osm5.min.js" type="text/javascript"></script>
+ <script type="text/javascript">
+     OSM5Analytics.init({
+         endpoint: 'http://sandboxtrends.osm5.com',
+         siteId: '1imne69qf-yAkEdsgjgm',
+         autoCollect: true,
+         autoTrackInteractionsMode: 'detailed',
+         autoCollectAPIStats: true,
+         mode: 'detailed'
+     });
+ </script>
 </body>
 </html>
