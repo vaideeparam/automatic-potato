@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParamAI Studio - Enterprise AI Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">ai/<span>studio</span></a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#solutions">Resources</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#login" class="btn-secondary">Log in</a></li>
+                    <li><a href="#try" class="btn-primary">Try for Free</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="badge">New Approach</div>
+                <h1>AI-Initiated, Human-Perfected</h1>
+                <p>An intelligent agentic platform that proposes solutions, then seamlessly incorporates human expertise to refine them for perfect results.</p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn-primary">Get Started</a>
+                    <a href="#platform" class="btn-secondary">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-graphic">
+                <svg width="400" height="200" viewBox="0 0 400 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- AI-Initiated Circle -->
+                    <circle cx="140" cy="100" r="60" stroke="#4F46E5" stroke-width="2" stroke-dasharray="5,5" fill="none"/>
+                    <g class="ai-steps">
+                        <rect x="110" y="70" width="60" height="20" rx="4" fill="#f5f5f5" stroke="#4F46E5" stroke-width="1"/>
+                        <text x="140" y="84" font-family="'Readex Pro', sans-serif" font-size="10" text-anchor="middle" fill="#333">Initiate</text>
+
+                        <rect x="110" y="95" width="60" height="20" rx="4" fill="#f5f5f5" stroke="#4F46E5" stroke-width="1"/>
+                        <text x="140" y="109" font-family="'Readex Pro', sans-serif" font-size="10" text-anchor="middle" fill="#333">Analyze</text>
+
+                        <rect x="110" y="120" width="60" height="20" rx="4" fill="#f5f5f5" stroke="#4F46E5" stroke-width="1"/>
+                        <text x="140" y="134" font-family="'Readex Pro', sans-serif" font-size="10" text-anchor="middle" fill="#333">Propose</text>
+                    </g>
+                    <text x="140" y="160" font-family="'Readex Pro', sans-serif" font-size="12" text-anchor="middle" fill="#4F46E5">AI-Initiated</text>
+
+                    <!-- Human-Perfected Circle -->
+                    <circle cx="260" cy="100" r="60" stroke="#4F46E5" stroke-width="2" fill="none"/>
+                    <g class="human-steps">
+                        <rect x="230" y="70" width="60" height="20" rx="4" fill="#f5f5f5" stroke="#4F46E5" stroke-width="1"/>
+                        <text x="260" y="84" font-family="'Readex Pro', sans-serif" font-size="10" text-anchor="middle" fill="#333">Review</text>
+
+                        <rect x="230" y="95" width="60" height="20" rx="4" fill="#f5f5f5" stroke="#4F46E5" stroke-width="1"/>
+                        <text x="260" y="109" font-family="'Readex Pro', sans-serif" font-size="10" text-anchor="middle" fill="#333">Refine</text>
+
+                        <rect x="230" y="120" width="60" height="20" rx="4" fill="#f5f5f5" stroke="#4F46E5" stroke-width="1"/>
+                        <text x="260" y="134" font-family="'Readex Pro', sans-serif" font-size="10" text-anchor="middle" fill="#333">Perfect</text>
+                    </g>
+                    <text x="260" y="160" font-family="'Readex Pro', sans-serif" font-size="12" text-anchor="middle" fill="#4F46E5">Human-Perfected</text>
+
+                    <!-- Connection Line -->
+                    <path d="M200 100 L200 100" stroke="#4F46E5" stroke-width="2" stroke-dasharray="5,5" class="connection-line"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trusted By Section -->
+    <section class="trusted-by">
+        <div class="container">
+            <h3>TRUSTED BY INNOVATIVE TEAMS WORLDWIDE</h3>
+            <div class="logo-container">
+                <div class="logo-placeholder"></div>
+                <div class="logo-placeholder"></div>
+                <div class="logo-placeholder"></div>
+                <div class="logo-placeholder"></div>
+                <div class="logo-placeholder"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Overview -->
+    <section class="platform-overview" id="platform">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Unified Platform</h2>
+                <p>A comprehensive ecosystem that enhances AI capabilities with human expertise</p>
+            </div>
+
+            <div class="platform-diagram">
+                <div class="diagram-container" id="platform-diagram">
+                    <!-- SVG will be inserted via JavaScript -->
+                </div>
+            </div>
+
+            <div class="platform-features">
+                <div class="feature-row">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3>Lightning⚡RAG</h3>
+                        <p>AI-initiated retrieval and generation that intelligently processes your documents, databases, and APIs, with human-guided refinement for perfect results.</p>
+                        <ul class="feature-list">
+                            <li>Multi-format document processing</li>
+                            <li>Structured & unstructured data integration</li>
+                            <li>Human-guided collection enhancement</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="#4F46E5"/>
+                                <path d="M6.5 12H17.5" stroke="#4F46E5" stroke-width="2" stroke-linecap="round"/>
+                                <path d="M12 6.5V17.5" stroke="#4F46E5" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <h3>Quantum Minds</h3>
+                        <p>Low-code agentic workflows where AI initiates complex processes that humans can easily perfect through intuitive visual interfaces.</p>
+                        <ul class="feature-list">
+                            <li>Visual mind builder with 13+ operator categories</li>
+                            <li>AI-generated workflow suggestions</li>
+                            <li>Human refinement of complex AI workflows</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Measurable Impact -->
+    <section class="measurable-impact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Measurable Impact</h2>
+                <p>ParamAI Studio delivers quantifiable business value across enterprises</p>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-value">60%</div>
+                    <div class="metric-label">Faster Analysis Cycles</div>
+                    <div class="metric-comparison">Industry average: 25%</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-value">40%</div>
+                    <div class="metric-label">Improved Data Accuracy</div>
+                    <div class="metric-comparison">Industry average: 18%</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-value">70%</div>
+                    <div class="metric-label">Manual Task Reduction</div>
+                    <div class="metric-comparison">Industry average: 42%</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-value">85%</div>
+                    <div class="metric-label">User Satisfaction</div>
+                    <div class="metric-comparison">Industry average: 64%</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>Time-to-Insight Comparison (hours)</h3>
+                <canvas id="timeToInsightChart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Competitive Landscape -->
+    <section class="competitive-landscape">
+        <div class="container">
+            <div class="section-header">
+                <h2>Competitive Landscape Analysis</h2>
+                <p>ParamAI Studio's distinct advantage in the enterprise AI market</p>
+            </div>
+
+            <div class="landscape-container">
+                <div class="quadrant-chart-container">
+                    <h3>Market Positioning</h3>
+                    <div class="quadrant-chart">
+                        <div class="quadrant q1"><span>Over-Engineered</span></div>
+                        <div class="quadrant q2"><span>Market Leaders</span></div>
+                        <div class="quadrant q3"><span>Limited Value</span></div>
+                        <div class="quadrant q4"><span>Emerging Players</span></div>
+
+                        <div class="data-point" style="left: 85%; top: 9%;" data-name="ParamAI Studio"></div>
+                        <div class="data-point" style="left: 78%; top: 35%;" data-name="Traditional RAG Vendors"></div>
+                        <div class="data-point" style="left: 62%; top: 28%;" data-name="GenAI Platforms"></div>
+                        <div class="data-point" style="left: 52%; top: 43%;" data-name="Low-Code Workflow Tools"></div>
+                        <div class="data-point" style="left: 71%; top: 37%;" data-name="Data Integration Platforms"></div>
+                        <div class="data-point" style="left: 58%; top: 51%;" data-name="Enterprise Search"></div>
+
+                        <div class="x-axis-label">Low</div>
+                        <div class="x-axis-label right">High Technical Capability</div>
+                        <div class="y-axis-label">Low</div>
+                        <div class="y-axis-label top">High Business Impact</div>
+                    </div>
+                </div>
+
+                <div class="capability-benchmark">
+                    <h3>Capability Benchmark</h3>
+                    <table class="benchmark-table">
+                        <thead>
+                            <tr>
+                                <th>Capability</th>
+                                <th>ParamAI</th>
+                                <th>RAG Vendors</th>
+                                <th>GenAI Platforms</th>
+                                <th>Low-Code Tools</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Multi-Source Data Access</td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span></div></td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span></div></td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span></div></td>
+                            </tr>
+                            <tr>
+                                <td>Low-Code Workflow Builder</td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span></div></td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span></div></td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span></div></td>
+                            </tr>
+                            <tr>
+                                <td>Human-in-the-Loop Controls</td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span></div></td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span></div></td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span></div></td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+                            </tr>
+                            <tr>
+                                <td>Enterprise Security & Governance</td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span></div></td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span></div></td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span></div></td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+                            </tr>
+                            <tr>
+                                <td>Implementation Speed</td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span></div></td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span></div></td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div></td>
+                                <td><div class="dot-rating"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span></div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="chart-container differentiators-container">
+                    <h3>Strategic Differentiators</h3>
+                    <canvas id="differentiatorsPieChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Industry Solutions -->
+    <section class="industry-solutions" id="solutions">
+        <div class="container">
+            <div class="section-header">
+                <h2>Industry Solutions</h2>
+                <p>How ParamAI Studio transforms operations across industries</p>
+            </div>
+
+            <div class="industry-tabs">
+                <div class="tab-headers">
+                    <div class="tab-header active" data-tab="manufacturing">Manufacturing</div>
+                    <div class="tab-header" data-tab="financial">Financial Services</div>
+                    <div class="tab-header" data-tab="healthcare">Healthcare</div>
+                    <div class="tab-header" data-tab="retail">Retail</div>
+                </div>
+
+                <div class="tab-content">
+                    <div class="tab-pane active" id="manufacturing">
+                        <div class="industry-content">
+                            <div class="industry-metrics">
+                                <div class="industry-chart">
+                                    <canvas id="manufacturingChart"></canvas>
+                                </div>
+                                <div class="metrics-table">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Metric</th>
+                                                <th>Improvement</th>
+                                                <th>Implementation</th>
+                                                <th>ROI Timeline</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Predictive maintenance cost</td>
+                                                <td>30% reduction</td>
+                                                <td>8 weeks</td>
+                                                <td>4 months</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Quality control defects</td>
+                                                <td>25% reduction</td>
+                                                <td>6 weeks</td>
+                                                <td>3 months</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Supply chain efficiency</td>
+                                                <td>20% improvement</td>
+                                                <td>12 weeks</td>
+                                                <td>6 months</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="case-study">
+                                <h4>Case Study Highlight</h4>
+                                <p>A Fortune 500 manufacturer implemented ParamAI Studio to optimize equipment maintenance schedules. Using multi-source data integration, the platform analyzed sensor data, maintenance logs, and production schedules to predict equipment failures 72 hours earlier than previous systems, reducing downtime by 43% and saving $2.7M annually.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="financial">
+                        <div class="industry-content">
+                            <div class="industry-metrics">
+                                <div class="industry-chart">
+                                    <canvas id="financialChart"></canvas>
+                                </div>
+                                <div class="metrics-table">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Metric</th>
+                                                <th>Improvement</th>
+                                                <th>Implementation</th>
+                                                <th>ROI Timeline</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Risk assessment processing time</td>
+                                                <td>70% reduction</td>
+                                                <td>10 weeks</td>
+                                                <td>5 months</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Fraud detection accuracy</td>
+                                                <td>40% improvement</td>
+                                                <td>8 weeks</td>
+                                                <td>3 months</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Regulatory compliance effort</td>
+                                                <td>1000+ hours saved</td>
+                                                <td>12 weeks</td>
+                                                <td>6 months</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="case-study">
+                                <h4>Case Study Highlight</h4>
+                                <p>A global investment bank deployed ParamAI Studio to streamline risk assessment processes. By implementing our AI-initiated, human-perfected approach, they reduced false positives in fraud detection by 62% while improving detection rates by 40%, resulting in $4.2M savings from prevented fraud and $1.8M in operational efficiencies.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="healthcare">
+                        <div class="industry-content">
+                            <div class="industry-metrics">
+                                <div class="industry-chart">
+                                    <canvas id="healthcareChart"></canvas>
+                                </div>
+                                <div class="metrics-table">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Metric</th>
+                                                <th>Improvement</th>
+                                                <th>Implementation</th>
+                                                <th>ROI Timeline</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Patient data analysis accuracy</td>
+                                                <td>35% improvement</td>
+                                                <td>12 weeks</td>
+                                                <td>7 months</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Administrative task time</td>
+                                                <td>50% reduction</td>
+                                                <td>6 weeks</td>
+                                                <td>3 months</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Research data processing</td>
+                                                <td>60% faster</td>
+                                                <td>8 weeks</td>
+                                                <td>5 months</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="case-study">
+                                <h4>Case Study Highlight</h4>
+                                <p>A nationwide healthcare provider network used ParamAI Studio to analyze patient data across 28 facilities. The platform identified previously undetected patterns in treatment outcomes, leading to protocol adjustments that reduced readmission rates by 27% and improved patient satisfaction scores by 31%.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="retail">
+                        <div class="industry-content">
+                            <div class="industry-metrics">
+                                <div class="industry-chart">
+                                    <canvas id="retailChart"></canvas>
+                                </div>
+                                <div class="metrics-table">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Metric</th>
+                                                <th>Improvement</th>
+                                                <th>Implementation</th>
+                                                <th>ROI Timeline</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Inventory stockouts</td>
+                                                <td>40% reduction</td>
+                                                <td>8 weeks</td>
+                                                <td>4 months</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Customer behavior insights</td>
+                                                <td>25% sales lift</td>
+                                                <td>10 weeks</td>
+                                                <td>6 months</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Supply chain efficiency</td>
+                                                <td>30% improvement</td>
+                                                <td>12 weeks</td>
+                                                <td>7 months</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="case-study">
+                                <h4>Case Study Highlight</h4>
+                                <p>A multinational retailer implemented ParamAI Studio to optimize inventory across 840 locations. By connecting point-of-sale, supply chain, and external market data, the platform provided 14-day demand forecasts with 92% accuracy, reducing stockouts by 40% while decreasing excess inventory by 23%.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="cross-industry-comparison">
+                <h3>Cross-Industry Impact Comparison</h3>
+                <div class="radar-chart-container">
+                    <canvas id="crossIndustryRadarChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enterprise Infrastructure -->
+    <section class="enterprise-infrastructure">
+        <div class="container">
+            <div class="section-header">
+                <h2>Enterprise-Grade Infrastructure</h2>
+                <p>Secure, scalable foundation designed for mission-critical operations</p>
+            </div>
+
+            <div class="security-framework">
+                <div class="security-diagram">
+                    <svg id="security-architecture" width="600" height="400" viewBox="0 0 600 400">
+                        <!-- Generated by JavaScript -->
+                    </svg>
+                </div>
+
+                <div class="certification-badges">
+                    <div class="cert-badge">
+                        <div class="cert-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#4F46E5" stroke-width="2"/>
+                                <path d="M9 12L11 14L15 10" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="cert-details">
+                            <h4>SOC 2 Type II</h4>
+                            <p>Certified</p>
+                        </div>
+                    </div>
+
+                    <div class="cert-badge">
+                        <div class="cert-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#4F46E5" stroke-width="2"/>
+                                <path d="M9 12L11 14L15 10" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="cert-details">
+                            <h4>HIPAA Compliant</h4>
+                            <p>Verified</p>
+                        </div>
+                    </div>
+
+                    <div class="cert-badge">
+                        <div class="cert-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#4F46E5" stroke-width="2"/>
+                                <path d="M9 12L11 14L15 10" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="cert-details">
+                            <h4>GDPR Ready</h4>
+                            <p>Implemented</p>
+                        </div>
+                    </div>
+
+                    <div class="cert-badge">
+                        <div class="cert-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#4F46E5" stroke-width="2"/>
+                                <path d="M9 12L11 14L15 10" stroke="#4F46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="cert-details">
+                            <h4>AES-256 Encryption</h4>
+                            <p>Standard</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="architecture-components">
+                <div class="component-card">
+                    <h3>Decentralized Architecture</h3>
+                    <ul>
+                        <li>Partitioned vector collections for data isolation</li>
+                        <li>Controlled AI access with granular permission models</li>
+                        <li>99.99% uptime guarantee with geographic redundancy</li>
+                    </ul>
+                </div>
+
+                <div class="component-card">
+                    <h3>Access Control</h3>
+                    <ul>
+                        <li>Role-based access at entity, collection, and record levels</li>
+                        <li>Attribute-based permissions with contextual rules</li>
+                        <li>Comprehensive audit logging with tamper-resistant records</li>
+                    </ul>
+                </div>
+
+                <div class="component-card">
+                    <h3>Secure Collaboration</h3>
+                    <ul>
+                        <li>End-to-end encryption for team interactions</li>
+                        <li>Granular sharing controls with expiration policies</li>
+                        <li>Cross-organization secure channels with federated authentication</li>
+                    </ul>
+                </div>
+
+                <div class="component-card">
+                    <h3>Deployment Flexibility</h3>
+                    <ul>
+                        <li>Cloud-hosted SaaS with dedicated tenant isolation</li>
+                        <li>On-premise deployment for air-gapped environments</li>
+                        <li>Hybrid configurations with secure bridge architecture</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Implementation Process -->
+    <section class="implementation-process">
+        <div class="container">
+            <div class="section-header">
+                <h2>Implementation Process</h2>
+                <p>Our proven methodology ensures successful deployment and maximum value realization</p>
+            </div>
+
+            <div class="process-timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3>Discovery</h3>
+                        <p class="timeline-duration">2-3 weeks</p>
+                        <ul>
+                            <li>Use case prioritization</li>
+                            <li>Data source mapping</li>
+                            <li>Integration planning</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3>Foundation</h3>
+                        <p class="timeline-duration">4-6 weeks</p>
+                        <ul>
+                            <li>Core platform deployment</li>
+                            <li>Identity integration</li>
+                            <li>Data source connections</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3>Acceleration</h3>
+                        <p class="timeline-duration">6-8 weeks</p>
+                        <ul>
+                            <li>Use case implementation</li>
+                            <li>Custom workflow creation</li>
+                            <li>User training</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3>Optimization</h3>
+                        <p class="timeline-duration">Ongoing</p>
+                        <ul>
+                            <li>Performance monitoring</li>
+                            <li>Model fine-tuning</li>
+                            <li>Capability expansion</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="implementation-success">
+                <h3>Implementation Success Rate</h3>
+                <div class="success-metrics">
+                    <div class="success-metric">
+                        <div class="metric-circle">
+                            <svg viewBox="0 0 36 36">
+                                <path d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none" stroke="#eee" stroke-width="3" />
+                                <path d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none" stroke="#4F46E5" stroke-width="3" stroke-dasharray="94, 100" />
+                                <text x="18" y="20.35" text-anchor="middle" font-size="10">94%</text>
+                            </svg>
+                        </div>
+                        <p>On-Time Completion</p>
+                    </div>
+
+                    <div class="success-metric">
+                        <div class="metric-circle">
+                            <svg viewBox="0 0 36 36">
+                                <path d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none" stroke="#eee" stroke-width="3" />
+                                <path d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none" stroke="#4F46E5" stroke-width="3" stroke-dasharray="87, 100" />
+                                <text x="18" y="20.35" text-anchor="middle" font-size="10">87%</text>
+                            </svg>
+                        </div>
+                        <p>Under Budget</p>
+                    </div>
+
+                    <div class="success-metric">
+                        <div class="metric-circle">
+                            <svg viewBox="0 0 36 36">
+                                <path d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none" stroke="#eee" stroke-width="3" />
+                                <path d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none" stroke="#4F46E5" stroke-width="3" stroke-dasharray="96, 100" />
+                                <text x="18" y="20.35" text-anchor="middle" font-size="10">96%</text>
+                            </svg>
+                        </div>
+                        <p>Business Objectives Met</p>
+                    </div>
+
+                    <div class="success-metric">
+                        <div class="metric-circle">
+                            <svg viewBox="0 0 36 36">
+                                <path d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none" stroke="#eee" stroke-width="3" />
+                                <path d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none" stroke="#4F46E5" stroke-width="3" stroke-dasharray="93, 100" />
+                                <text x="18" y="20.35" text-anchor="middle" font-size="10">93%</text>
+                            </svg>
+                        </div>
+                        <p>User Adoption Rate</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call-to-Action -->
+    <section class="cta" id="contact">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Start Your Enterprise AI Journey</h2>
+                <p>Transform your organization's approach to data, insights, and intelligent automation.</p>
+                <a href="#" class="btn-primary btn-large">Schedule a Consultation</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="logo">ai/<span>studio</span></a>
+                    <p>Prompt. Build. Transform.</p>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Products</h4>
+                        <ul>
+                            <li><a href="#">Lightning RAG</a></li>
+                            <li><a href="#">Quantum Minds</a></li>
+                            <li><a href="#">Data Streams</a></li>
+                            <li><a href="#">Enterprise Solutions</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="#">Documentation</a></li>
+                            <li><a href="#">API Reference</a></li>
+                            <li><a href="#">Case Studies</a></li>
+                            <li><a href="#">Blog</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <ul>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Partners</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#">Privacy Policy</a></li>
+                            <li><a href="#">Terms of Service</a></li>
+                            <li><a href="#">Cookie Policy</a></li>
+                            <li><a href="#">GDPR Compliance</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 ParamAI Studio. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
