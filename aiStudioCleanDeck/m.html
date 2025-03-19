@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ai/studio by ⦃param⦄</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&family=Readex+Pro:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #000;
+            --secondary-color: #333;
+            --accent-color: #666;
+            --background: #fff;
+            --highlight: #f5f5f5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Oxygen', sans-serif;
+            color: var(--primary-color);
+            background-color: var(--background);
+            line-height: 1.6;
+            overflow: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Readex Pro', sans-serif;
+            font-weight: 500;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.6rem;
+        }
+        
+        h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        p {
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        
+        .slides {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            background-color: var(--background);
+            opacity: 0;
+            transform: translateX(100%);
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            overflow: auto;
+        }
+        
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .slide-content {
+            max-width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .two-column {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .column {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            z-index: 10;
+        }
+        
+        .control-btn {
+            background: var(--highlight);
+            border: 1px solid var(--accent-color);
+            color: var(--primary-color);
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: 'Oxygen', sans-serif;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .control-btn:hover {
+            background: var(--accent-color);
+            color: var(--background);
+        }
+        
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background-color: var(--accent-color);
+            width: 0;
+            transition: width 0.3s ease;
+            z-index: 10;
+        }
+        
+        .stat-box {
+            background-color: var(--highlight);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 8px 0;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .big-stat {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin: 15px 0;
+            position: relative;
+            gap: 30px;
+        }
+        
+        .timeline-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding-left: 45px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background-color: var(--background);
+            border: 2px solid var(--accent-color);
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            top: 35px;
+            left: 25px;
+            width: 2px;
+            height: calc(100% + 10px);
+            background-color: var(--accent-color);
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        .timeline-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: left;
+            width: 100%;
+        }
+        
+        .chart {
+            width: 100%;
+            height: 200px;
+            margin: 15px 0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid var(--accent-color);
+        }
+        
+        .comparison-table th {
+            font-weight: 600;
+            background-color: var(--highlight);
+        }
+        
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        .feature-item {
+            background-color: var(--highlight);
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+            opacity: 0;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .slide-up {
+            animation: slideUp 0.8s ease forwards;
+            transform: translateY(30px);
+            opacity: 0;
+        }
+        
+        @keyframes slideUp {
+            from { 
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .animation-delay-1 {
+            animation-delay: 0.2s;
+        }
+        
+        .animation-delay-2 {
+            animation-delay: 0.4s;
+        }
+        
+        .animation-delay-3 {
+            animation-delay: 0.6s;
+        }
+        
+        .animation-delay-4 {
+            animation-delay: 0.8s;
+        }
+        
+        /* SVG containers */
+        .svg-container {
+            width: 100%;
+            height: auto;
+            margin: 10px 0;
+            max-height: 40vh;
+        }
+        
+        svg {
+            width: 100%;
+            height: 100%;
+            max-height: 300px;
+        }
+        
+        /* Touch-friendly UI adjustments */
+        ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        .slide-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: var(--highlight);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            z-index: 10;
+        }
+        
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.8rem; }
+            h3 { font-size: 1.4rem; }
+            p { font-size: 1.1rem; }
+            
+            .two-column {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            
+            .column {
+                width: 48%;
+                text-align: left;
+                align-items: flex-start;
+            }
+            
+            .timeline {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            
+            .timeline-item {
+                width: 22%;
+                padding-left: 0;
+                padding-top: 45px;
+            }
+            
+            .timeline-item::before {
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            .timeline-item::after {
+                top: 25px;
+                left: calc(50% + 12px);
+                width: calc(100% - 25px);
+                height: 2px;
+            }
+            
+            .timeline-label {
+                text-align: center;
+            }
+            
+            .feature-list {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .feature-item {
+                width: 45%;
+            }
+        }
+        
+        /* For tablets and medium screens */
+        @media (min-width: 992px) {
+            .slide {
+                padding: 30px;
+            }
+            
+            .feature-item {
+                width: 22%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="slides">
+            <!-- Slide 1: Introduction -->
+            <div class="slide active" id="slide-1">
+                <div class="slide-content">
+                    <div class="logo fade-in">ai/studio</div>
+                    <h1 class="fade-in animation-delay-1">The Evolution of Enterprise AI</h1>
+                    <p class="fade-in animation-delay-2">AI-Initiated, Human-Perfected</p>
+                    <div class="fade-in animation-delay-3">
+                        <svg width="250" height="250" viewBox="0 0 300 300">
+                            <circle cx="150" cy="150" r="120" fill="none" stroke="#000" stroke-width="2" />
+                            <path id="orbit" d="M150,30 A120,120 0 1,1 149,30" fill="none" stroke="#666" stroke-width="2" stroke-dasharray="5,5" />
+                            <text x="150" y="160" text-anchor="middle" font-size="20">⦃param⦄</text>
+                            <circle cx="150" cy="30" r="8" fill="#000">
+                                <animateMotion dur="10s" repeatCount="indefinite" path="M0,0 A120,120 0 1,1 -1,0" />
+                            </circle>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 2: LLM Introduction -->
+            <div class="slide" id="slide-2">
+                <div class="slide-content">
+                    <h2>The Rise of Large Language Models</h2>
+                    <div class="svg-container">
+                        <svg viewBox="0 0 800 200">
+                            <!-- LLM Brain Visualization -->
+                            <text x="400" y="25" text-anchor="middle" font-size="18" font-weight="bold">LLM Architecture</text>
+                            <ellipse cx="400" cy="100" rx="180" ry="70" fill="none" stroke="#000" stroke-width="2" />
+                            <path d="M300,90 Q400,50 500,90" fill="none" stroke="#000" stroke-width="2" />
+                            <path d="M300,110 Q400,150 500,110" fill="none" stroke="#000" stroke-width="2" />
+                            
+                            <!-- Nodes in the brain -->
+                            <circle cx="350" cy="80" r="8" fill="#f5f5f5" stroke="#000" stroke-width="1" />
+                            <circle cx="400" cy="70" r="8" fill="#f5f5f5" stroke="#000" stroke-width="1" />
+                            <circle cx="450" cy="80" r="8" fill="#f5f5f5" stroke="#000" stroke-width="1" />
+                            <circle cx="350" cy="120" r="8" fill="#f5f5f5" stroke="#000" stroke-width="1" />
+                            <circle cx="400" cy="130" r="8" fill="#f5f5f5" stroke="#000" stroke-width="1" />
+                            <circle cx="450" cy="120" r="8" fill="#f5f5f5" stroke="#000" stroke-width="1" />
+                            <circle cx="380" cy="100" r="8" fill="#f5f5f5" stroke="#000" stroke-width="1" />
+                            <circle cx="420" cy="100" r="8" fill="#f5f5f5" stroke="#000" stroke-width="1" />
+                            
+                            <!-- Connection lines -->
+                            <line x1="350" y1="80" x2="400" y2="70" stroke="#666" stroke-width="1" />
+                            <line x1="400" y1="70" x2="450" y2="80" stroke="#666" stroke-width="1" />
+                            <line x1="350" y1="120" x2="400" y2="130" stroke="#666" stroke-width="1" />
+                            <line x1="400" y1="130" x2="450" y2="120" stroke="#666" stroke-width="1" />
+                            <line x1="350" y1="80" x2="380" y2="100" stroke="#666" stroke-width="1" />
+                            <line x1="450" y1="80" x2="420" y2="100" stroke="#666" stroke-width="1" />
+                            <line x1="350" y1="120" x2="380" y2="100" stroke="#666" stroke-width="1" />
+                            <line x1="450" y1="120" x2="420" y2="100" stroke="#666" stroke-width="1" />
+                            <line x1="380" y1="100" x2="420" y2="100" stroke="#666" stroke-width="1" />
+                            
+                            <!-- Labels -->
+                            <text x="250" y="100" text-anchor="middle" font-size="16">Input</text>
+                            <text x="550" y="100" text-anchor="middle" font-size="16">Output</text>
+                            
+                            <!-- Animated pulses -->
+                            <circle cx="350" cy="80" r="10" fill="none" stroke="#000" stroke-width="1" opacity="0">
+                                <animate attributeName="r" from="8" to="20" dur="2s" begin="0s" repeatCount="indefinite" />
+                                <animate attributeName="opacity" from="0.8" to="0" dur="2s" begin="0s" repeatCount="indefinite" />
+                            </circle>
+                            <circle cx="450" cy="120" r="10" fill="none" stroke="#000" stroke-width="1" opacity="0">
+                                <animate attributeName="r" from="8" to="20" dur="2s" begin="1s" repeatCount="indefinite" />
+                                <animate attributeName="opacity" from="0.8" to="0" dur="2s" begin="1s" repeatCount="indefinite" />
+                            </circle>
+                        </svg>
+                    </div>
+                    
+                    <div class="two-column">
+                        <div class="column slide-up">
+                            <h3>ChatGPT & Claude</h3>
+                            <p>Powerful consumer-facing models capable of understanding and generating human-like text.</p>
+                            <ul>
+                                <li>Natural language understanding</li>
+                                <li>Content generation</li>
+                                <li>Question answering</li>
+                            </ul>
+                        </div>
+                        <div class="column slide-up animation-delay-1">
+                            <div class="stat-box">
+                                <div class="big-stat">175B+</div>
+                                <p>Parameters in advanced models</p>
+                            </div>
+                            <div class="stat-box">
+                                <div class="big-stat">89%</div>
+                                <p>Task completion rate on standard benchmarks</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3: Reasoning -->
+            <div class="slide" id="slide-3">
+                <div class="slide-content">
+                    <h2>The Next Step: Reasoning Capabilities</h2>
+                    <div class="svg-container">
+                        <svg viewBox="0 0 800 200">
+                            <!-- Reasoning diagram -->
+                            <rect x="150" y="30" width="500" height="150" rx="10" ry="10" fill="none" stroke="#000" stroke-width="2" />
+                            
+                            <!-- Input section -->
+                            <rect x="180" y="60" width="100" height="90" rx="5" ry="5" fill="#f5f5f5" stroke="#000" stroke-width="1" />
+                            <text x="230" y="45" text-anchor="middle" font-size="16">Input</text>
+                            <text x="230" y="105" text-anchor="middle" font-size="14" font-style="italic">Problem</text>
+                            
+                            <!-- Reasoning section -->
+                            <rect x="350" y="60" width="100" height="90" rx="5" ry="5" fill="#f5f5f5" stroke="#000" stroke-width="1" />
+                            <text x="400" y="45" text-anchor="middle" font-size="16">Reasoning</text>
+                            <text x="400" y="80" text-anchor="middle" font-size="12" font-style="italic">Step 1</text>
+                            <text x="400" y="100" text-anchor="middle" font-size="12" font-style="italic">Step 2</text>
+                            <text x="400" y="120" text-anchor="middle" font-size="12" font-style="italic">Step 3</text>
+                            <text x="400" y="140" text-anchor="middle" font-size="12" font-style="italic">Step 4</text>
+                            
+                            <!-- Output section -->
+                            <rect x="520" y="60" width="100" height="90" rx="5" ry="5" fill="#f5f5f5" stroke="#000" stroke-width="1" />
+                            <text x="570" y="45" text-anchor="middle" font-size="16">Output</text>
+                            <text x="570" y="105" text-anchor="middle" font-size="14" font-style="italic">Solution</text>
+                            
+                            <!-- Arrows -->
+                            <path d="M280,105 H350" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrow)" />
+                            <path d="M450,105 H520" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrow)" />
+                            
+                            <!-- Arrow marker definition -->
+                            <defs>
+                                <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
+                                    markerWidth="6" markerHeight="6" orient="auto">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#000" />
+                                </marker>
+                            </defs>
+                            
+                            <!-- Animated thought bubble -->
+                            <ellipse cx="400" cy="15" rx="20" ry="15" fill="#f5f5f5" stroke="#000" stroke-width="1">
+                                <animate attributeName="rx" values="20;25;20" dur="3s" repeatCount="indefinite" />
+                            </ellipse>
+                            <ellipse cx="370" cy="20" rx="15" ry="10" fill="#f5f5f5" stroke="#000" stroke-width="1">
+                                <animate attributeName="rx" values="15;18;15" dur="3s" repeatCount="indefinite" />
+                            </ellipse>
+                            <circle cx="350" cy="25" r="5" fill="#f5f5f5" stroke="#000" stroke-width="1">
+                                <animate attributeName="r" values="5;7;5" dur="3s" repeatCount="indefinite" />
+                            </circle>
+                        </svg>
+                    </div>
+                    
+                    <div class="two-column">
+                        <div class="column slide-up">
+                            <h3>Deepseek Models</h3>
+                            <p>Advanced models with enhanced reasoning capabilities that can follow complex logical steps.</p>
+                            <ul>
+                                <li>Logical reasoning</li>
+                                <li>Step-by-step problem solving</li>
+                                <li>Mathematical computation</li>
+                                <li>Analysis of complex scenarios</li>
+                            </ul>
+                        </div>
+                        <div class="column slide-up animation-delay-1">
+                            <div class="stat-box">
+                                <div class="big-stat">73%</div>
+                                <p>Improvement in complex problem-solving</p>
+                            </div>
+                            <div class="stat-box">
+                                <div class="big-stat">4.2×</div>
+                                <p>More accurate than standard LLMs on reasoning tasks</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 4: Agentic AI -->
+            <div class="slide" id="slide-4">
+                <div class="slide-content">
+                    <h2>The Emergence of Agentic AI</h2>
+                    <div class="svg-container">
+                        <svg viewBox="0 0 800 200">
+                            <!-- Central agent circle -->
+                            <circle cx="400" cy="100" r="60" fill="#f5f5f5" stroke="#000" stroke-width="2" />
+                            <text x="400" y="95" text-anchor="middle" font-size="18" font-weight="bold">Agent</text>
+                            <text x="400" y="115" text-anchor="middle" font-size="14">Autonomous AI</text>
+                            
+                            <!-- Surrounding tool nodes -->
+                            <circle cx="250" cy="60" r="35" fill="none" stroke="#666" stroke-width="1" />
+                            <text x="250" y="55" text-anchor="middle" font-size="14">Web</text>
+                            <text x="250" y="75" text-anchor="middle" font-size="14">Search</text>
+                            
+                            <circle cx="250" cy="140" r="35" fill="none" stroke="#666" stroke-width="1" />
+                            <text x="250" y="135" text-anchor="middle" font-size="14">Code</text>
+                            <text x="250" y="155" text-anchor="middle" font-size="14">Execution</text>
+                            
+                            <circle cx="550" cy="60" r="35" fill="none" stroke="#666" stroke-width="1" />
+                            <text x="550" y="55" text-anchor="middle" font-size="14">Data</text>
+                            <text x="550" y="75" text-anchor="middle" font-size="14">Analysis</text>
+                            
+                            <circle cx="550" cy="140" r="35" fill="none" stroke="#666" stroke-width="1" />
+                            <text x="550" y="135" text-anchor="middle" font-size="14">External</text>
+                            <text x="550" y="155" text-anchor="middle" font-size="14">APIs</text>
+                            
+                            <!-- Connection lines -->
+                            <line x1="342" y1="80" x2="285" y2="67" stroke="#666" stroke-width="1.5" />
+                            <line x1="342" y1="120" x2="285" y2="133" stroke="#666" stroke-width="1.5" />
+                            <line x1="458" y1="80" x2="515" y2="67" stroke="#666" stroke-width="1.5" />
+                            <line x1="458" y1="120" x2="515" y2="133" stroke="#666" stroke-width="1.5" />
+                            
+                            <!-- Animated pulse around agent -->
+                            <circle cx="400" cy="100" r="60" fill="none" stroke="#000" stroke-width="1" opacity="0.5">
+                                <animate attributeName="r" from="60" to="75" dur="3s" begin="0s" repeatCount="indefinite" />
+                                <animate attributeName="opacity" from="0.5" to="0" dur="3s" begin="0s" repeatCount="indefinite" />
+                            </circle>
+                            
+                            <!-- Animated data flow -->
+                            <circle cx="336" cy="80" r="5" fill="#000">
+                                <animate attributeName="cx" values="285;342" dur="2s" begin="0s" repeatCount="indefinite" />
+                                <animate attributeName="cy" values="67;80" dur="2s" begin="0s" repeatCount="indefinite" />
+                                <animate attributeName="opacity" values="0;1;0" dur="2s" begin="0s" repeatCount="indefinite" />
+                            </circle>
+                            
+                            <circle cx="458" cy="80" r="5" fill="#000">
+                                <animate attributeName="cx" values="458;515" dur="2s" begin="1s" repeatCount="indefinite" />
+                                <animate attributeName="cy" values="80;67" dur="2s" begin="1s" repeatCount="indefinite" />
+                                <animate attributeName="opacity" values="0;1;0" dur="2s" begin="1s" repeatCount="indefinite" />
+                            </circle>
+                        </svg>
+                    </div>
+                    
+                    <div class="two-column">
+                        <div class="column slide-up">
+                            <h3>Frameworks like Manus.im</h3>
+                            <p>Autonomous AI agents that can plan and execute complex tasks through tool use and reasoning.</p>
+                            <ul>
+                                <li>Task planning and execution</li>
+                                <li>Tool integration (web search, code, APIs)</li>
+                                <li>Autonomous decision making</li>
+                                <li>Multi-step action sequences</li>
+                            </ul>
+                        </div>
+                        <div class="column slide-up animation-delay-1">
+                            <div class="stat-box">
+                                <div class="big-stat">65%</div>
+                                <p>Tasks that can be fully automated</p>
+                            </div>
+                            <div class="stat-box">
+                                <div class="big-stat">42%</div>
+                                <p>Reduction in time for complex workflows</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 5: The Enterprise Gap -->
+            <div class="slide" id="slide-5">
+                <div class="slide-content">
+                    <h2>The Enterprise AI Gap</h2>
+                    <p>Consumer AI platforms lack critical enterprise capabilities</p>
+                    
+                    <table class="comparison-table slide-up">
+                        <thead>
+                            <tr>
+                                <th>Requirement</th>
+                                <th>Consumer AI</th>
+                                <th>Enterprise Needs</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Data Integration</td>
+                                <td>Limited, primarily web-based</td>
+                                <td>Comprehensive, multi-source</td>
+                            </tr>
+                            <tr>
+                                <td>Security & Compliance</td>
+                                <td>Basic consumer-grade</td>
+                                <td>Enterprise-grade with certifications</td>
+                            </tr>
+                            <tr>
+                                <td>Workflow Integration</td>
+                                <td>Minimal or manual</td>
+                                <td>Seamless with existing systems</td>
+                            </tr>
+                            <tr>
+                                <td>Customization</td>
+                                <td>Limited to prompting</td>
+                                <td>Deep customization for specific use cases</td>
+                            </tr>
+                            <tr>
+                                <td>Human Oversight</td>
+                                <td>Limited or non-existent</td>
+                                <td>Robust human-in-the-loop controls</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="stat-box slide-up animation-delay-2">
+                        <div class="big-stat">87%</div>
+                        <p>of enterprises report that consumer AI solutions do not meet their security and integration requirements</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 6: Introducing ai/studio -->
+            <div class="slide" id="slide-6">
+                <div class="slide-content">
+                    <h2>Introducing ai/studio by ⦃param⦄</h2>
+                    <h3 class="slide-up">AI-Initiated, Human-Perfected</h3>
+                    
+                    <div class="svg-container slide-up animation-delay-1">
+                        <svg viewBox="0 0 800 250">
+                            <!-- Human element on top -->
+                            <circle cx="400" cy="30" r="15" fill="#f5f5f5" stroke="#000" stroke-width="1.5" />
+                            <path d="M395,28 L405,28 M397,25 L397,25 M403,25 L403,25 M395,33 C395,33 400,36 405,33" fill="none" stroke="#000" stroke-width="1.5" />
+                            
+                            <!-- Human connection -->
+                            <path d="M400,45 L400,50" fill="none" stroke="#000" stroke-width="1.5" />
+                            
+                            <!-- Main platform box -->
+                            <rect x="250" y="50" width="300" height="60" rx="10" ry="10" fill="#f5f5f5" stroke="#000" stroke-width="2" />
+                            <text x="400" y="85" text-anchor="middle" font-size="20" font-weight="bold">ai/studio</text>
+                            
+                            <!-- Left product box -->
+                            <rect x="150" y="140" width="200" height="60" rx="8" ry="8" fill="#f5f5f5" stroke="#000" stroke-width="2" />
+                            <text x="250" y="175" text-anchor="middle" font-size="18" font-weight="bold">Lightning ⚡ RAG</text>
+                            
+                            <!-- Right product box -->
+                            <rect x="450" y="140" width="200" height="60" rx="8" ry="8" fill="#f5f5f5" stroke="#000" stroke-width="2" />
+                            <text x="550" y="175" text-anchor="middle" font-size="18" font-weight="bold">Quantum Minds</text>
+                            
+                            <!-- Connection lines -->
+                            <path d="M250,110 L250,140" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrow2)" />
+                            <path d="M550,110 L550,140" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrow2)" />
+                            
+                            <!-- Data types at bottom -->
+                            <rect x="100" y="220" width="100" height="25" rx="5" ry="5" fill="none" stroke="#666" />
+                            <text x="150" y="237" text-anchor="middle" font-size="13">Structured</text>
+                            
+                            <rect x="210" y="220" width="120" height="25" rx="5" ry="5" fill="none" stroke="#666" />
+                            <text x="270" y="237" text-anchor="middle" font-size="13">Semi-structured</text>
+                            
+                            <rect x="340" y="220" width="120" height="25" rx="5" ry="5" fill="none" stroke="#666" />
+                            <text x="400" y="237" text-anchor="middle" font-size="13">Unstructured</text>
+                            
+                            <rect x="470" y="220" width="100" height="25" rx="5" ry="5" fill="none" stroke="#666" />
+                            <text x="520" y="237" text-anchor="middle" font-size="13">APIs</text>
+                            
+                            <rect x="580" y="220" width="120" height="25" rx="5" ry="5" fill="none" stroke="#666" />
+                            <text x="640" y="237" text-anchor="middle" font-size="13">Media/Images</text>
+                            
+                            <!-- Connections to data types -->
+                            <path d="M150,200 L150,220" fill="none" stroke="#666" stroke-width="1" />
+                            <path d="M250,200 L270,220" fill="none" stroke="#666" stroke-width="1" />
+                            <path d="M350,200 L400,220" fill="none" stroke="#666" stroke-width="1" />
+                            <path d="M550,200 L520,220" fill="none" stroke="#666" stroke-width="1" />
+                            <path d="M650,200 L640,220" fill="none" stroke="#666" stroke-width="1" />
+                            
+                            <!-- Arrow marker definition -->
+                            <defs>
+                                <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5"
+                                    markerWidth="6" markerHeight="6" orient="auto">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#000" />
+                                </marker>
+                            </defs>
+                        </svg>
+                    </div>
+                    
+                    <div class="two-column slide-up animation-delay-2">
+                        <div class="column">
+                            <p>An enterprise-grade AI platform that combines intelligent automation with human expertise to deliver measurable business outcomes.</p>
+                            <ul>
+                                <li>Comprehensive data integration</li>
+                                <li>Powerful workflow automation</li>
+                                <li>Enterprise security & compliance</li>
+                                <li>Human-in-the-loop controls</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <div class="stat-box">
+                                <div class="big-stat">96%</div>
+                                <p>Enterprises reporting successful integration</p>
+                            </div>
+                            <div class="stat-box">
+                                <div class="big-stat">97.1%</div>
+                                <p>Average efficiency gain in data analysis workflows</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 7: AI-Initiated, Human-Perfected -->
+            <div class="slide" id="slide-7">
+                <div class="slide-content">
+                    <h2>AI-Initiated, Human-Perfected Approach</h2>
+                    
+                    <div class="svg-container">
+                        <svg viewBox="0 0 800 300">
+                            <!-- AI side -->
+                            <rect x="100" y="70" width="250" height="150" rx="10" ry="10" fill="#f5f5f5" stroke="#000" stroke-width="2" />
+                            <text x="225" y="50" text-anchor="middle" font-size="18" font-weight="bold">AI-Initiated</text>
+                            
+                            <!-- Human side -->
+                            <rect x="450" y="70" width="250" height="150" rx="10" ry="10" fill="#f5f5f5" stroke="#000" stroke-width="2" />
+                            <text x="575" y="50" text-anchor="middle" font-size="18" font-weight="bold">Human-Perfected</text>
+                            
+                            <!-- Connection arrow -->
+                            <path d="M350,145 L450,145" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrow3)" />
+                            
+                            <!-- AI side content -->
+                            <circle cx="150" cy="110" r="20" fill="none" stroke="#000" />
+                            <text x="150" y="115" text-anchor="middle" font-size="14">Initiate</text>
+                            
+                            <circle cx="225" cy="145" r="20" fill="none" stroke="#000" />
+                            <text x="225" y="150" text-anchor="middle" font-size="14">Analyze</text>
+                            
+                            <circle cx="300" cy="180" r="20" fill="none" stroke="#000" />
+                            <text x="300" y="185" text-anchor="middle" font-size="14">Propose</text>
+                            
+                            <path d="M170,110 L205,145" fill="none" stroke="#000" stroke-width="1" marker-end="url(#arrow3)" />
+                            <path d="M245,145 L280,180" fill="none" stroke="#000" stroke-width="1" marker-end="url(#arrow3)" />
+                            
+                            <!-- Human side content -->
+                            <circle cx="500" cy="110" r="20" fill="none" stroke="#000" />
+                            <text x="500" y="115" text-anchor="middle" font-size="14">Review</text>
+                            
+                            <circle cx="575" cy="145" r="20" fill="none" stroke="#000" />
+                            <text x="575" y="150" text-anchor="middle" font-size="14">Refine</text>
+                            
+                            <circle cx="650" cy="180" r="20" fill="none" stroke="#000" />
+                            <text x="650" y="185" text-anchor="middle" font-size="14">Perfect</text>
+                            
+                            <path d="M520,110 L555,145" fill="none" stroke="#000" stroke-width="1" marker-end="url(#arrow3)" />
+                            <path d="M595,145 L630,180" fill="none" stroke="#000" stroke-width="1" marker-end="url(#arrow3)" />
+                            
+                            <!-- Arrow marker definition -->
+                            <defs>
+                                <marker id="arrow3" viewBox="0 0 10 10" refX="9" refY="5"
+                                    markerWidth="6" markerHeight="6" orient="auto">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#000" />
+                                </marker>
+                            </defs>
+                            
+                            <!-- Performance metrics at bottom -->
+                            <text x="225" y="250" text-anchor="middle" font-size="16">Processing speed: 500ms avg</text>
+                            <text x="225" y="275" text-anchor="middle" font-size="16">Pattern detection: 94% accuracy</text>
+                            
+                            <text x="575" y="250" text-anchor="middle" font-size="16">Decision quality: 97% accuracy</text>
+                            <text x="575" y="275" text-anchor="middle" font-size="16">User trust: 89% higher</text>
+                        </svg>
+                    </div>
+                    
+                    <div class="stat-box slide-up animation-delay-2">
+                        <div class="big-stat">91%</div>
+                        <p>of enterprise users report higher confidence in AI systems with human oversight</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 8: Lightning RAG -->
+            <div class="slide" id="slide-8">
+                <div class="slide-content">
+                    <h2>Lightning ⚡ RAG</h2>
+                    <p class="slide-up">Advanced Retrieval Augmented Generation Platform</p>
+                    
+                    <div class="svg-container slide-up animation-delay-1">
+                        <svg viewBox="0 0 800 220">
+                            <!-- Document sources at top -->
+                            <rect x="150" y="30" width="100" height="35" rx="5" ry="5" fill="#f5f5f5" stroke="#000" />
+                            <text x="200" y="53" text-anchor="middle" font-size="13">PDF/Documents</text>
+                            
+                            <rect x="280" y="30" width="100" height="35" rx="5" ry="5" fill="#f5f5f5" stroke="#000" />
+                            <text x="330" y="53" text-anchor="middle" font-size="13">SQL Databases</text>
+                            
+                            <rect x="410" y="30" width="100" height="35" rx="5" ry="5" fill="#f5f5f5" stroke="#000" />
+                            <text x="460" y="53" text-anchor="middle" font-size="13">MongoDB</text>
+                            
+                            <rect x="540" y="30" width="100" height="35" rx="5" ry="5" fill="#f5f5f5" stroke="#000" />
+                            <text x="590" y="53" text-anchor="middle" font-size="13">APIs</text>
+                            
+                            <!-- Processing layer -->
+                            <rect x="150" y="100" width="490" height="45" rx="8" ry="8" fill="#f5f5f5" stroke="#000" stroke-width="2" />
+                            <text x="395" y="130" text-anchor="middle" font-size="16" font-weight="bold">Vector Embedding & Processing Layer</text>
+                            
+                            <!-- Connection lines from sources to processing -->
+                            <path d="M200,65 L200,100" fill="none" stroke="#000" stroke-width="1" />
+                            <path d="M330,65 L330,100" fill="none" stroke="#000" stroke-width="1" />
+                            <path d="M460,65 L460,100" fill="none" stroke="#000" stroke-width="1" />
+                            <path d="M590,65 L590,100" fill="none" stroke="#000" stroke-width="1" />
+                            
+                            <!-- LLM & Retrieval Engine -->
+                            <rect x="250" y="175" width="290" height="40" rx="8" ry="8" fill="#f5f5f5" stroke="#000" stroke-width="2" />
+                            <text x="395" y="200" text-anchor="middle" font-size="16" font-weight="bold">LLM & Retrieval Engine</text>
+                            
+                            <!-- Connection processing to LLM -->
+                            <path d="M395,145 L395,175" fill="none" stroke="#000" stroke-width="1" marker-end="url(#arrow4)" />
+                            
+                            <!-- User input and output -->
+                            <path d="M150,195 L250,195" fill="none" stroke="#000" stroke-width="1" marker-end="url(#arrow4)" />
+                            <text x="180" y="185" text-anchor="middle" font-size="14">Query</text>
+                            
+                            <path d="M540,195 L640,195" fill="none" stroke="#000" stroke-width="1" marker-end="url(#arrow4)" />
+                            <text x="610" y="185" text-anchor="middle" font-size="14">Response</text>
+                            
+                            <!-- Arrow marker definition -->
+                            <defs>
+                                <marker id="arrow4" viewBox="0 0 10 10" refX="9" refY="5"
+                                    markerWidth="6" markerHeight="6" orient="auto">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#000" />
+                                </marker>
+                            </defs>
+                            
+                            <!-- Animated data flow -->
+                            <circle cx="200" cy="82" r="4" fill="#000">
+                                <animate attributeName="cy" values="65;100" dur="2s" begin="0s" repeatCount="indefinite" />
+                                <animate attributeName="opacity" values="0;1;0" dur="2s" begin="0s" repeatCount="indefinite" />
+                            </circle>
+                            
+                            <circle cx="460" cy="82" r="4" fill="#000">
+                                <animate attributeName="cy" values="65;100" dur="2s" begin="0.5s" repeatCount="indefinite" />
+                                <animate attributeName="opacity" values="0;1;0" dur="2s" begin="0.5s" repeatCount="indefinite" />
+                            </circle>
+                        </svg>
+                    </div>
+                    
+                    <div class="two-column slide-up animation-delay-2">
+                        <div class="column">
+                            <h3>Technical Specifications</h3>
+                            <ul>
+                                <li>10,000+ pages per minute processing</li>
+                                <li>85% faster than traditional RAG systems</li>
+                                <li>92% semantic retrieval accuracy</li>
+                                <li>26 document formats supported</li>
+                                <li>18 native database connectors</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <div class="stat-box">
+                                <div class="big-stat">85%</div>
+                                <p>Faster query response than traditional systems</p>
+                            </div>
+                            <div class="stat-box">
+                                <div class="big-stat">92%</div>
+                                <p>Semantic retrieval accuracy</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 9: Quantum Minds -->
+            <div class="slide" id="slide-9">
+                <div class="slide-content">
+                    <h2>Quantum Minds</h2>
+                    <p class="slide-up">Low-Code Agentic AI Workflow Platform</p>
+                    
+                    <div class="svg-container slide-up animation-delay-1">
+                        <svg viewBox="0 0 800 250">
+                            <!-- Visual builder area -->
+                            <rect x="150" y="30" width="500" height="160" rx="10" ry="10" fill="#f5f5f5" stroke="#000" stroke-width="2" />
+                            <rect x="170" y="50" width="460" height="120" rx="5" ry="5" fill="none" stroke="#666" stroke-width="1" stroke-dasharray="5,5" />
+                            <text x="400" y="20" text-anchor="middle" font-size="18" font-weight="bold">Visual Mind Builder</text>
+                            
+                            <!-- Operator nodes -->
+                            <rect x="200" y="70" width="80" height="35" rx="5" ry="5" fill="none" stroke="#000" />
+                            <text x="240" y="92" text-anchor="middle" font-size="14">Data Input</text>
+                            
+                            <rect x="360" y="70" width="80" height="35" rx="5" ry="5" fill="none" stroke="#000" />
+                            <text x="400" y="92" text-anchor="middle" font-size="14">Processing</text>
+                            
+                            <rect x="520" y="70" width="80" height="35" rx="5" ry="5" fill="none" stroke="#000" />
+                            <text x="560" y="92" text-anchor="middle" font-size="14">Analysis</text>
+                            
+                            <rect x="240" y="125" width="80" height="35" rx="5" ry="5" fill="none" stroke="#000" />
+                            <text x="280" y="147" text-anchor="middle" font-size="14">Decision</text>
+                            
+                            <rect x="440" y="125" width="80" height="35" rx="5" ry="5" fill="none" stroke="#000" />
+                            <text x="480" y="147" text-anchor="middle" font-size="14">Output</text>
+                            
+                            <!-- Connection lines -->
+                            <path d="M280,87 L360,87" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow5)" />
+                            <path d="M440,87 L520,87" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow5)" />
+                            <path d="M520,105 C520,115 360,115 360,125" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow5)" />
+                            <path d="M320,142 L440,142" fill="none" stroke="#000" stroke-width="1.5" marker-end="url(#arrow5)" />
+                            
+                            <!-- Arrow marker definition -->
+                            <defs>
+                                <marker id="arrow5" viewBox="0 0 10 10" refX="9" refY="5"
+                                    markerWidth="6" markerHeight="6" orient="auto">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#000" />
+                                </marker>
+                            </defs>
+                            
+                            <!-- Animated data flow -->
+                            <circle cx="320" cy="87" r="4" fill="#000">
+                                <animate attributeName="cx" values="280;360" dur="3s" begin="0s" repeatCount="indefinite" />
+                                <animate attributeName="opacity" values="0;1;0" dur="3s" begin="0s" repeatCount="indefinite" />
+                            </circle>
+                            
+                            <circle cx="480" cy="87" r="4" fill="#000">
+                                <animate attributeName="cx" values="440;520" dur="3s" begin="1s" repeatCount="indefinite" />
+                                <animate attributeName="opacity" values="0;1;0" dur="3s" begin="1s" repeatCount="indefinite" />
+                            </circle>
+                            
+                            <circle cx="380" cy="142" r="4" fill="#000">
+                                <animate attributeName="cx" values="320;440" dur="3s" begin="2s" repeatCount="indefinite" />
+                                <animate attributeName="opacity" values="0;1;0" dur="3s" begin="2s" repeatCount="indefinite" />
+                            </circle>
+                            
+                            <!-- Category labels at bottom -->
+                            <text x="200" y="205" font-size="12">SQL</text>
+                            <text x="250" y="205" font-size="12">Table</text>
+                            <text x="300" y="205" font-size="12">Document</text>
+                            <text x="370" y="205" font-size="12">MongoDB</text>
+                            <text x="440" y="205" font-size="12">LLM</text>
+                            <text x="485" y="205" font-size="12">Excel</text>
+                            <text x="530" y="205" font-size="12">Media</text>
+                            <text x="580" y="205" font-size="12">API</text>
+                            <text x="615" y="205" font-size="12">Code</text>
+                        </svg>
+                    </div>
+                    
+                    <div class="two-column slide-up animation-delay-2">
+                        <div class="column">
+                            <h3>Technical Specifications</h3>
+                            <ul>
+                                <li>17 specialized operator categories</li>
+                                <li>Intuitive drag-and-drop interface</li>
+                                <li>AI-assisted workflow creation</li>
+                                <li>Integration with 9 leading model providers</li>
+                                <li>73% reduction in workflow complexity</li>
+                            </ul>
+                        </div>
+                        <div class="column">
+                            <div class="stat-box">
+                                <div class="big-stat">96.2%</div>
+                                <p>Average efficiency gain in compliance reporting</p>
+                            </div>
+                            <div class="stat-box">
+                                <div class="big-stat">93%</div>
+                                <p>Error reduction in document processing</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 10: Enterprise Capabilities -->
+            <div class="slide" id="slide-10">
+                <div class="slide-content">
+                    <h2>Enterprise-Grade Capabilities</h2>
+                    
+                    <div class="feature-list slide-up">
+                        <div class="feature-item">
+                            <h3>Security</h3>
+                            <p>SOC 2 Type II certified, HIPAA compliant, GDPR ready, ISO 27001</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>Integration</h3>
+                            <p>18 native connectors, API-driven architecture, Custom endpoints</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>Deployment</h3>
+                            <p>Cloud, On-premise, or Hybrid with secure bridge architecture</p>
+                        </div>
+                        <div class="feature-item">
+                            <h3>Access Control</h3>
+                            <p>Role-based permissions, Attribute-based rules, Audit logging</p>
+                        </div>
+                    </div>
+                    
+                    <div class="svg-container slide-up animation-delay-1">
+                        <svg viewBox="0 0 800 150">
+                            <!-- Security layer -->
+                            <rect x="150" y="20" width="500" height="30" rx="5" ry="5" fill="#f5f5f5" stroke="#000" stroke-width="2" />
+                            <text x="400" y="40" text-anchor="middle" font-size="16">Security Layer</text>
+                            
+                            <!-- Data layer -->
+                            <rect x="150" y="60" width="500" height="30" rx="5" ry="5" fill="#f5f5f5" stroke="#000" stroke-width="2" />
+                            <text x="400" y="80" text-anchor="middle" font-size="16">Data Layer</text>
+                            
+                            <!-- AI layer -->
+                            <rect x="150" y="100" width="500" height="30" rx="5" ry="5" fill="#f5f5f5" stroke="#000" stroke-width="2" />
+                            <text x="400" y="120" text-anchor="middle" font-size="16">AI Layer</text>
+                            
+                            <!-- Lock icons -->
+                            <circle cx="180" cy="35" r="8" fill="none" stroke="#000" stroke-width="1" />
+                            <rect x="176" y="32" width="8" height="10" rx="2" ry="2" fill="none" stroke="#000" stroke-width="1" />
+                            <path d="M174,32 L174,29 C174,26 186,26 186,29 L186,32" fill="none" stroke="#000" stroke-width="1" />
+                            
+                            <circle cx="220" cy="35" r="8" fill="none" stroke="#000" stroke-width="1" />
+                            <rect x="216" y="32" width="8" height="10" rx="2" ry="2" fill="none" stroke="#000" stroke-width="1" />
+                            <path d="M214,32 L214,29 C214,26 226,26 226,29 L226,32" fill="none" stroke="#000" stroke-width="1" />
+                        </svg>
+                    </div>
+                    
+                    <div class="stat-box slide-up animation-delay-2">
+                        <div class="big-stat">99.99%</div>
+                        <p>Uptime guarantee with geographic redundancy</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 11: Industry Impact -->
+            <div class="slide" id="slide-11">
+                <div class="slide-content">
+                    <h2>Measurable Industry Impact</h2>
+                    
+                    <div class="two-column">
+                        <div class="column slide-up">
+                            <h3>Manufacturing</h3>
+                            <div class="stat-box">
+                                <div class="big-stat">30%</div>
+                                <p>Reduction in maintenance costs</p>
+                            </div>
+                            <div class="stat-box">
+                                <div class="big-stat">43%</div>
+                                <p>Reduction in equipment downtime</p>
+                            </div>
+                            <p>Case: Fortune 500 manufacturer saved $2.7M annually</p>
+                        </div>
+                        <div class="column slide-up animation-delay-1">
+                            <h3>Financial Services</h3>
+                            <div class="stat-box">
+                                <div class="big-stat">62%</div>
+                                <p>Reduction in fraud detection false positives</p>
+                            </div>
+                            <div class="stat-box">
+                                <div class="big-stat">40%</div>
+                                <p>Improvement in detection rates</p>
+                            </div>
+                            <p>Case: Global bank saved $4.2M from prevented fraud</p>
+                        </div>
+                    </div>
+                    
+                    <div class="two-column">
+                        <div class="column slide-up animation-delay-2">
+                            <h3>Healthcare</h3>
+                            <div class="stat-box">
+                                <div class="big-stat">27%</div>
+                                <p>Reduction in readmission rates</p>
+                            </div>
+                            <div class="stat-box">
+                                <div class="big-stat">31%</div>
+                                <p>Improvement in patient satisfaction</p>
+                            </div>
+                        </div>
+                        <div class="column slide-up animation-delay-3">
+                            <h3>Retail</h3>
+                            <div class="stat-box">
+                                <div class="big-stat">40%</div>
+                                <p>Reduction in inventory stockouts</p>
+                            </div>
+                            <div class="stat-box">
+                                <div class="big-stat">92%</div>
+                                <p>Demand forecast accuracy</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 12: Implementation Process -->
+            <div class="slide" id="slide-12">
+                <div class="slide-content">
+                    <h2>Implementation Journey</h2>
+                    
+                    <div class="timeline slide-up">
+                        <div class="timeline-item">
+                            <div class="timeline-label">Discovery<br/>(2-3 weeks)</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-label">Foundation<br/>(4-6 weeks)</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-label">Acceleration<br/>(6-8 weeks)</div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-label">Optimization<br/>(Ongoing)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="svg-container slide-up animation-delay-1">
+                        <svg class="chart" viewBox="0 0 800 200">
+                            <!-- ROI timeline chart -->
+                            <rect x="100" y="30" width="600" height="140" fill="none" stroke="#666" stroke-width="1" />
+                            
+                            <!-- X-axis labels -->
+                            <text x="150" y="190" text-anchor="middle" font-size="14">Month 1</text>
+                            <text x="300" y="190" text-anchor="middle" font-size="14">Month 3</text>
+                            <text x="450" y="190" text-anchor="middle" font-size="14">Month 6</text>
+                            <text x="600" y="190" text-anchor="middle" font-size="14">Month 12</text>
+                            
+                            <!-- Y-axis labels -->
+                            <text x="80" y="170" text-anchor="end" font-size="14">0x</text>
+                            <text x="80" y="125" text-anchor="end" font-size="14">5x</text>
+                            <text x="80" y="80" text-anchor="end" font-size="14">7.5x</text>
+                            <text x="80" y="35" text-anchor="end" font-size="14">10x</text>
+                            
+                            <!-- Grid lines -->
+                            <line x1="100" y1="170" x2="700" y2="170" stroke="#ccc" stroke-width="1" stroke-dasharray="5,5" />
+                            <line x1="100" y1="125" x2="700" y2="125" stroke="#ccc" stroke-width="1" stroke-dasharray="5,5" />
+                            <line x1="100" y1="80" x2="700" y2="80" stroke="#ccc" stroke-width="1" stroke-dasharray="5,5" />
+                            <line x1="100" y1="35" x2="700" y2="35" stroke="#ccc" stroke-width="1" stroke-dasharray="5,5" />
+                            
+                            <!-- Chart title -->
+                            <text x="400" y="15" text-anchor="middle" font-size="16" font-weight="bold">Customer ROI Timeline</text>
+                            
+                            <!-- ROI line -->
+                            <path d="M150,165 L300,125 L450,80 L600,35" fill="none" stroke="#000" stroke-width="3" />
+                            
+                            <!-- Data points -->
+                            <circle cx="150" cy="165" r="6" fill="#fff" stroke="#000" stroke-width="2" />
+                            <circle cx="300" cy="125" r="6" fill="#fff" stroke="#000" stroke-width="2" />
+                            <circle cx="450" cy="80" r="6" fill="#fff" stroke="#000" stroke-width="2" />
+                            <circle cx="600" cy="35" r="6" fill="#fff" stroke="#000" stroke-width="2" />
+                            
+                            <!-- Data labels -->
+                            <text x="150" y="155" text-anchor="middle" font-size="12">0.2x</text>
+                            <text x="300" y="115" text-anchor="middle" font-size="12">1.8x</text>
+                            <text x="450" y="70" text-anchor="middle" font-size="12">4.2x</text>
+                            <text x="600" y="25" text-anchor="middle" font-size="12">9.7x</text>
+                        </svg>
+                    </div>
+                    
+                    <div class="slide-up animation-delay-2">
+                        <div class="stat-box">
+                            <div class="big-stat">94%</div>
+                            <p>of implementations completed on time and within budget</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 13: Call to Action -->
+            <div class="slide" id="slide-13">
+                <div class="slide-content">
+                    <h2>Start Your Enterprise AI Journey</h2>
+                    
+                    <div class="svg-container">
+                        <svg width="200" height="200" viewBox="0 0 200 200">
+                            <circle cx="100" cy="100" r="80" fill="none" stroke="#000" stroke-width="2" />
+                            <text x="100" y="85" text-anchor="middle" font-size="20" font-weight="bold">ai/studio</text>
+                            <text x="100" y="115" text-anchor="middle" font-size="16">by</text>
+                            <text x="100" y="140" text-anchor="middle" font-size="20">⦃param⦄</text>
+                        </svg>
+                    </div>
+                    
+                    <div class="slide-up animation-delay-1">
+                        <h3>Next Steps</h3>
+                        <p>1. Schedule a Consultation<br>
+                        2. Proof of Concept<br>
+                        3. Implementation Planning<br>
+                        4. Deployment<br>
+                        5. Value Realization</p>
+                    </div>
+                    
+                    <div class="slide-up animation-delay-2">
+                        <p>Contact: enterprise@paramai.studio | +91 9845120421</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="slide-indicator" id="slide-indicator">1/13</div>
+            
+            <div class="controls">
+                <button class="control-btn" id="prev-btn">Previous</button>
+                <button class="control-btn" id="next-btn">Next</button>
+            </div>
+            
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const progressBar = document.getElementById('progress-bar');
+            const slideIndicator = document.getElementById('slide-indicator');
+            let currentSlide = 0;
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            // Set initial progress bar width and slide indicator
+            updateProgressBar();
+            updateSlideIndicator();
+            
+            // Add event listeners to buttons
+            prevBtn.addEventListener('click', prevSlide);
+            nextBtn.addEventListener('click', nextSlide);
+            
+            // Add keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                }
+            });
+            
+            // Add touch navigation
+            document.addEventListener('touchstart', function(e) {
+                touchStartX = e.changedTouches[0].screenX;
+            });
+            
+            document.addEventListener('touchend', function(e) {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            });
+            
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                if (touchEndX < touchStartX - swipeThreshold) {
+                    // Swipe left
+                    nextSlide();
+                } else if (touchEndX > touchStartX + swipeThreshold) {
+                    // Swipe right
+                    prevSlide();
+                }
+            }
+            
+            function showSlide(index) {
+                // Remove active class from all slides
+                slides.forEach(slide => {
+                    slide.classList.remove('active');
+                });
+                
+                // Add active class to the current slide
+                slides[index].classList.add('active');
+                
+                // Update progress bar and indicator
+                updateProgressBar();
+                updateSlideIndicator();
+                
+                // Reset animations
+                resetAnimations(slides[index]);
+                
+                // Scroll to top of slide
+                slides[index].scrollTop = 0;
+            }
+            
+            function nextSlide() {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            }
+            
+            function prevSlide() {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            }
+            
+            function updateProgressBar() {
+                const progress = ((currentSlide + 1) / slides.length) * 100;
+                progressBar.style.width = `${progress}%`;
+            }
+            
+            function updateSlideIndicator() {
+                slideIndicator.textContent = `${currentSlide + 1}/${slides.length}`;
+            }
+            
+            function resetAnimations(slide) {
+                // Get all animated elements in the current slide
+                const animatedElements = slide.querySelectorAll('.fade-in, .slide-up');
+                
+                // Remove and reapply animation classes to restart animations
+                animatedElements.forEach(element => {
+                    const animations = Array.from(element.classList)
+                        .filter(cls => cls.startsWith('fade-in') || cls.startsWith('slide-up') || cls.startsWith('animation-delay'));
+                    
+                    // Get the delay class if it exists
+                    const delayClass = animations.find(cls => cls.startsWith('animation-delay'));
+                    
+                    // Remove animation classes
+                    animations.forEach(cls => {
+                        element.classList.remove(cls);
+                    });
+                    
+                    // Force reflow
+                    void element.offsetWidth;
+                    
+                    // Add back animation classes
+                    if (element.classList.contains('fade-in') || animations.includes('fade-in')) {
+                        element.classList.add('fade-in');
+                    }
+                    
+                    if (element.classList.contains('slide-up') || animations.includes('slide-up')) {
+                        element.classList.add('slide-up');
+                    }
+                    
+                    // Add back delay class if it existed
+                    if (delayClass) {
+                        element.classList.add(delayClass);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
