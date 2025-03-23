@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Western Ghats Tree Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2d6a4f;
+            --secondary-color: #40916c;
+            --accent-color: #95d5b2;
+            --light-color: #f5f5f5;
+            --dark-color: #1b4332;
+            --text-color: #333;
+            --light-text: #fff;
+            --danger-color: #d62828;
+            --warning-color: #fc8c03;
+            --info-color: #4361ee;
+            --success-color: #52b788;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Work Sans', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-color);
+            color: var(--text-color);
+            line-height: 1.5;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 0.75rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 0.75rem;
+        }
+        
+        .app-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .branding {
+            font-weight: 600;
+        }
+        
+        .search-container {
+            display: flex;
+            margin: 0.5rem 0;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            font-size: 0.9rem;
+            font-family: 'Work Sans', sans-serif;
+            outline: none;
+        }
+        
+        .search-btn {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        nav {
+            display: flex;
+            overflow-x: auto;
+            margin-top: 0.5rem;
+            border-radius: 4px;
+            gap: 2px;
+        }
+        
+        .nav-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: var(--light-text);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 4px;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .nav-btn.active {
+            background-color: rgba(0,0,0,0.15);
+        }
+        
+        .nav-btn:hover {
+            background-color: rgba(0,0,0,0.1);
+        }
+        
+        main {
+            padding: 0.75rem 0;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.75rem;
+            color: var(--dark-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .tree-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+        
+        .tree-card {
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            padding: 0.75rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            position: relative;
+            border: 1px solid #f0f0f0;
+        }
+        
+        .tree-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+        }
+        
+        .tree-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+            color: var(--dark-color);
+        }
+        
+        .tree-scientific {
+            font-style: italic;
+            margin-bottom: 0.25rem;
+            color: #666;
+            font-size: 0.85rem;
+        }
+        
+        .tree-kannada {
+            margin-bottom: 0.25rem;
+            color: #555;
+            font-size: 0.85rem;
+        }
+        
+        .tree-status {
+            display: inline-block;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-top: 0.25rem;
+            font-weight: 500;
+            border: 1px solid;
+        }
+        
+        .status-lc {
+            color: var(--success-color);
+            border-color: var(--success-color);
+            background-color: rgba(82, 183, 136, 0.05);
+        }
+        
+        .status-vu {
+            color: var(--warning-color);
+            border-color: var(--warning-color);
+            background-color: rgba(252, 140, 3, 0.05);
+        }
+        
+        .status-en {
+            color: var(--danger-color);
+            border-color: var(--danger-color);
+            background-color: rgba(214, 40, 40, 0.05);
+        }
+        
+        .status-cr {
+            color: #990000;
+            border-color: #990000;
+            background-color: rgba(153, 0, 0, 0.05);
+        }
+        
+        .tree-icons {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            display: flex;
+            gap: 5px;
+        }
+        
+        .tree-icon {
+            width: 16px;
+            height: 16px;
+            color: var(--secondary-color);
+        }
+        
+        .table-view {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.75rem;
+            overflow-x: auto;
+            display: block;
+            font-size: 0.9rem;
+        }
+        
+        .table-view th, .table-view td {
+            border: 1px solid #eee;
+            padding: 0.5rem;
+            text-align: left;
+        }
+        
+        .table-view th {
+            background-color: var(--secondary-color);
+            color: white;
+            position: sticky;
+            top: 0;
+            font-weight: 500;
+        }
+        
+        .table-view tr:nth-child(even) {
+            background-color: #f8f8f8;
+        }
+        
+        .table-view tr:hover {
+            background-color: #f2f2f2;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 200;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            backdrop-filter: blur(3px);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 7% auto;
+            padding: 1.25rem;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            color: #aaa;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+        
+        .close-btn:hover {
+            color: #333;
+        }
+        
+        .tree-detail-header {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.75rem;
+        }
+        
+        .tree-detail-name {
+            font-size: 1.3rem;
+            color: var(--dark-color);
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+        
+        .tree-detail-scientific {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+        }
+        
+        .tree-detail-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: var(--dark-color);
+            font-size: 0.8rem;
+        }
+        
+        .info-value {
+            color: #555;
+            font-size: 0.9rem;
+        }
+        
+        .filter-bar {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin: 0.75rem 0;
+            align-items: center;
+        }
+        
+        .filter-select {
+            padding: 0.4rem;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 0.85rem;
+            font-family: 'Work Sans', sans-serif;
+            outline: none;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .visible {
+            display: block;
+        }
+        
+        .tree-count {
+            color: var(--secondary-color);
+            font-weight: 500;
+            margin-left: auto;
+            font-size: 0.85rem;
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background-color: var(--primary-color);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 0.75rem;
+            text-align: center;
+            font-size: 0.85rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .tree-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+            
+            .filter-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .filter-select {
+                width: 100%;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+            }
+            
+            .app-title {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.1rem;
+            }
+            
+            .tree-name {
+                font-size: 0.9rem;
+            }
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+        
+        .spinner {
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border-left-color: var(--primary-color);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+        
+        h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0.75rem 0 0.5rem 0;
+            color: var(--dark-color);
+        }
+        
+        ul {
+            padding-left: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        p {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="app-title">
+                <span>🌳</span>
+                <h1 class="branding">ileaf.org || Western Ghats Trees</h1>
+            </div>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search trees by name (English, Scientific or Kannada)...">
+                <button class="search-btn">🔍 Search</button>
+            </div>
+            <nav>
+                <button class="nav-btn active" data-section="all-trees">Top 100 Native Trees</button>
+                <button class="nav-btn" data-section="priorities-5">Top 5 Priorities</button>
+                <button class="nav-btn" data-section="fastest-growing">Fastest Growing</button>
+                <button class="nav-btn" data-section="priorities-10">Top 10 Priorities</button>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <div id="all-trees" class="section visible">
+            <h2 class="section-title">🌲 Top 100 Native Trees of Western Ghats</h2>
+            <div class="filter-bar">
+                <select class="filter-select" id="status-filter">
+                    <option value="all">All Conservation Status</option>
+                    <option value="Least Concern">Least Concern</option>
+                    <option value="Vulnerable">Vulnerable</option>
+                    <option value="Endangered">Endangered</option>
+                    <option value="Critically Endangered">Critically Endangered</option>
+                </select>
+                <select class="filter-select" id="sort-by">
+                    <option value="name">Sort by Name</option>
+                    <option value="scientific">Sort by Scientific Name</option>
+                    <option value="status">Sort by Conservation Status</option>
+                </select>
+                <div class="tree-count">Showing <span id="count-display">100</span> trees</div>
+            </div>
+            <div class="tree-grid" id="tree-list"></div>
+        </div>
+        
+        <div id="priorities-5" class="section hidden">
+            <h2 class="section-title">🌱 Top 5 Afforestation Priorities</h2>
+            <div id="priorities-5-content">
+                <h3>Endangered Timber Trees (IUCN Red List)</h3>
+                <div class="table-container">
+                    <table class="table-view">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Kannada Name</th>
+                                <th>Botanical Name</th>
+                                <th>IUCN Status</th>
+                                <th>Growth & Habitat</th>
+                                <th>Significance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="endangered-timber-table"></tbody>
+                    </table>
+                </div>
+                
+                <h3>Timber Trees for Ecosystem Support</h3>
+                <div class="table-container">
+                    <table class="table-view">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Kannada Name</th>
+                                <th>Botanical Name</th>
+                                <th>Key Role</th>
+                                <th>Growth</th>
+                                <th>Significance</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ecosystem-support-table"></tbody>
+                    </table>
+                </div>
+                
+                <h3>Flowering & Fruit Trees (Wildlife Support)</h3>
+                <div class="table-container">
+                    <table class="table-view">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Kannada Name</th>
+                                <th>Botanical Name</th>
+                                <th>Flowering/Fruit</th>
+                                <th>Ecological Role</th>
+                            </tr>
+                        </thead>
+                        <tbody id="flowering-fruit-table"></tbody>
+                    </table>
+                </div>
+                
+                <h3>Ayurvedic Plants/Trees</h3>
+                <div class="table-container">
+                    <table class="table-view">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Kannada Name</th>
+                                <th>Botanical Name</th>
+                                <th>Part Used</th>
+                                <th>Medicinal Use</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ayurvedic-table"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div id="fastest-growing" class="section hidden">
+            <h2 class="section-title">🚀 Fastest Growing Trees</h2>
+            <div id="fastest-growing-content">
+                <div class="table-container">
+                    <table class="table-view">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Common Name</th>
+                                <th>Kannada Name</th>
+                                <th>Botanical Name</th>
+                                <th>Growth Rate</th>
+                                <th>Height</th>
+                                <th>Key Features</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fastest-growing-table"></tbody>
+                    </table>
+                </div>
+                
+                <h3>Key Recommendations</h3>
+                <ul id="fast-growing-recommendations"></ul>
+            </div>
+        </div>
+        
+        <div id="priorities-10" class="section hidden">
+            <h2 class="section-title">📊 Top 10 Afforestation Priorities</h2>
+            <div id="priorities-10-content">
+                <h3>Timber Trees</h3>
+                <div class="table-container">
+                    <table class="table-view">
+                        <thead>
+                            <tr>
+                                <th>Common Name</th>
+                                <th>Kannada Name</th>
+                                <th>Technical Specs</th>
+                                <th>Significance</th>
+                                <th>Lifespan (years)</th>
+                                <th>Economic Value</th>
+                                <th>Environmental Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="timber-trees-table"></tbody>
+                    </table>
+                </div>
+                
+                <h3>Flowering and Fruiting Trees</h3>
+                <div class="table-container">
+                    <table class="table-view">
+                        <thead>
+                            <tr>
+                                <th>Common Name</th>
+                                <th>Kannada Name</th>
+                                <th>Significance</th>
+                                <th>Lifespan (years)</th>
+                                <th>Economic Value</th>
+                                <th>Environmental Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="flowering-fruiting-table"></tbody>
+                    </table>
+                </div>
+                
+                <h3>Ayurvedic Plants</h3>
+                <div class="table-container">
+                    <table class="table-view">
+                        <thead>
+                            <tr>
+                                <th>Common Name</th>
+                                <th>Kannada Name</th>
+                                <th>Significance</th>
+                                <th>Lifespan (years)</th>
+                                <th>Economic Value</th>
+                                <th>Environmental Value</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ayurvedic-plants-table"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <div id="tree-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div id="tree-detail-content"></div>
+        </div>
+    </div>
+    
+    <div class="back-to-top">↑</div>
+    
+    <footer>
+        <p>By Sid, Sachin, Sree & Vaidee</p>
+    </footer>
+    
+    <script>
+        // Tree data from the markdown file
+        const treesData = [
+            { id: 1, name: "Malabar Ironwood", scientific: "Hopea parviflora", kannada: "ಕಂಬಗಮರ (Kambagamara)", status: "Least Concern", type: "timber" },
+            { id: 2, name: "White Dammar", scientific: "Vateria indica", kannada: "ಧೂಪದ ಮರ (Dhoopada Mara)", status: "Critically Endangered", type: "timber" },
+            { id: 3, name: "Indian Kino Tree", scientific: "Pterocarpus marsupium", kannada: "ಬಿಜಸಾಲ (Bijasala)", status: "Vulnerable", type: "timber" },
+            { id: 4, name: "Black Dammar", scientific: "Canarium strictum", kannada: "ಕರಿಂಧೂಪ (Karindhoopa)", status: "Endangered", type: "timber" },
+            { id: 5, name: "Ceylon Oak", scientific: "Schleichera oleosa", kannada: "ಕಸುಬು (Kasubu)", status: "Least Concern", type: "timber" },
+            { id: 6, name: "Indian Mahogany", scientific: "Toona ciliata", kannada: "ಮಹಾಗನಿ (Mahagani)", status: "Least Concern", type: "timber" },
+            { id: 7, name: "Indian Laurel", scientific: "Terminalia paniculata", kannada: "ಮಡ್ಡಿ (Maddi)", status: "Least Concern", type: "timber" },
+            { id: 8, name: "Jackfruit Tree", scientific: "Artocarpus heterophyllus", kannada: "ಹಲಸು (Halasu)", status: "Least Concern", type: "fruit" },
+            { id: 9, name: "Indian Gooseberry", scientific: "Phyllanthus emblica", kannada: "ನೆಲ್ಲಿಕಾಯಿ (Nellikayi)", status: "Least Concern", type: "fruit" },
+            { id: 10, name: "Neem", scientific: "Azadirachta indica", kannada: "ಬೇವು (Bevu)", status: "Least Concern", type: "medicinal" },
+            { id: 11, name: "Indian Beech", scientific: "Millettia pinnata", kannada: "ಹೊಂಗೆ (Honge)", status: "Least Concern", type: "timber" },
+            { id: 12, name: "Flame of the Forest", scientific: "Butea monosperma", kannada: "ಮುತ್ತುಗ (Muttuga)", status: "Least Concern", type: "flowering" },
+            { id: 13, name: "Indian Cork Tree", scientific: "Millingtonia hortensis", kannada: "ಮರಮದ್ದಳೆ (Mara Maddale)", status: "Least Concern", type: "timber" },
+            { id: 14, name: "Indian Almond", scientific: "Terminalia catappa", kannada: "ಬದಾಮಿ (Badami)", status: "Least Concern", type: "fruit" },
+            { id: 15, name: "Indian Tulip Tree", scientific: "Thespesia populnea", kannada: "ಪಾರಿಸ (Parisa)", status: "Least Concern", type: "flowering" },
+            { id: 16, name: "Indian Butter Tree", scientific: "Madhuca longifolia", kannada: "ಇಪ್ಪೆ (Ippe)", status: "Least Concern", type: "timber" },
+            { id: 17, name: "Indian Laburnum", scientific: "Cassia fistula", kannada: "ಕಿರಿಮುಟ್ಟಿ (Kirimutti)", status: "Least Concern", type: "flowering" },
+            { id: 18, name: "Indian Elm", scientific: "Holoptelea integrifolia", kannada: "ತ್ರೇಮು (Tremu)", status: "Least Concern", type: "timber" },
+            { id: 19, name: "Indian Kino", scientific: "Butea monosperma", kannada: "ಮುತ್ತುಗ (Muttuga)", status: "Least Concern", type: "medicinal" },
+            { id: 20, name: "Indian Mulberry", scientific: "Morinda tinctoria", kannada: "ನೊಣಗಿಡ (Nonagida)", status: "Least Concern", type: "fruit" },
+            { id: 21, name: "Indian Oak", scientific: "Barringtonia acutangula", kannada: "ಹಿಜ್ಜೆ (Hijje)", status: "Least Concern", type: "timber" },
+            { id: 22, name: "Indian Persimmon", scientific: "Diospyros lotus", kannada: "ತಿಮ್ಮರೆ (Timmare)", status: "Least Concern", type: "fruit" },
+            { id: 23, name: "Indian Plum", scientific: "Ziziphus mauritiana", kannada: "ಬೋರ (Bora)", status: "Least Concern", type: "fruit" },
+            { id: 24, name: "Indian Redwood", scientific: "Chukrasia tabularis", kannada: "ಬಿಳಿ ಸೀಸಂ (Bili Sisaṁ)", status: "Least Concern", type: "timber" },
+            { id: 25, name: "Indian Rose Chestnut", scientific: "Mesua ferrea", kannada: "ನಾಗಸಂಪಿಗೆ (Nagasampige)", status: "Least Concern", type: "flowering" },
+            { id: 26, name: "Indian Sandalwood", scientific: "Santalum album", kannada: "ಚಂದನ (Chandana)", status: "Vulnerable", type: "medicinal" },
+            { id: 27, name: "Indian Screw Tree", scientific: "Helicteres isora", kannada: "ಮುರಡು (Muradu)", status: "Least Concern", type: "medicinal" },
+            { id: 28, name: "Indian Silver Fir", scientific: "Abies pindrow", kannada: "ಪಿಂಡ್ರೋ (Pindro)", status: "Least Concern", type: "timber" },
+            { id: 29, name: "Indian Siris", scientific: "Albizia lebbeck", kannada: "ಬಾಗಿಲು (Bagilu)", status: "Least Concern", type: "timber" },
+            { id: 30, name: "Indian Soapberry", scientific: "Sapindus trifoliatus", kannada: "ಅಂಟು (Antu)", status: "Least Concern", type: "fruit" },
+            { id: 31, name: "Indian Trumpet Flower", scientific: "Oroxylum indicum", kannada: "ಶಯ್ಯಾ (Shayya)", status: "Least Concern", type: "flowering" },
+            { id: 32, name: "Indian Willow", scientific: "Salix tetrasperma", kannada: "ಹಾಲುಮರ (Haalumara)", status: "Least Concern", type: "timber" },
+            { id: 33, name: "Indian Wormwood", scientific: "Artemisia nilagirica", kannada: "ನಗದಾಳು (Nagadaalu)", status: "Least Concern", type: "medicinal" },
+            { id: 34, name: "Ironwood Tree", scientific: "Memecylon umbellatum", kannada: "ಕಲ್ಲುಮರ (Kallumara)", status: "Least Concern", type: "timber" },
+            { id: 35, name: "Kadam Tree", scientific: "Neolamarckia cadamba", kannada: "ಕದಂಬ (Kadamba)", status: "Least Concern", type: "timber" },
+            { id: 36, name: "Kapok Tree", scientific: "Ceiba pentandra", kannada: "ಬೊಂಬಾಕ್ಸ್ (Bombax)", status: "Least Concern", type: "timber" },
+            { id: 37, name: "Karanja Tree", scientific: "Pongamia pinnata", kannada: "ಹೊಂಗೆ (Honge)", status: "Least Concern", type: "timber" },
+            { id: 38, name: "Kattukariveppu", scientific: "Wrightia tinctoria", kannada: "ಹಾಲಿನ ಮರ (Haalina Mara)", status: "Least Concern", type: "medicinal" },
+            { id: 39, name: "Khirni Tree", scientific: "Manilkara hexandra", kannada: "ರಾಸು (Raasu)", status: "Least Concern", type: "fruit" },
+            { id: 40, name: "Kokum Tree", scientific: "Garcinia indica", kannada: "ಮಂಗಸ್ತೀನ್ (Mangasteen)", status: "Least Concern", type: "fruit" },
+            { id: 41, name: "Kumbhi Tree", scientific: "Careya arborea", kannada: "ಕಂಬಿ (Kambi)", status: "Least Concern", type: "timber" },
+            { id: 42, name: "Kusum Tree", scientific: "Schleichera oleosa", kannada: "ಕಸುಬು (Kasubu)", status: "Least Concern", type: "timber" },
+            { id: 43, name: "Malabar Mahogany", scientific: "Chukrasia tabularis", kannada: "ಬಿಳಿ ಸೀಸಂ (Bili Sisaṁ)", status: "Least Concern", type: "timber" },
+            { id: 44, name: "Wild Mango", scientific: "Mangifera indica", kannada: "ಮಾವು (Mavu)", status: "Least Concern", type: "fruit" },
+            { id: 45, name: "Ceylon Ironwood", scientific: "Mesua ferrea", kannada: "ನಾಗಸಂಪಿಗೆ (Nagasampige)", status: "Least Concern", type: "timber" },
+            { id: 46, name: "Kokum", scientific: "Garcinia indica", kannada: "ಮಂಗಸ್ತೀನ್ (Mangasteen)", status: "Least Concern", type: "fruit" },
+            { id: 47, name: "Malabar Plum", scientific: "Syzygium cumini", kannada: "ನೆರೆಳೆ (Nerele)", status: "Least Concern", type: "fruit" },
+            { id: 48, name: "Candle Bush", scientific: "Cassia alata", kannada: "ದಾದಾಪ (Dadapa)", status: "Least Concern", type: "flowering" },
+            { id: 49, name: "Indian Tulip Tree", scientific: "Thespesia populnea", kannada: "ಪಾರಿಸ (Parisa)", status: "Least Concern", type: "flowering" },
+            { id: 50, name: "Banyan Tree", scientific: "Ficus benghalensis", kannada: "ಆಲದ ಮರ (Alada Mara)", status: "Least Concern", type: "timber" },
+            
+            // Continuing with the remaining trees...
+            { id: 51, name: "Peepal Tree", scientific: "Ficus religiosa", kannada: "ಅಶ್ವತ್ಥ (Ashvattha)", status: "Least Concern", type: "medicinal" },
+            { id: 52, name: "Sacred Barna", scientific: "Crataeva religiosa", kannada: "ಮರೇಗಾಸು (Maregāsu)", status: "Least Concern", type: "medicinal" },
+            { id: 53, name: "Indian Bael", scientific: "Aegle marmelos", kannada: "ಬಿಲ್ವ (Bilva)", status: "Least Concern", type: "medicinal" },
+            { id: 54, name: "Drumstick Tree", scientific: "Moringa oleifera", kannada: "ನುಗ್ಗೆ (Nugge)", status: "Least Concern", type: "medicinal" },
+            { id: 55, name: "Flame of the Forest", scientific: "Butea monosperma", kannada: "ಮುತ್ತುಗ (Muttuga)", status: "Least Concern", type: "flowering" },
+            { id: 56, name: "Indian Coral Tree", scientific: "Erythrina variegata", kannada: "ಹಾಲುಬೆವು (Halubevu)", status: "Least Concern", type: "flowering" },
+            { id: 57, name: "Golden Shower Tree", scientific: "Cassia fistula", kannada: "ಕಿರಿಮುಟ್ಟಿ (Kirimutti)", status: "Least Concern", type: "flowering" },
+            { id: 58, name: "Indian Elm", scientific: "Holoptelea integrifolia", kannada: "ತ್ರೇಮು (Tremu)", status: "Least Concern", type: "timber" },
+            { id: 59, name: "Axlewood Tree", scientific: "Anogeissus latifolia", kannada: "ದಿಂಡಿಗ (Dindiga)", status: "Least Concern", type: "timber" },
+            { id: 60, name: "Satinwood", scientific: "Chloroxylon swietenia", kannada: "ಬಿಲ್ವಪತ್ರ (Bilvapatra)", status: "Least Concern", type: "timber" },
+            { id: 61, name: "Indian Kino Tree", scientific: "Pterocarpus marsupium", kannada: "ಬಿಜಸಾಲ (Bijasala)", status: "Vulnerable", type: "timber" },
+            { id: 62, name: "Sandalwood", scientific: "Santalum album", kannada: "ಚಂದನ (Chandana)", status: "Vulnerable", type: "medicinal" },
+            { id: 63, name: "Black Dammar", scientific: "Canarium strictum", kannada: "ಕರಿಂಧೂಪ (Karindhoopa)", status: "Endangered", type: "timber" },
+            { id: 64, name: "Malabar Ironwood", scientific: "Hopea parviflora", kannada: "ಕಂಬಗಮರ (Kambagamara)", status: "Least Concern", type: "timber" },
+            { id: 65, name: "White Dammar", scientific: "Vateria indica", kannada: "ಧೂಪದ ಮರ (Dhoopada Mara)", status: "Critically Endangered", type: "timber" },
+            { id: 66, name: "Ceylon Oak", scientific: "Schleichera oleosa", kannada: "ಕಸುಬು (Kasubu)", status: "Least Concern", type: "timber" },
+            { id: 67, name: "Indian Mahogany", scientific: "Toona ciliata", kannada: "ಮಹಾಗನಿ (Mahagani)", status: "Least Concern", type: "timber" },
+            { id: 68, name: "Indian Laurel", scientific: "Terminalia paniculata", kannada: "ಮಡ್ಡಿ (Maddi)", status: "Least Concern", type: "timber" },
+            { id: 69, name: "Jackfruit Tree", scientific: "Artocarpus heterophyllus", kannada: "ಹಲಸು (Halasu)", status: "Least Concern", type: "fruit" },
+            { id: 70, name: "Indian Gooseberry", scientific: "Phyllanthus emblica", kannada: "ನೆಲ್ಲಿಕಾಯಿ (Nellikayi)", status: "Least Concern", type: "fruit" },
+            { id: 71, name: "Neem", scientific: "Azadirachta indica", kannada: "ಬೇವು (Bevu)", status: "Least Concern", type: "medicinal" },
+            { id: 72, name: "Indian Beech", scientific: "Millettia pinnata", kannada: "ಹೊಂಗೆ (Honge)", status: "Least Concern", type: "timber" },
+            { id: 73, name: "Indian Cork Tree", scientific: "Millingtonia hortensis", kannada: "ಮರಮದ್ದಳೆ (Mara Maddale)", status: "Least Concern", type: "timber" },
+            { id: 74, name: "Indian Almond", scientific: "Terminalia catappa", kannada: "ಬದಾಮಿ (Badami)", status: "Least Concern", type: "fruit" },
+            { id: 75, name: "Indian Butter Tree", scientific: "Madhuca longifolia", kannada: "ಇಪ್ಪೆ (Ippe)", status: "Least Concern", type: "timber" },
+            { id: 76, name: "Indian Laburnum", scientific: "Cassia fistula", kannada: "ಕಿರಿಮುಟ್ಟಿ (Kirimutti)", status: "Least Concern", type: "flowering" },
+            { id: 77, name: "Indian Mulberry", scientific: "Morinda tinctoria", kannada: "ನೊಣಗಿಡ (Nonagida)", status: "Least Concern", type: "fruit" },
+            { id: 78, name: "Kadam Tree", scientific: "Neolamarckia cadamba", kannada: "ಕದಂಬ (Kadamba)", status: "Least Concern", type: "timber" },
+            { id: 79, name: "Kapok Tree", scientific: "Ceiba pentandra", kannada: "ಬೊಂಬಾಕ್ಸ್ (Bombax)", status: "Least Concern", type: "timber" },
+            { id: 80, name: "Karanja Tree", scientific: "Pongamia pinnata", kannada: "ಹೊಂಗೆ (Honge)", status: "Least Concern", type: "timber" },
+            { id: 81, name: "Khirni Tree", scientific: "Manilkara hexandra", kannada: "ರಾಸು (Raasu)", status: "Least Concern", type: "fruit" },
+            { id: 82, name: "Wild Jack", scientific: "Artocarpus hirsutus", kannada: "ಅಂಜಲಿ (Anjali)", status: "Least Concern", type: "fruit" },
+            { id: 83, name: "Ceylon Ironwood", scientific: "Mesua ferrea", kannada: "ನಾಗಸಂಪಿಗೆ (Nagasampige)", status: "Least Concern", type: "timber" },
+            { id: 84, name: "Malabar Plum", scientific: "Syzygium cumini", kannada: "ನೆರೆಳೆ (Nerele)", status: "Least Concern", type: "fruit" },
+            { id: 85, name: "Indian Cork Tree", scientific: "Millingtonia hortensis", kannada: "ಮರಮದ್ದಳೆ (Mara Maddale)", status: "Least Concern", type: "timber" },
+            { id: 86, name: "Kokum", scientific: "Garcinia indica", kannada: "ಮಂಗಸ್ತೀನ್ (Mangasteen)", status: "Least Concern", type: "fruit" },
+            { id: 87, name: "Axlewood Tree", scientific: "Anogeissus latifolia", kannada: "ದಿಂಡಿಗ (Dindiga)", status: "Least Concern", type: "timber" },
+            { id: 88, name: "Satinwood", scientific: "Chloroxylon swietenia", kannada: "ಬಿಲ್ವಪತ್ರ (Bilvapatra)", status: "Least Concern", type: "timber" },
+            { id: 89, name: "Indian Kino Tree", scientific: "Pterocarpus marsupium", kannada: "ಬಿಜಸಾಲ (Bijasala)", status: "Vulnerable", type: "timber" },
+            { id: 90, name: "Sandalwood", scientific: "Santalum album", kannada: "ಚಂದನ (Chandana)", status: "Vulnerable", type: "medicinal" },
+            { id: 91, name: "Black Dammar", scientific: "Canarium strictum", kannada: "ಕರಿಂಧೂಪ (Karindhoopa)", status: "Endangered", type: "timber" },
+            { id: 92, name: "Malabar Ironwood", scientific: "Hopea parviflora", kannada: "ಕಂಬಗಮರ (Kambagamara)", status: "Least Concern", type: "timber" },
+            { id: 93, name: "White Dammar", scientific: "Vateria indica", kannada: "ಧೂಪದ ಮರ (Dhoopada Mara)", status: "Critically Endangered", type: "timber" },
+            { id: 94, name: "Ceylon Oak", scientific: "Schleichera oleosa", kannada: "ಕಸುಬು (Kasubu)", status: "Least Concern", type: "timber" },
+            { id: 95, name: "Indian Mahogany", scientific: "Toona ciliata", kannada: "ಮಹಾಗನಿ (Mahagani)", status: "Least Concern", type: "timber" },
+            { id: 96, name: "Indian Laurel", scientific: "Terminalia paniculata", kannada: "ಮಡ್ಡಿ (Maddi)", status: "Least Concern", type: "timber" },
+            { id: 97, name: "Jackfruit Tree", scientific: "Artocarpus heterophyllus", kannada: "ಹಲಸು (Halasu)", status: "Least Concern", type: "fruit" },
+            { id: 98, name: "Indian Gooseberry", scientific: "Phyllanthus emblica", kannada: "ನೆಲ್ಲಿಕಾಯಿ (Nellikayi)", status: "Least Concern", type: "fruit" },
+            { id: 99, name: "Neem", scientific: "Azadirachta indica", kannada: "ಬೇವು (Bevu)", status: "Least Concern", type: "medicinal" },
+            { id: 100, name: "Indian Beech", scientific: "Millettia pinnata", kannada: "ಹೊಂಗೆ (Honge)", status: "Least Concern", type: "timber" }
+        ];
+        
+        // Data for Top 5 Priorities section
+        const endangeredTimberData = [
+            { name: "Indian Rosewood", kannada: "ಇರುವಿ (Iruve)", botanical: "Dalbergia latifolia", status: "Vulnerable", growth: "Slow-growing (25-30m), moist deciduous forests", significance: "High-value timber for furniture; critically overexploited." },
+            { name: "Malabar Kino", kannada: "ಬಿಜಸಾಲ (Bijasaala)", botanical: "Pterocarpus marsupium", status: "Near Threatened", growth: "30m tall, tropical semi-evergreen forests", significance: "Medicinal resin, durable timber; supports pollinators." },
+            { name: "Red Cedar", kannada: "ಸಿಗಂದಾನ (Sigandaan)", botanical: "Toona ciliata", status: "Vulnerable", growth: "Fast-growing (25m), riparian zones", significance: "Lightweight timber; agroforestry shade tree." },
+            { name: "White Dammar", kannada: "ಧೂಪದ ಮರ (Dhoopada Mara)", botanical: "Vateria indica", status: "Endangered", growth: "35m, evergreen forests", significance: "Source of white dammar resin; sacred grove species." },
+            { name: "Nageia", kannada: "ನಾಗೇಶ್ವರ (Nageshwara)", botanical: "Nageia wallichiana", status: "Endangered", growth: "30m, high-altitude shola forests", significance: "Rare conifer; slow-growing, high-quality wood." }
+        ];
+        
+        const ecosystemSupportData = [
+            { name: "Terminalia arjuna", kannada: "ಮತ್ತಿ (Matti)", botanical: "Terminalia arjuna", role: "Riverbank stabilizer", growth: "20-25m", significance: "Prevents soil erosion; bark used in Ayurveda." },
+            { name: "Wild Jack", kannada: "ಹೆಬ್ಬಲಸು (Hebbalasu)", botanical: "Artocarpus hirsutus", role: "Keystone species", growth: "30-35m", significance: "Fruits feed wildlife; timber for construction." },
+            { name: "Ironwood", kannada: "ಕಂಬಗ (Kambaga)", botanical: "Hopea parviflora", role: "Drought-resistant", growth: "30m", significance: "Dense hardwood; supports endemic birds." },
+            { name: "White Dammar", kannada: "ಧೂಪದ ಮರ (Dhoopada Mara)", botanical: "Vateria indica", role: "Canopy layer", growth: "35m", significance: "Enhances forest microclimate; resin for incense." },
+            { name: "Nandi", kannada: "ನಂದಿ (Nandi)", botanical: "Lagerstroemia lanceolata", role: "Termite-resistant", growth: "25m", significance: "Used for agricultural tools; attracts bees." }
+        ];
+        
+        const floweringFruitData = [
+            { name: "Kokum", kannada: "ಮುತ್ತುಗ (Muttuga)", botanical: "Garcinia indica", flowering: "Purple flowers, tangy fruit", role: "Fruits feed birds/mammals; drought-resistant." },
+            { name: "Jamun", kannada: "ನೇರಳೆ (Nerale)", botanical: "Syzygium cumini", flowering: "White blooms, purple berries", role: "Key frugivore food; improves soil fertility." },
+            { name: "Jackfruit", kannada: "ಹಲಸು (Halasu)", botanical: "Artocarpus heterophyllus", flowering: "Large fruit, edible flowers", role: "Massive canopy for shade; fruit for humans/wildlife." },
+            { name: "Cluster Fig", kannada: "ಅತ್ತಿ (Atti)", botanical: "Ficus racemosa", flowering: "Figs year-round", role: "Critical for bats, birds, and pollinators." },
+            { name: "Wild Mango", kannada: "ಕಾಡು ಮಾವು (Kaadu Maavu)", botanical: "Mangifera indica", flowering: "Mango fruit (smaller)", role: "Genetic reservoir for mango diversity." }
+        ];
+        
+        const ayurvedicData = [
+            { name: "Ashoka", kannada: "ಅಶೋಕ (Ashoka)", botanical: "Saraca asoca", part: "Bark, flowers", use: "Menstrual health; anti-inflammatory." },
+            { name: "Haritaki", kannada: "ಅಳಲೆ ಕಾಯಿ (Alale Kaayi)", botanical: "Terminalia chebula", part: "Fruit", use: "Digestive detox; \"Triphala\" component." },
+            { name: "Calumba", kannada: "ಮಾರವಂಡ (Maravaṇḍa)", botanical: "Coscinium fenestratum", part: "Stem", use: "Antimicrobial; treats diabetes." },
+            { name: "Bael", kannada: "ಬಿಲ್ವ (Bilva)", botanical: "Aegle marmelos", part: "Fruit, leaves", use: "Digestive aid; sacred tree." },
+            { name: "Gurmar", kannada: "ಮಧುನಾಶಿನಿ (Madhunashini)", botanical: "Gymnema sylvestre", part: "Leaves", use: "Blood sugar control; anti-diabetic." }
+        ];
+        
+        // Data for Fastest Growing Trees section
+        const fastestGrowingData = [
+            { no: 1, name: "Malabar Neem", kannada: "ಹೆಬ್ಬೇವು (Hebbevu)", botanical: "Melia dubia", growth: "3–4 m/year", height: "25–30 m", features: "- Lightning-fast growth. <br> - Straight trunk for plywood/light timber. <br> - Drought-resistant." },
+            { no: 2, name: "Red Cedar", kannada: "ಸಿಗಂದಾನ (Sigandaan)", botanical: "Toona ciliata", growth: "2–3 m/year", height: "25–35 m", features: "- Lightweight, durable timber. <br> - Tall, straight trunk. <br> - Thrives in moist valleys." },
+            { no: 3, name: "Indian Siris", kannada: "ಬಾಗೆ ಮರ (Baage Mara)", botanical: "Albizia lebbeck", growth: "2–2.5 m/year", height: "20–25 m", features: "- Hardwood for furniture. <br> - Nitrogen-fixing roots. <br> - Broad canopy for shade." },
+            { no: 4, name: "Red Silk Cotton", kannada: "ಕೆಂಪು ಬೂರುಗ (Kempu Buruga)", botanical: "Bombax ceiba", growth: "1.5–2 m/year", height: "30–40 m", features: "- Massive trunk (buttressed base). <br> - Flowers attract birds. <br> - Soft timber for packing." },
+            { no: 5, name: "White Teak", kannada: "ನಂದಿ (Nandi)", botanical: "Gmelina arborea", growth: "2–3 m/year", height: "20–25 m", features: "- Termite-resistant wood. <br> - Used for musical instruments. <br> - Prefers well-drained soils." }
+        ];
+        
+        const fastGrowingRecommendations = [
+            "Top Choice for Speed: Malabar Neem (Hebbevu): Plant in open areas (sunlight required) for rapid timber yield, Red Cedar (Sigandaan): Ideal for riparian zones (riverbanks) in your forested 25 acres.",
+            "Tallest Trees: Red Silk Cotton (Kempu Buruga): Reaches up to 40m; iconic for its towering height and thick trunk.",
+            "Ecological Benefits: Indian Siris (Baage Mara): Improves soil fertility (nitrogen fixation) and supports pollinators.",
+            "Spacing: Melia dubia: 3m x 3m for timber, Toona ciliata: 4m x 4m near water sources.",
+            "Soil: Most thrive in loamy, well-drained soils (avoid waterlogging).",
+            "Timeline: Achieve harvestable timber in 8–12 years for Melia dubia and Gmelina.",
+            "Why Avoid Non-Natives? Eucalyptus/Silver Oak: Harmful to groundwater and biodiversity. Acacia mangium: Invasive; outcompetes native species."
+        ];
+        
+        // Data for Top 10 Afforestation Priorities section
+        const timberTreesData = [
+            { name: "Teak", kannada: "ತೇಕು ಮರ (Tēku mara)", specs: "Durable, termite-resistant, golden-brown hardwood; high dimensional stability", significance: "Premium timber for furniture, shipbuilding, and construction", lifespan: "80-100", economic: "3,500 - 4,500", environmental: "High" },
+            { name: "Rosewood", kannada: "ಶೀಷಮ್ (Shīṣam)", specs: "Dense, dark-colored hardwood with fine grain; resistant to decay", significance: "Used in premium furniture, musical instruments, and decorative veneers", lifespan: "100-150", economic: "2,500 - 3,500", environmental: "High" },
+            { name: "Indian Kino Tree", kannada: "ಹೊನ್ನೆ (Honne)", specs: "Hard, heavy wood with interlocked grain; reddish-brown color", significance: "Utilized in flooring, furniture, and as a source of natural dye", lifespan: "50-60", economic: "1,500 - 2,500", environmental: "Moderate" },
+            { name: "Malabar Kino", kannada: "ಬಿಜಸಾಲ (Bijasāla)", specs: "Hard, durable wood with coarse grain; reddish-brown heartwood", significance: "Employed in construction, railway sleepers, and heavy furniture", lifespan: "60-80", economic: "1,800 - 2,800", environmental: "Moderate" },
+            { name: "Jackfruit Tree", kannada: "ಹಲಸು (Halasu)", specs: "Medium hardwood with coarse grain; yellow to orange-brown color", significance: "Used in furniture, doors, and musical instruments; also provides edible fruit", lifespan: "50-75", economic: "1,200 - 1,800", environmental: "Moderate" },
+            { name: "Indian Laurel", kannada: "ದೂಡಿ (Dūḍi)", specs: "Moderately hard wood with straight grain; light to dark brown color", significance: "Suitable for furniture, cabinetry, and interior fittings", lifespan: "60-90", economic: "1,000 - 1,500", environmental: "Moderate" },
+            { name: "Silver Oak", kannada: "ಬೆಳ್ಳಿ ಮಾವು (Beḷḷi māvu)", specs: "Light, moderately durable wood with straight grain; pale to light brown color", significance: "Commonly used as shade tree in coffee plantations; wood used in construction and furniture", lifespan: "40-60", economic: "800 - 1,200", environmental: "Moderate" },
+            { name: "Indian Mahogany", kannada: "ಮಹಾಗನಿ (Mahāgani)", specs: "Medium to hard wood with straight to interlocked grain; reddish-brown color", significance: "Valued for furniture, cabinetry, and decorative veneers", lifespan: "70-90", economic: "2,000 - 3,000", environmental: "High" },
+            { name: "White Cedar", kannada: "ಬಿಲ್ವ (Bilva)", specs: "Lightweight, durable wood with fine texture; pale yellow to light brown color", significance: "Used in furniture, veneers, and as a shade tree in plantations", lifespan: "50-70", economic: "1,000 - 1,500", environmental: "Moderate" },
+            { name: "Indian Cork Tree", kannada: "ಮರಮದ್ದಳೆ (Mara maddale)", specs: "Softwood with cork-like bark; light, easy to work; pale color", significance: "Ornamental tree; wood used for lightweight construction and packing cases", lifespan: "30-50", economic: "500 - 800", environmental: "Low" }
+        ];
+        
+        const floweringFruitingData = [
+            { name: "Mango", kannada: "ಮಾವು (Māvu)", significance: "Provides nutritious fruits; supports various bird and insect species", lifespan: "100-200", economic: "5,000 - 10,000", environmental: "High" },
+            { name: "Indian Gooseberry", kannada: "ನೆಲ್ಲಿಕಾಯಿ (Nellikayi)", significance: "Fruits rich in vitamin C; used in traditional medicine; attracts pollinators", lifespan: "60-70", economic: "3,000 - 5,000", environmental: "Moderate" },
+            { name: "Jamun", kannada: "ನೇರಳೆ (Neraḷe)", significance: "Produces edible fruits; supports bird species; used in traditional medicine", lifespan: "50-75", economic: "2,500 - 4,500", environmental: "Moderate" },
+            { name: "Indian Laburnum", kannada: "ಅಮಲತಾಶ (Amalataśa)", significance: "Ornamental tree with bright yellow flowers; used in traditional medicine; attracts pollinators", lifespan: "40-60", economic: "1,500 - 2,500", environmental: "High" },
+            { name: "Flame of the Forest", kannada: "ಮುತ್ತುಗ (Muttuga)", significance: "Known for vibrant orange-red flowers; supports pollinators; used in traditional medicine", lifespan: "30-50", economic: "1,000 - 1,800", environmental: "High" },
+            { name: "Neem", kannada: "ಬೇವು (Bēvu)", significance: "Provides medicinal products; natural pesticide; supports various species", lifespan: "150-200", economic: "2,000 - 3,500", environmental: "High" },
+            { name: "Indian Beech", kannada: "ಹೋಂಗೆ (Honge)", significance: "Nitrogen-fixing tree; used in traditional medicine; supports soil health", lifespan: "60-80", economic: "1,200 - 2,000", environmental: "High" },
+            { name: "Indian Almond", kannada: "ಬದಾಮಿ (Badāmi)", significance: "Produces edible nuts; provides shade; supports bird species", lifespan: "60-80", economic: "2,000 - 3,000", environmental: "Moderate" },
+            { name: "Bael", kannada: "ಬಿಲ್ವ (Bilva)", significance: "Fruits used in traditional medicine; attracts pollinators; drought-resistant", lifespan: "50-60", economic: "1,500 - 2,500", environmental: "Moderate" },
+            { name: "Indian Blackberry", kannada: "ಕಾಡು ನೇರಳೆ (Kāḍu neraḷe)", significance: "Produces edible fruits; supports bird species; used in traditional medicine", lifespan: "50-70", economic: "2,000 - 3,000", environmental: "Moderate" }
+        ];
+        
+        const ayurvedicPlantsData = [
+            { name: "Aloe Vera", kannada: "ಲೋಳಿಸಾರ (Lōḷisāra)", significance: "Used in skincare and digestive remedies; drought-resistant", lifespan: "5-7", economic: "15 - 25", environmental: "High" },
+            { name: "Ashwagandha", kannada: "ಅಶ್ವಗಂಧ (Aśvagandha)", significance: "Roots used for stress relief and vitality; grows in various soils", lifespan: "3-5", economic: "200 - 300", environmental: "High" },
+            { name: "Turmeric", kannada: "ಅರಿಶಿನ (Ariśina)", significance: "Rhizomes used as spice and in medicine; anti-inflammatory properties", lifespan: "1", economic: "80 - 120", environmental: "High" },
+            { name: "Indian Gooseberry", kannada: "ನೆಲ್ಲಿಕಾಯಿ (Nellikayi)", significance: "Fruits rich in vitamin C; used in traditional medicine; attracts pollinators", lifespan: "60-70", economic: "3,000 - 5,000 per tree", environmental: "Moderate" },
+            { name: "Neem", kannada: "ಬೇವು (Bēvu)", significance: "Provides medicinal products; natural pesticide; supports various species", lifespan: "150-200", economic: "2,000 - 3,500 per tree", environmental: "High" },
+            { name: "Holy Basil", kannada: "ತುಳಸಿ (Tulasi)", significance: "Leaves used in respiratory disorders; aromatic herb; attracts pollinators", lifespan: "1-2", economic: "100 - 150", environmental: "High" },
+            { name: "Giloy", kannada: "ಅಮೃತಬಳ್ಳಿ (Amṛtaballi)", significance: "Stem used to boost immunity; climber; drought-resistant", lifespan: "5-8", economic: "150 - 200", environmental: "High" },
+            { name: "Brahmi", kannada: "ಬ್ರಹ್ಮಿ (Brahmi)", significance: "Leaves used to enhance memory; grows in moist conditions", lifespan: "2-3", economic: "120 - 180", environmental: "High" },
+            { name: "Indian Sandalwood", kannada: "ಚಂದನ (Candana)", significance: "Heartwood used in aromatherapy and skincare; fragrant wood; semi-parasitic tree", lifespan: "60-80", economic: "10,000 - 12,000 per cubic foot", environmental: "High" },
+            { name: "Vetiver", kannada: "ಲವನಚಿ (Lavanaci)", significance: "Roots used in cooling and aromatic applications; prevents soil erosion; grass species", lifespan: "3-5", economic: "50 - 80", environmental: "High" }
+        ];
+        
+        // Helper functions
+        function getStatusClass(status) {
+            switch(status) {
+                case 'Least Concern':
+                    return 'status-lc';
+                case 'Vulnerable':
+                case 'Near Threatened':
+                    return 'status-vu';
+                case 'Endangered':
+                    return 'status-en';
+                case 'Critically Endangered':
+                    return 'status-cr';
+                default:
+                    return 'status-lc';
+            }
+        }
+        
+        function getTreeTypeIcon(type) {
+            switch(type) {
+                case 'timber':
+                    return '<svg class="tree-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2L4 9h7v4h2V9h7L12 2zm0 9v11h2V11h-2z"/></svg>';
+                case 'fruit':
+                    return '<svg class="tree-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a4 4 0 00-4 4c0 .73.23 1.41.62 2H6a4 4 0 00-4 4c0 2.86 2.2 5.2 5 5.91V22h10v-4.09c2.8-.71 5-3.05 5-5.91a4 4 0 00-4-4h-2.62c.39-.59.62-1.27.62-2a4 4 0 00-4-4z"/></svg>';
+                case 'flowering':
+                    return '<svg class="tree-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c-5.33 3.3-8 7.33-8 11.33 0 5 3.33 8.67 8 8.67 4.67 0 8-3.67 8-8.67C20 9.33 17.33 5.3 12 2zm0 16c-2.67 0-4.67-2-4.67-4.67a7.67 7.67 0 012-4.83 7.67 7.67 0 012.67-2A7.67 7.67 0 0114.67 8.5a7.67 7.67 0 012 4.83c0 2.67-2 4.67-4.67 4.67z"/></svg>';
+                case 'medicinal':
+                    return '<svg class="tree-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>';
+                default:
+                    return '<svg class="tree-icon" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22a9 9 0 009-9c0-3.03-1.5-5.8-4-7.46V3c0-.55-.45-1-1-1H8c-.55 0-1 .45-1 1v2.54c-2.5 1.67-4 4.43-4 7.46a9 9 0 009 9zM11 5h2v1h-2V5zm-2 14a7 7 0 01-3.38-13.34L6 5.07V4h12v1.07l.38.59A7 7 0 019 19z"/></svg>';
+            }
+        }
+        
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Render tree cards
+            renderTreeList(treesData);
+            
+            // Fill tables for Top 5 Priorities section
+            fillTable('endangered-timber-table', endangeredTimberData);
+            fillTable('ecosystem-support-table', ecosystemSupportData);
+            fillTable('flowering-fruit-table', floweringFruitData);
+            fillTable('ayurvedic-table', ayurvedicData);
+            
+            // Fill tables for Fastest Growing Trees section
+            fillTable('fastest-growing-table', fastestGrowingData);
+            
+            // Fill recommendations
+            const recsElement = document.getElementById('fast-growing-recommendations');
+            fastGrowingRecommendations.forEach(rec => {
+                const li = document.createElement('li');
+                li.textContent = rec;
+                recsElement.appendChild(li);
+            });
+            
+            // Fill tables for Top 10 Priorities section
+            fillTable('timber-trees-table', timberTreesData);
+            fillTable('flowering-fruiting-table', floweringFruitingData);
+            fillTable('ayurvedic-plants-table', ayurvedicPlantsData);
+            
+            // Add event listeners
+            setupEventListeners();
+        });
+        
+        function renderTreeList(trees) {
+            const treeList = document.getElementById('tree-list');
+            treeList.innerHTML = '';
+            
+            if (trees.length === 0) {
+                treeList.innerHTML = '<div class="no-results">No trees found matching your search criteria</div>';
+                document.getElementById('count-display').textContent = '0';
+                return;
+            }
+            
+            trees.forEach(tree => {
+                const treeCard = document.createElement('div');
+                treeCard.className = 'tree-card';
+                treeCard.dataset.id = tree.id;
+                
+                // Prepare card content
+                let cardContent = `
+                    <div class="tree-icons">
+                        ${getTreeTypeIcon(tree.type)}
+                    </div>
+                    <div class="tree-name">${tree.name}</div>
+                `;
+                
+                // Add scientific name if available
+                if (tree.scientific) {
+                    cardContent += `<div class="tree-scientific">${tree.scientific}</div>`;
+                }
+                
+                // Add Kannada name if available
+                if (tree.kannada) {
+                    cardContent += `<div class="tree-kannada">${tree.kannada}</div>`;
+                }
+                
+                // Add status badge
+                cardContent += `<div class="tree-status ${getStatusClass(tree.status)}">${tree.status}</div>`;
+                
+                // Add source tag if the tree is from a specialized section
+                if (tree.source) {
+                    cardContent += `<div class="tree-source">From: ${tree.source}</div>`;
+                }
+                
+                treeCard.innerHTML = cardContent;
+                
+                treeCard.addEventListener('click', () => showTreeDetails(tree));
+                treeList.appendChild(treeCard);
+            });
+            
+            document.getElementById('count-display').textContent = trees.length;
+        }
+        
+        function fillTable(tableId, data) {
+            const table = document.getElementById(tableId);
+            table.innerHTML = '';
+            
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                
+                // Add cells based on the properties in each item
+                Object.values(item).forEach(value => {
+                    const cell = document.createElement('td');
+                    cell.innerHTML = value;
+                    row.appendChild(cell);
+                });
+                
+                table.appendChild(row);
+            });
+        }
+        
+        function showTreeDetails(tree) {
+            const modal = document.getElementById('tree-modal');
+            const content = document.getElementById('tree-detail-content');
+            
+            // Find duplicate entries to get more complete information
+            const duplicates = getAllTreeData().filter(t => 
+                t.name.toLowerCase() === tree.name.toLowerCase() || 
+                (t.scientific && tree.scientific && t.scientific.toLowerCase() === tree.scientific.toLowerCase()) ||
+                (t.kannada && tree.kannada && t.kannada.toLowerCase() === tree.kannada.toLowerCase())
+            );
+            
+            // Build the detail content
+            let detailContent = `
+                <div class="tree-detail-header">
+                    <div class="tree-detail-name">${tree.name}</div>
+                `;
+                
+            // Add scientific name if available
+            if (tree.scientific) {
+                detailContent += `<div class="tree-detail-scientific">${tree.scientific}</div>`;
+            }
+            
+            // Add Kannada name if available
+            if (tree.kannada) {
+                detailContent += `<div class="tree-kannada">${tree.kannada}</div>`;
+            }
+            
+            // Add status badge
+            detailContent += `<div class="tree-status ${getStatusClass(tree.status)}">${tree.status}</div>`;
+            
+            // Add source if available
+            if (tree.source) {
+                detailContent += `<div class="tree-source">From: ${tree.source}</div>`;
+            }
+            
+            detailContent += `</div>
+                
+                <div class="tree-detail-info">
+                    <div class="info-item">
+                        <div class="info-label">Type</div>
+                        <div class="info-value">
+                            ${getTreeTypeIcon(tree.type)} 
+                            ${tree.type.charAt(0).toUpperCase() + tree.type.slice(1)} Tree
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Conservation Status</div>
+                        <div class="info-value">${tree.status}</div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-label">Occurrences in Lists</div>
+                        <div class="info-value">${duplicates.length} entries</div>
+                    </div>
+                </div>
+            `;
+            
+            // Add additional details based on the tree source
+            if (tree.details) {
+                if (tree.source === "Endangered Timber Trees") {
+                    detailContent += `
+                        <h3>Growth & Habitat</h3>
+                        <p>${tree.details.growth}</p>
+                        
+                        <h3>Significance</h3>
+                        <p>${tree.details.significance}</p>
+                    `;
+                } else if (tree.source === "Ecosystem Support Trees") {
+                    detailContent += `
+                        <h3>Key Ecosystem Role</h3>
+                        <p>${tree.details.role}</p>
+                        
+                        <h3>Growth</h3>
+                        <p>${tree.details.growth}</p>
+                        
+                        <h3>Significance</h3>
+                        <p>${tree.details.significance}</p>
+                    `;
+                } else if (tree.source === "Flowering & Fruit Trees") {
+                    detailContent += `
+                        <h3>Flowering & Fruit</h3>
+                        <p>${tree.details.flowering}</p>
+                        
+                        <h3>Ecological Role</h3>
+                        <p>${tree.details.role}</p>
+                    `;
+                } else if (tree.source === "Ayurvedic Plants/Trees") {
+                    detailContent += `
+                        <h3>Parts Used</h3>
+                        <p>${tree.details.part}</p>
+                        
+                        <h3>Medicinal Uses</h3>
+                        <p>${tree.details.use}</p>
+                    `;
+                } else if (tree.source === "Fastest Growing Trees") {
+                    detailContent += `
+                        <h3>Growth Rate</h3>
+                        <p>${tree.details.growth}</p>
+                        
+                        <h3>Maximum Height</h3>
+                        <p>${tree.details.height}</p>
+                        
+                        <h3>Key Features</h3>
+                        <p>${tree.details.features}</p>
+                    `;
+                } else if (tree.source === "Top 10 Timber Trees") {
+                    detailContent += `
+                        <h3>Technical Specifications</h3>
+                        <p>${tree.details.specs}</p>
+                        
+                        <h3>Significance</h3>
+                        <p>${tree.details.significance}</p>
+                        
+                        <h3>Lifespan & Economic Value</h3>
+                        <p>Typical lifespan: ${tree.details.lifespan} years</p>
+                        <p>Economic value: ₹${tree.details.economic} per cubic foot</p>
+                        <p>Environmental value: ${tree.details.environmental}</p>
+                    `;
+                } else if (tree.source === "Top 10 Flowering/Fruiting Trees" || tree.source === "Top 10 Ayurvedic Plants") {
+                    detailContent += `
+                        <h3>Significance</h3>
+                        <p>${tree.details.significance}</p>
+                        
+                        <h3>Lifespan & Economic Value</h3>
+                        <p>Typical lifespan: ${tree.details.lifespan} years</p>
+                        <p>Economic value: ₹${tree.details.economic}</p>
+                        <p>Environmental value: ${tree.details.environmental}</p>
+                    `;
+                }
+            } else {
+                // Default content for trees without specific details
+                detailContent += `
+                    <h3>Significance</h3>
+                    <p>This tree is native to the Western Ghats region of India and is an important part of the local ecosystem.</p>
+                    
+                    <h3>Recommended Uses</h3>
+                    <ul>
+                        ${tree.type === 'timber' ? '<li>Valuable timber for construction and furniture</li>' : ''}
+                        ${tree.type === 'fruit' ? '<li>Provides nutritious fruits for both humans and wildlife</li>' : ''}
+                        ${tree.type === 'flowering' ? '<li>Attracts pollinators and enhances biodiversity</li>' : ''}
+                        ${tree.type === 'medicinal' ? '<li>Has traditional medicinal properties</li>' : ''}
+                        <li>Suitable for afforestation and reforestation projects</li>
+                        <li>Helps in soil conservation and water management</li>
+                    </ul>
+                `;
+            }
+            
+            // List other places this tree appears
+            if (duplicates.length > 1) {
+                detailContent += `
+                    <h3>Also Found In</h3>
+                    <ul>
+                `;
+                
+                duplicates.forEach(dup => {
+                    if (dup.source && dup.source !== tree.source) {
+                        detailContent += `<li>${dup.source}</li>`;
+                    } else if (!dup.source && tree.source) {
+                        detailContent += `<li>Top 100 Native Trees</li>`;
+                    }
+                });
+                
+                detailContent += `</ul>`;
+            }
+            
+            content.innerHTML = detailContent;
+            modal.style.display = 'block';
+        }
+        
+        // Collect all tree data from all sections for comprehensive search
+        function getAllTreeData() {
+            let allTrees = [...treesData]; // Start with the top 100 trees
+            
+            // Add trees from other sections with source information
+            
+            // Top 5 Endangered Timber Trees
+            endangeredTimberData.forEach(tree => {
+                allTrees.push({
+                    id: `et-${tree.name}`,
+                    name: tree.name,
+                    scientific: tree.botanical,
+                    kannada: tree.kannada,
+                    status: tree.status || "Unknown",
+                    type: "timber",
+                    source: "Endangered Timber Trees",
+                    details: tree
+                });
+            });
+            
+            // Top 5 Ecosystem Support Trees
+            ecosystemSupportData.forEach(tree => {
+                allTrees.push({
+                    id: `es-${tree.name}`,
+                    name: tree.name,
+                    scientific: tree.botanical,
+                    kannada: tree.kannada,
+                    status: "Unknown",
+                    type: "timber",
+                    source: "Ecosystem Support Trees",
+                    details: tree
+                });
+            });
+            
+            // Top 5 Flowering & Fruit Trees
+            floweringFruitData.forEach(tree => {
+                allTrees.push({
+                    id: `ff-${tree.name}`,
+                    name: tree.name,
+                    scientific: tree.botanical,
+                    kannada: tree.kannada,
+                    status: "Unknown",
+                    type: "fruit",
+                    source: "Flowering & Fruit Trees",
+                    details: tree
+                });
+            });
+            
+            // Top 5 Ayurvedic Plants/Trees
+            ayurvedicData.forEach(tree => {
+                allTrees.push({
+                    id: `ay-${tree.name}`,
+                    name: tree.name,
+                    scientific: tree.botanical,
+                    kannada: tree.kannada,
+                    status: "Unknown",
+                    type: "medicinal",
+                    source: "Ayurvedic Plants/Trees",
+                    details: tree
+                });
+            });
+            
+            // Fastest Growing Trees
+            fastestGrowingData.forEach(tree => {
+                allTrees.push({
+                    id: `fg-${tree.name}`,
+                    name: tree.name,
+                    scientific: tree.botanical,
+                    kannada: tree.kannada,
+                    status: "Unknown",
+                    type: "timber",
+                    source: "Fastest Growing Trees",
+                    details: tree
+                });
+            });
+            
+            // Top 10 Timber Trees
+            timberTreesData.forEach(tree => {
+                allTrees.push({
+                    id: `tt-${tree.name}`,
+                    name: tree.name,
+                    scientific: "", // No scientific name in this data
+                    kannada: tree.kannada,
+                    status: "Unknown",
+                    type: "timber",
+                    source: "Top 10 Timber Trees",
+                    details: tree
+                });
+            });
+            
+            // Top 10 Flowering and Fruiting Trees
+            floweringFruitingData.forEach(tree => {
+                allTrees.push({
+                    id: `ft-${tree.name}`,
+                    name: tree.name,
+                    scientific: "", // No scientific name in this data
+                    kannada: tree.kannada,
+                    status: "Unknown",
+                    type: "fruit",
+                    source: "Top 10 Flowering/Fruiting Trees",
+                    details: tree
+                });
+            });
+            
+            // Top 10 Ayurvedic Plants
+            ayurvedicPlantsData.forEach(tree => {
+                allTrees.push({
+                    id: `ap-${tree.name}`,
+                    name: tree.name,
+                    scientific: "", // No scientific name in this data
+                    kannada: tree.kannada,
+                    status: "Unknown",
+                    type: "medicinal",
+                    source: "Top 10 Ayurvedic Plants",
+                    details: tree
+                });
+            });
+            
+            // Remove duplicates by name (keeping the first occurrence)
+            const uniqueTrees = [];
+            const addedNames = new Set();
+            
+            allTrees.forEach(tree => {
+                // Normalize names to prevent case-sensitive duplicates
+                const normalizedName = tree.name.toLowerCase();
+                if (!addedNames.has(normalizedName)) {
+                    addedNames.add(normalizedName);
+                    uniqueTrees.push(tree);
+                }
+            });
+            
+            return uniqueTrees;
+        }
+        
+        function setupEventListeners() {
+            // Navigation
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const sectionId = this.dataset.section;
+                    
+                    // Update active button
+                    navBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show selected section, hide others
+                    document.querySelectorAll('.section').forEach(section => {
+                        section.classList.add('hidden');
+                        section.classList.remove('visible');
+                    });
+                    
+                    const selectedSection = document.getElementById(sectionId);
+                    selectedSection.classList.remove('hidden');
+                    selectedSection.classList.add('visible');
+                });
+            });
+            
+            // Search functionality
+            const searchInput = document.querySelector('.search-input');
+            const searchBtn = document.querySelector('.search-btn');
+            
+            function performSearch() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                
+                if (searchTerm === '') {
+                    renderTreeList(treesData);
+                    return;
+                }
+                
+                // Search across all tree data
+                const allTrees = getAllTreeData();
+                const filteredTrees = allTrees.filter(tree => 
+                    (tree.name && tree.name.toLowerCase().includes(searchTerm)) || 
+                    (tree.scientific && tree.scientific.toLowerCase().includes(searchTerm)) || 
+                    (tree.kannada && tree.kannada.toLowerCase().includes(searchTerm))
+                );
+                
+                renderTreeList(filteredTrees);
+                
+                // If search is performed, switch to all-trees section
+                navBtns.forEach(b => b.classList.remove('active'));
+                document.querySelector('[data-section="all-trees"]').classList.add('active');
+                
+                document.querySelectorAll('.section').forEach(section => {
+                    section.classList.add('hidden');
+                    section.classList.remove('visible');
+                });
+                
+                document.getElementById('all-trees').classList.remove('hidden');
+                document.getElementById('all-trees').classList.add('visible');
+                
+                // Update section title to indicate we're showing search results
+                const sectionTitle = document.querySelector('#all-trees .section-title');
+                if (sectionTitle) {
+                    sectionTitle.innerHTML = `🔍 Search Results for "${searchTerm}"`;
+                }
+            }
+            
+            searchBtn.addEventListener('click', performSearch);
+            searchInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // Filters
+            const statusFilter = document.getElementById('status-filter');
+            const sortBy = document.getElementById('sort-by');
+            
+            function applyFilters() {
+                const status = statusFilter.value;
+                const sort = sortBy.value;
+                
+                let filteredTrees = [...treesData];
+                
+                // Apply status filter
+                if (status !== 'all') {
+                    filteredTrees = filteredTrees.filter(tree => tree.status === status);
+                }
+                
+                // Apply sorting
+                filteredTrees.sort((a, b) => {
+                    if (sort === 'name') {
+                        return a.name.localeCompare(b.name);
+                    } else if (sort === 'scientific') {
+                        return a.scientific.localeCompare(b.scientific);
+                    } else if (sort === 'status') {
+                        return a.status.localeCompare(b.status);
+                    }
+                    return 0;
+                });
+                
+                renderTreeList(filteredTrees);
+            }
+            
+            statusFilter.addEventListener('change', applyFilters);
+            sortBy.addEventListener('change', applyFilters);
+            
+            // Close modal
+            const closeBtn = document.querySelector('.close-btn');
+            const modal = document.getElementById('tree-modal');
+            
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            window.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // Back to top button
+            const backToTopBtn = document.querySelector('.back-to-top');
+            
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+            });
+            
+            backToTopBtn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+    </script>
+</body>
+</html>
