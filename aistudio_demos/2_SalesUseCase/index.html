@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retail Analytics Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Include Chart.js for visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- Include PapaParse for CSV parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <!-- Include xlsx for Excel export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <header>
+            <h1>Retail Analytics Dashboard</h1>
+            <div class="actions">
+                <button id="export-excel" class="btn">Export to Excel</button>
+                <button id="toggle-theme" class="btn">Toggle Dark Mode</button>
+            </div>
+        </header>
+
+        <section class="data-upload">
+            <h2>Data Upload</h2>
+            <div class="upload-form">
+                <div class="upload-group">
+                    <label for="retail-sales">Retail Sales Data:</label>
+                    <input type="file" id="retail-sales" accept=".csv">
+                </div>
+                <div class="upload-group">
+                    <label for="product-positioning">Product Positioning Data:</label>
+                    <input type="file" id="product-positioning" accept=".csv">
+                </div>
+                <button id="analyze-btn" class="btn btn-primary">Analyze Data</button>
+            </div>
+        </section>
+
+        <div class="loading-indicator" id="loading">
+            <div class="spinner"></div>
+            <p>Analyzing data...</p>
+        </div>
+
+        <main id="dashboard-content" class="dashboard-hidden">
+            <!-- KPI Section -->
+            <section class="kpi-section">
+                <h2>Key Performance Indicators</h2>
+                <div class="kpi-cards">
+                    <div class="kpi-card">
+                        <h3>Total Sales</h3>
+                        <p id="total-sales">$0</p>
+                    </div>
+                    <div class="kpi-card">
+                        <h3>Total Transactions</h3>
+                        <p id="total-transactions">0</p>
+                    </div>
+                    <div class="kpi-card">
+                        <h3>Average Order Value</h3>
+                        <p id="avg-order-value">$0</p>
+                    </div>
+                    <div class="kpi-card">
+                        <h3>Unique Customers</h3>
+                        <p id="unique-customers">0</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Segmentation Analysis -->
+            <section class="analytics-section">
+                <h2>Customer Segmentation Analysis</h2>
+                <div class="chart-grid">
+                    <div class="chart-container">
+                        <h3>Age Distribution</h3>
+                        <canvas id="age-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Gender Distribution</h3>
+                        <canvas id="gender-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Age-Gender Spending Heatmap</h3>
+                        <div id="age-gender-heatmap" class="heatmap-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Product Analysis -->
+            <section class="analytics-section">
+                <h2>Product Category Analysis</h2>
+                <div class="chart-grid">
+                    <div class="chart-container">
+                        <h3>Sales by Category</h3>
+                        <canvas id="category-sales-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Quantity Sold by Category</h3>
+                        <canvas id="category-quantity-chart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Market Basket Analysis -->
+            <section class="analytics-section">
+                <h2>Market Basket Analysis</h2>
+                <div class="chart-grid">
+                    <div class="chart-container">
+                        <h3>Top Product Combinations</h3>
+                        <div id="product-combinations-table" class="table-container"></div>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Product Affinity Network</h3>
+                        <div id="product-network" class="network-container">
+                            <p class="placeholder-text">Interactive network visualization will appear here after analysis.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Comparative Analysis -->
+            <section class="analytics-section">
+                <h2>Competitive Pricing Analysis</h2>
+                <div class="chart-grid">
+                    <div class="chart-container">
+                        <h3>Price Comparison with Competitors</h3>
+                        <canvas id="price-comparison-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Price Difference vs. Sales Volume</h3>
+                        <canvas id="price-sales-scatter"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sensitivity Analysis -->
+            <section class="analytics-section">
+                <h2>Promotional & Seasonal Impact</h2>
+                <div class="chart-grid">
+                    <div class="chart-container">
+                        <h3>Promotion Effectiveness</h3>
+                        <canvas id="promotion-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>Seasonal Performance</h3>
+                        <canvas id="seasonal-chart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recommendations -->
+            <section class="recommendations-section">
+                <h2>Data-Driven Recommendations</h2>
+                <div class="recommendations-container" id="recommendations-container">
+                    <p class="placeholder-text">Recommendations will appear here after analysis.</p>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Retail Analytics Dashboard. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
