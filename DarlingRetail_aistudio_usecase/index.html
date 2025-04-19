@@ -1043,7 +1043,7 @@
                             href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&family=Readex+Pro:wght@300;400;500;600;700&display=swap"
                             rel="stylesheet"
                         />
-                        <link rel="stylesheet" href="case-study.css" />
+                        <!-- link rel="stylesheet" href="case-study.css" /-->
                         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                     </head>
                     <body>
@@ -1508,43 +1508,467 @@
             </section>
 
             <section class="slide" id="roi-analysis">
-                <h2>Expected Return on Investment</h2>
-                <div class="roi-container">
-                    <div class="roi-chart">
-                        <div class="chart-container">
-                            <canvas id="roiChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="roi-metrics">
-                        <div class="metric">
-                            <h3>Investment</h3>
-                            <p class="value">₹24-30 Lakhs</p>
+                <div class="case-study">
+                    <h1>Expected Return on Investment</h1>
+
+                    <div class="case-study-container">
+                        <div class="case-info">
+                            <h3>Investment and Returns</h3>
                             <p class="description">
-                                Implementation and first year operational costs
+                                Our dynamic pricing solution delivers measurable
+                                ROI through increased conversions and optimal
+                                price points.
                             </p>
+
+                            <div class="roi-metrics">
+                                <div class="metric-card">
+                                    <h4>Investment</h4>
+                                    <p class="metric-value">₹24-30 Lakhs</p>
+                                    <p class="metric-description">
+                                        Implementation and first year
+                                        operational costs
+                                    </p>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>Year 1 Returns</h4>
+                                    <p class="metric-value">₹1.2-1.8 Crore</p>
+                                    <p class="metric-description">
+                                        Projected revenue increase from
+                                        optimized pricing
+                                    </p>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>ROI Timeframe</h4>
+                                    <p class="metric-value">4-6 Months</p>
+                                    <p class="metric-description">
+                                        Expected payback period
+                                    </p>
+                                </div>
+                                <div class="metric-card">
+                                    <h4>3-Year Impact</h4>
+                                    <p class="metric-value">₹5.5-7.2 Crore</p>
+                                    <p class="metric-description">
+                                        Cumulative projected revenue increase
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="metric">
-                            <h3>Year 1 Returns</h3>
-                            <p class="value">₹1.2-1.8 Crore</p>
-                            <p class="description">
-                                Projected revenue increase from optimized
-                                pricing
-                            </p>
-                        </div>
-                        <div class="metric">
-                            <h3>ROI Timeframe</h3>
-                            <p class="value">4-6 Months</p>
-                            <p class="description">Expected payback period</p>
-                        </div>
-                        <div class="metric">
-                            <h3>3-Year Impact</h3>
-                            <p class="value">₹5.5-7.2 Crore</p>
-                            <p class="description">
-                                Cumulative projected revenue increase
+
+                        <div class="chart-section">
+                            <div class="chart-container">
+                                <canvas id="roiChart"></canvas>
+                            </div>
+                            <p class="chart-caption">
+                                Projected ROI Over 12 Months
                             </p>
                         </div>
                     </div>
                 </div>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        // Define chart initialization functions
+                        function initTVPriceChart() {
+                            const ctx = document.getElementById("tvPriceChart");
+                            if (!ctx) return null;
+
+                            return new Chart(ctx, {
+                                type: "line",
+                                data: {
+                                    labels: [
+                                        "Week 1",
+                                        "Week 2",
+                                        "Week 3",
+                                        "Week 4",
+                                    ],
+                                    datasets: [
+                                        {
+                                            label: "Amazon",
+                                            data: [
+                                                109990, 109990, 107990, 105990,
+                                            ],
+                                            borderColor: "#F59E0B",
+                                            backgroundColor: "rgba(0, 0, 0, 0)",
+                                            tension: 0.1,
+                                        },
+                                        {
+                                            label: "Flipkart",
+                                            data: [
+                                                114990, 112990, 109990, 108990,
+                                            ],
+                                            borderColor: "#3B82F6",
+                                            backgroundColor: "rgba(0, 0, 0, 0)",
+                                            tension: 0.1,
+                                        },
+                                        {
+                                            label: "Croma",
+                                            data: [
+                                                119990, 116990, 114990, 109990,
+                                            ],
+                                            borderColor: "#10B981",
+                                            backgroundColor: "rgba(0, 0, 0, 0)",
+                                            tension: 0.1,
+                                        },
+                                        {
+                                            label: "DarlingRetail Optimized",
+                                            data: [
+                                                114490, 112490, 110490, 108490,
+                                            ],
+                                            borderColor: "#4F46E5",
+                                            backgroundColor: "rgba(0, 0, 0, 0)",
+                                            borderWidth: 3,
+                                            tension: 0.1,
+                                        },
+                                    ],
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        y: {
+                                            title: {
+                                                display: true,
+                                                text: "Price (₹)",
+                                                font: {
+                                                    family: "'Oxygen', sans-serif",
+                                                    size: 12,
+                                                },
+                                            },
+                                            ticks: {
+                                                callback: function (value) {
+                                                    return (
+                                                        "₹" +
+                                                        value.toLocaleString(
+                                                            "en-IN",
+                                                        )
+                                                    );
+                                                },
+                                                font: {
+                                                    family: "'Oxygen', sans-serif",
+                                                },
+                                            },
+                                        },
+                                        x: {
+                                            ticks: {
+                                                font: {
+                                                    family: "'Oxygen', sans-serif",
+                                                },
+                                            },
+                                        },
+                                    },
+                                    plugins: {
+                                        title: {
+                                            display: true,
+                                            text: "Samsung Neo QLED TV Price Trends",
+                                            font: {
+                                                family: "'Readex Pro', sans-serif",
+                                                size: 16,
+                                                weight: "bold",
+                                            },
+                                        },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: function (context) {
+                                                    return (
+                                                        context.dataset.label +
+                                                        ": ₹" +
+                                                        context.parsed.y.toLocaleString(
+                                                            "en-IN",
+                                                        )
+                                                    );
+                                                },
+                                            },
+                                            titleFont: {
+                                                family: "'Readex Pro', sans-serif",
+                                            },
+                                            bodyFont: {
+                                                family: "'Oxygen', sans-serif",
+                                            },
+                                        },
+                                        legend: {
+                                            position: "bottom",
+                                            labels: {
+                                                font: {
+                                                    family: "'Oxygen', sans-serif",
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            });
+                        }
+
+                        function initPhoneComparisonChart() {
+                            const ctx = document.getElementById(
+                                "phoneComparisonChart",
+                            );
+                            if (!ctx) return null;
+
+                            return new Chart(ctx, {
+                                type: "bar",
+                                data: {
+                                    labels: ["OnePlus 13 Pro", "iPhone 16"],
+                                    datasets: [
+                                        {
+                                            label: "Market Low (₹)",
+                                            data: [64999, 74900],
+                                            backgroundColor:
+                                                "rgba(16, 185, 129, 0.7)",
+                                            borderColor:
+                                                "rgba(16, 185, 129, 1)",
+                                            borderWidth: 1,
+                                        },
+                                        {
+                                            label: "Market High (₹)",
+                                            data: [68999, 78900],
+                                            backgroundColor:
+                                                "rgba(245, 158, 11, 0.7)",
+                                            borderColor:
+                                                "rgba(245, 158, 11, 1)",
+                                            borderWidth: 1,
+                                        },
+                                        {
+                                            label: "DarlingRetail Optimized (₹)",
+                                            data: [65999, 76490],
+                                            backgroundColor:
+                                                "rgba(79, 70, 229, 0.7)",
+                                            borderColor: "rgba(79, 70, 229, 1)",
+                                            borderWidth: 1,
+                                        },
+                                    ],
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        y: {
+                                            beginAtZero: false,
+                                            min: 60000,
+                                            title: {
+                                                display: true,
+                                                text: "Price (₹)",
+                                                font: {
+                                                    family: "'Oxygen', sans-serif",
+                                                    size: 12,
+                                                },
+                                            },
+                                            ticks: {
+                                                callback: function (value) {
+                                                    return (
+                                                        "₹" +
+                                                        value.toLocaleString(
+                                                            "en-IN",
+                                                        )
+                                                    );
+                                                },
+                                                font: {
+                                                    family: "'Oxygen', sans-serif",
+                                                },
+                                            },
+                                        },
+                                        x: {
+                                            ticks: {
+                                                font: {
+                                                    family: "'Oxygen', sans-serif",
+                                                },
+                                            },
+                                        },
+                                    },
+                                    plugins: {
+                                        title: {
+                                            display: true,
+                                            text: "Smartphone Price Comparison",
+                                            font: {
+                                                family: "'Readex Pro', sans-serif",
+                                                size: 16,
+                                                weight: "bold",
+                                            },
+                                        },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: function (context) {
+                                                    return (
+                                                        context.dataset.label +
+                                                        ": ₹" +
+                                                        context.parsed.y.toLocaleString(
+                                                            "en-IN",
+                                                        )
+                                                    );
+                                                },
+                                            },
+                                            titleFont: {
+                                                family: "'Readex Pro', sans-serif",
+                                            },
+                                            bodyFont: {
+                                                family: "'Oxygen', sans-serif",
+                                            },
+                                        },
+                                        legend: {
+                                            position: "bottom",
+                                            labels: {
+                                                font: {
+                                                    family: "'Oxygen', sans-serif",
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            });
+                        }
+
+                        function initROIChart() {
+                            const ctx = document.getElementById("roiChart");
+                            if (!ctx) return null;
+
+                            return new Chart(ctx, {
+                                type: "line",
+                                data: {
+                                    labels: [
+                                        "Month 1",
+                                        "Month 2",
+                                        "Month 3",
+                                        "Month 4",
+                                        "Month 5",
+                                        "Month 6",
+                                        "Month 7",
+                                        "Month 8",
+                                        "Month 9",
+                                        "Month 10",
+                                        "Month 11",
+                                        "Month 12",
+                                    ],
+                                    datasets: [
+                                        {
+                                            label: "Investment Cost",
+                                            data: [
+                                                2500000, 2500000, 2500000,
+                                                2500000, 2500000, 2500000,
+                                                2700000, 2700000, 2700000,
+                                                2700000, 2700000, 2700000,
+                                            ],
+                                            borderColor: "rgba(239, 68, 68, 1)",
+                                            backgroundColor:
+                                                "rgba(239, 68, 68, 0.1)",
+                                            tension: 0.1,
+                                            fill: true,
+                                        },
+                                        {
+                                            label: "Cumulative Revenue Increase",
+                                            data: [
+                                                1000000, 2500000, 4500000,
+                                                7000000, 9500000, 12000000,
+                                                14500000, 17000000, 19500000,
+                                                22000000, 24500000, 27000000,
+                                            ],
+                                            borderColor:
+                                                "rgba(16, 185, 129, 1)",
+                                            backgroundColor:
+                                                "rgba(16, 185, 129, 0.1)",
+                                            tension: 0.1,
+                                            fill: true,
+                                        },
+                                    ],
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        y: {
+                                            title: {
+                                                display: true,
+                                                text: "Amount (₹)",
+                                                font: {
+                                                    family: "'Oxygen', sans-serif",
+                                                    size: 12,
+                                                },
+                                            },
+                                            ticks: {
+                                                callback: function (value) {
+                                                    return (
+                                                        "₹" +
+                                                        (
+                                                            value / 100000
+                                                        ).toFixed(1) +
+                                                        " L"
+                                                    );
+                                                },
+                                                font: {
+                                                    family: "'Oxygen', sans-serif",
+                                                },
+                                            },
+                                        },
+                                        x: {
+                                            ticks: {
+                                                font: {
+                                                    family: "'Oxygen', sans-serif",
+                                                },
+                                            },
+                                        },
+                                    },
+                                    plugins: {
+                                        title: {
+                                            display: true,
+                                            text: "Projected ROI Over 12 Months",
+                                            font: {
+                                                family: "'Readex Pro', sans-serif",
+                                                size: 16,
+                                                weight: "bold",
+                                            },
+                                        },
+                                        tooltip: {
+                                            callbacks: {
+                                                label: function (context) {
+                                                    const value =
+                                                        context.parsed.y;
+                                                    if (value >= 10000000) {
+                                                        return (
+                                                            context.dataset
+                                                                .label +
+                                                            ": ₹" +
+                                                            (
+                                                                value / 10000000
+                                                            ).toFixed(2) +
+                                                            " Crore"
+                                                        );
+                                                    } else {
+                                                        return (
+                                                            context.dataset
+                                                                .label +
+                                                            ": ₹" +
+                                                            (
+                                                                value / 100000
+                                                            ).toFixed(2) +
+                                                            " Lakhs"
+                                                        );
+                                                    }
+                                                },
+                                            },
+                                            titleFont: {
+                                                family: "'Readex Pro', sans-serif",
+                                            },
+                                            bodyFont: {
+                                                family: "'Oxygen', sans-serif",
+                                            },
+                                        },
+                                        legend: {
+                                            position: "bottom",
+                                            labels: {
+                                                font: {
+                                                    family: "'Oxygen', sans-serif",
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                            });
+                        }
+
+                        // Initialize all charts independently
+                        //initTVPriceChart();
+                        //initPhoneComparisonChart();
+                        initROIChart();
+                    });
+                </script>
             </section>
 
             <section class="slide" id="why-choose-us">
