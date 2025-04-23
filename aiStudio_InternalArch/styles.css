@@ -1,0 +1,442 @@
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Oxygen', sans-serif;
+    background-color: #f8fafc;
+    color: #334155;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Readex Pro', sans-serif;
+    color: #1e293b;
+}
+
+/* Password Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.password-container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    text-align: center;
+}
+
+.logo-container {
+    margin-bottom: 20px;
+}
+
+.password-container h1 {
+    margin-bottom: 20px;
+    color: #2563EB;
+}
+
+.password-container p {
+    margin-bottom: 20px;
+    color: #64748b;
+}
+
+#password-input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 16px;
+    font-family: 'Oxygen', sans-serif;
+}
+
+#password-submit {
+    background-color: #2563EB;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-family: 'Readex Pro', sans-serif;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+#password-submit:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 10px rgba(37, 99, 235, 0.2);
+}
+
+.error {
+    color: #ef4444;
+    margin-top: 15px;
+}
+
+/* Main Content Styles */
+.hidden {
+    display: none;
+}
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 15px 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    margin-right: 15px;
+}
+
+.top-bar h1 {
+    font-size: 20px;
+    font-weight: 600;
+    flex-grow: 1;
+}
+
+.controls button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #2563EB;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Readex Pro', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.controls button:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 10px rgba(37, 99, 235, 0.2);
+}
+
+/* Tab Navigation */
+.tab-navigation {
+    display: flex;
+    background-color: white;
+    padding: 0 30px;
+    border-bottom: 1px solid #e2e8f0;
+    overflow-x: auto;
+}
+
+.tab-button {
+    padding: 15px 24px;
+    background-color: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: #64748b;
+    font-family: 'Readex Pro', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.tab-button:hover {
+    color: #2563EB;
+}
+
+.tab-button.active {
+    color: #2563EB;
+    border-bottom-color: #2563EB;
+}
+
+/* Tab Content */
+.tab-content {
+    position: relative;
+    min-height: calc(100vh - 125px);
+}
+
+.tab-pane {
+    display: none;
+    height: 100%;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+/* Content Layout */
+.content-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 125px);
+}
+
+.diagram-container {
+    flex: 0.8;
+    background-color: white;
+    border-radius: 8px;
+    margin: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+#overview-svg, #embedding-svg, #minds-svg, #mcp-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.details-panel {
+    flex: 0.2;
+    background-color: white;
+    border-radius: 8px;
+    margin: 0 15px 15px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow-y: auto;
+}
+
+.details-panel h2 {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #2563EB;
+}
+
+.details-panel p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.details-panel ul {
+    margin-bottom: 15px;
+    padding-left: 20px;
+}
+
+.details-panel li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+/* SVG Styles */
+.component {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.component:hover {
+    filter: brightness(1.1);
+}
+
+.component-bg {
+    fill: #2563EB;
+    stroke: #1d4ed8;
+    stroke-width: 2;
+    rx: 10;
+    ry: 10;
+    filter: drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.component-bg.highlight {
+    fill: #10b981;
+}
+
+.component-text {
+    fill: white;
+    font-family: 'Readex Pro', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    pointer-events: none;
+}
+
+.connection-line {
+    stroke: #64748b;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 5, 5;
+}
+
+.data-flow {
+    stroke: #2563EB;
+    stroke-width: 2;
+    marker-end: url(#arrowhead);
+    filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.sub-component-bg {
+    fill: #3b82f6;
+    rx: 6;
+    ry: 6;
+}
+
+.sub-component-text {
+    fill: white;
+    font-family: 'Oxygen', sans-serif;
+    font-size: 12px;
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+/* Embedding Tab Specific Styles */
+.embedding-type {
+    fill: #4ade80;
+}
+
+.embedding-process {
+    fill: #fb923c;
+}
+
+/* Mind Tab Specific Styles */
+.operator-category {
+    fill: #a78bfa;
+}
+
+.mind-process {
+    fill: #fb7185;
+}
+
+/* MCP Tab Specific Styles */
+.mcp-connector {
+    fill: #22d3ee;
+}
+
+.mcp-process {
+    fill: #facc15;
+}
+
+/* Print Styles */
+#print-content {
+    display: none;
+}
+
+@media print {
+    body {
+        background-color: white;
+    }
+
+    #main-content, .overlay {
+        display: none !important;
+    }
+
+    #print-content {
+        display: block;
+        padding: 30px;
+        max-width: 100%;
+    }
+
+    #print-content h1 {
+        font-size: 24px;
+        margin-bottom: 30px;
+        color: #2563EB;
+        text-align: center;
+    }
+
+    .print-section {
+        margin-bottom: 50px;
+        page-break-inside: avoid;
+    }
+
+    .print-section h2 {
+        color: #2563EB;
+        font-size: 20px;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .print-diagram {
+        width: 100%;
+        height: 400px;
+        margin-bottom: 30px;
+    }
+    
+    .print-section p, .print-section ul {
+        font-size: 14px;
+        line-height: 1.6;
+        margin-bottom: 15px;
+    }
+
+    .print-section ul {
+        padding-left: 25px;
+    }
+
+    .print-section li {
+        margin-bottom: 8px;
+    }
+
+    .print-component {
+        margin-bottom: 30px;
+        border-left: 3px solid #2563EB;
+        padding-left: 15px;
+    }
+
+    .print-component h3 {
+        color: #2563EB;
+        margin-bottom: 10px;
+    }
+}
+
+/* Responsive Adjustments for MacBook Pro 16" */
+@media screen and (min-width: 1440px) {
+    .content-container {
+        flex-direction: row;
+    }
+
+    .diagram-container {
+        flex: 0.8;
+        margin-right: 0;
+    }
+
+    .details-panel {
+        flex: 0.2;
+        margin-left: 0;
+        height: auto;
+    }
+}
+
+/* Tooltip Styles */
+.tooltip {
+    position: absolute;
+    background-color: #1e293b;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+    max-width: 250px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tooltip:after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px 5px 0;
+    border-style: solid;
+    border-color: #1e293b transparent transparent transparent;
+}

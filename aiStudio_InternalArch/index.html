@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI/Studio Architecture</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oxygen:wght@300;400;700&family=Readex+Pro:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Password Protection Overlay -->
+    <div id="password-overlay" class="overlay">
+        <div class="password-container">
+            <div class="logo-container">
+                <svg width="120" height="120" viewBox="0 0 120 120">
+                    <circle cx="60" cy="60" r="50" fill="#2563EB" />
+                    <text x="60" y="70" font-family="Readex Pro" font-size="24" fill="white" text-anchor="middle">AI/Studio</text>
+                </svg>
+            </div>
+            <h1>AI/Studio Architecture</h1>
+            <p>Please enter password to view documentation</p>
+            <input type="password" id="password-input" placeholder="Enter password">
+            <button id="password-submit">Access Documentation</button>
+            <p id="password-error" class="error"></p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="hidden">
+        <div class="top-bar">
+            <div class="logo">
+                <svg width="40" height="40" viewBox="0 0 40 40">
+                    <circle cx="20" cy="20" r="18" fill="#2563EB" />
+                    <text x="20" y="24" font-family="Readex Pro" font-size="8" fill="white" text-anchor="middle">AI/Studio</text>
+                </svg>
+            </div>
+            <h1>AI/Studio Architecture</h1>
+            <div class="controls">
+                <button id="print-btn" title="Print documentation"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> Print</button>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-button active" data-tab="overview">System Overview</button>
+            <button class="tab-button" data-tab="embedding">Embedding Internals</button>
+            <button class="tab-button" data-tab="minds">Quantum Minds Internals</button>
+            <button class="tab-button" data-tab="mcp">MCP Streams Internals</button>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Tab 1: System Overview -->
+            <div id="overview-tab" class="tab-pane active">
+                <div class="content-container">
+                    <div class="diagram-container">
+                        <svg id="overview-svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid meet"></svg>
+                    </div>
+                    <div class="details-panel">
+                        <h2 id="overview-details-title">System Architecture</h2>
+                        <div id="overview-details-content">
+                            <p>Click on any component in the architecture diagram to view detailed information.</p>
+                            <p>This overview shows the main components of the AI/Studio platform and how they interconnect.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Embedding Internals -->
+            <div id="embedding-tab" class="tab-pane">
+                <div class="content-container">
+                    <div class="diagram-container">
+                        <svg id="embedding-svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid meet"></svg>
+                    </div>
+                    <div class="details-panel">
+                        <h2 id="embedding-details-title">Embedding Cluster Architecture</h2>
+                        <div id="embedding-details-content">
+                            <p>Click on any component to view detailed information about the embedding technologies.</p>
+                            <p>The embedding cluster handles document processing and vector embedding generation with multiple technologies.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Quantum Minds Internals -->
+            <div id="minds-tab" class="tab-pane">
+                <div class="content-container">
+                    <div class="diagram-container">
+                        <svg id="minds-svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid meet"></svg>
+                    </div>
+                    <div class="details-panel">
+                        <h2 id="minds-details-title">Quantum Minds Architecture</h2>
+                        <div id="minds-details-content">
+                            <p>Click on any component to view detailed information about the Quantum Minds system.</p>
+                            <p>Quantum Minds is a low-code agentic AI platform that enables creation of sophisticated AI workflows.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 4: MCP Streams Internals -->
+            <div id="mcp-tab" class="tab-pane">
+                <div class="content-container">
+                    <div class="diagram-container">
+                        <svg id="mcp-svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid meet"></svg>
+                    </div>
+                    <div class="details-panel">
+                        <h2 id="mcp-details-title">MCP Streams Architecture</h2>
+                        <div id="mcp-details-content">
+                            <p>Click on any component to view detailed information about the MCP Streams system.</p>
+                            <p>MCP (Model Connect Protocol) Streams provide data integration capabilities for external sources.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print Layout -->
+    <div id="print-content">
+        <h1>AI/Studio Architecture Documentation</h1>
+        
+        <!-- Overview Print Section -->
+        <div class="print-section">
+            <h2>System Overview</h2>
+            <div class="print-diagram print-overview-diagram"></div>
+            <div id="print-overview-content">
+                <p>AI/Studio is a comprehensive AI platform that integrates multiple components including L⚡RAG (Lightning RAG), Quantum Minds, and MCP Streams to provide a complete solution for building AI-powered applications and insights.</p>
+            </div>
+        </div>
+
+        <!-- Component Print Sections -->
+        <div id="print-components">
+            <!-- Will be populated dynamically by JavaScript -->
+        </div>
+
+        <!-- Embedding Print Section -->
+        <div class="print-section">
+            <h2>Embedding Cluster Internals</h2>
+            <div class="print-diagram print-embedding-diagram"></div>
+            <div id="print-embedding-content"></div>
+        </div>
+
+        <!-- Quantum Minds Print Section -->
+        <div class="print-section">
+            <h2>Quantum Minds Internals</h2>
+            <div class="print-diagram print-minds-diagram"></div>
+            <div id="print-minds-content"></div>
+        </div>
+
+        <!-- MCP Streams Print Section -->
+        <div class="print-section">
+            <h2>MCP Streams Internals</h2>
+            <div class="print-diagram print-mcp-diagram"></div>
+            <div id="print-mcp-content"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
