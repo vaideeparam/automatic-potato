@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Supply Chain SaaS - Minds Documentation</title>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <div id="login-overlay">
+            <div class="login-container">
+                <h2>Documentation Access</h2>
+                <p>Please enter the password to access the documentation.</p>
+                <div class="login-form">
+                    <input
+                        type="password"
+                        id="password-input"
+                        placeholder="Enter password"
+                    />
+                    <button id="login-button">Access Documentation</button>
+                </div>
+                <p id="login-error" class="hidden">
+                    Incorrect password. Please try again.
+                </p>
+            </div>
+        </div>
+
+        <div id="content" class="hidden">
+            <header>
+                <div class="container">
+                    <h1>Supply Chain SaaS - Minds Documentation</h1>
+                    <p class="subtitle">
+                        Developer Documentation for Raw Data Collection Minds &
+                        AI-Processed Collection Minds
+                    </p>
+                </div>
+            </header>
+
+            <nav>
+                <div class="container">
+                    <ul>
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#collections">Collections</a></li>
+                        <li><a href="#raw-data-minds">Raw Data Minds</a></li>
+                        <li>
+                            <a href="#ai-processed-minds">AI-Processed Minds</a>
+                        </li>
+                        <li><a href="#mind-details">Mind Details</a></li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="container">
+                <section id="overview">
+                    <h2>Overview</h2>
+                    <div class="overview-content">
+                        <div class="overview-text">
+                            <p>
+                                This documentation provides detailed information
+                                about the Mind workflows implemented for a
+                                Series A funded supply chain SaaS company's CRM
+                                Copilot system. Minds are specialized AI
+                                components that process various data sources to
+                                provide valuable insights and automations.
+                            </p>
+                            <p>
+                                Two primary categories of Minds are documented:
+                            </p>
+                            <ul>
+                                <li>
+                                    <strong>Raw Data Collection Minds:</strong>
+                                    These extract, process, and vectorize data
+                                    from various sources like Salesforce, Email,
+                                    Slack, Zoom, etc.
+                                </li>
+                                <li>
+                                    <strong
+                                        >AI-Processed Collection Minds:</strong
+                                    >
+                                    These analyze the vectorized data to
+                                    generate insights, profiles, and
+                                    recommendations.
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="overview-diagram">
+                            <svg
+                                id="mind-flow-diagram"
+                                viewBox="0 0 700 320"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <!-- Data Sources -->
+                                <rect
+                                    x="10"
+                                    y="110"
+                                    width="120"
+                                    height="100"
+                                    rx="5"
+                                    class="data-source-box"
+                                />
+                                <text
+                                    x="70"
+                                    y="160"
+                                    text-anchor="middle"
+                                    class="diagram-text"
+                                >
+                                    Data Sources
+                                </text>
+
+                                <!-- Raw Data Minds -->
+                                <rect
+                                    x="190"
+                                    y="110"
+                                    width="120"
+                                    height="100"
+                                    rx="5"
+                                    class="raw-minds-box"
+                                />
+                                <text
+                                    x="250"
+                                    y="160"
+                                    text-anchor="middle"
+                                    class="diagram-text"
+                                >
+                                    Raw Data Collection Minds
+                                </text>
+
+                                <!-- Collections -->
+                                <rect
+                                    x="370"
+                                    y="50"
+                                    width="120"
+                                    height="50"
+                                    rx="5"
+                                    class="collections-box"
+                                />
+                                <text
+                                    x="430"
+                                    y="80"
+                                    text-anchor="middle"
+                                    class="diagram-text"
+                                >
+                                    Raw Collections
+                                </text>
+
+                                <rect
+                                    x="370"
+                                    y="220"
+                                    width="120"
+                                    height="50"
+                                    rx="5"
+                                    class="collections-box"
+                                />
+                                <text
+                                    x="430"
+                                    y="250"
+                                    text-anchor="middle"
+                                    class="diagram-text"
+                                >
+                                    AI Collections
+                                </text>
+
+                                <!-- AI Processed Minds -->
+                                <rect
+                                    x="550"
+                                    y="110"
+                                    width="120"
+                                    height="100"
+                                    rx="5"
+                                    class="ai-minds-box"
+                                />
+                                <text
+                                    x="610"
+                                    y="160"
+                                    text-anchor="middle"
+                                    class="diagram-text"
+                                >
+                                    AI-Processed Minds
+                                </text>
+
+                                <!-- Arrows -->
+                                <path d="M 130 160 L 190 160" class="arrow" />
+                                <path
+                                    d="M 310 140 L 350 140 L 370 75"
+                                    class="arrow"
+                                />
+                                <path
+                                    d="M 490 75 L 530 75 L 550 140"
+                                    class="arrow"
+                                />
+                                <path
+                                    d="M 610 210 L 610 250 L 490 250"
+                                    class="arrow"
+                                />
+                                <path
+                                    d="M 370 250 L 330 250 L 310 180"
+                                    class="arrow"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="collections">
+                    <h2>Collections</h2>
+                    <p>
+                        The following collections (vector databases) are used to
+                        store and retrieve processed data. They are divided into
+                        Raw Collections (directly populated from data sources)
+                        and AI-Processed Collections (generated through analysis
+                        of raw data).
+                    </p>
+
+                    <h3>Raw Collections</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Collection Name</th>
+                                <th>Description</th>
+                                <th>Data Source</th>
+                                <th>Populated By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>sales_activities</td>
+                                <td>
+                                    Sales opportunities, proposals, and account
+                                    information
+                                </td>
+                                <td>Salesforce, Document storage</td>
+                                <td>
+                                    SalesforceOpportunityIngestor,
+                                    SalesforceAccountProfiler,
+                                    QuoteProposalExtractor
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>customer_interactions</td>
+                                <td>
+                                    Customer emails, support tickets, and other
+                                    direct communications
+                                </td>
+                                <td>Email servers, Support platforms</td>
+                                <td>
+                                    EmailCommunicationProcessor,
+                                    SupportTicketProcessor
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>internal_discussions</td>
+                                <td>
+                                    Internal team communications about customers
+                                </td>
+                                <td>Slack, Teams</td>
+                                <td>SlackThreadExtractor</td>
+                            </tr>
+                            <tr>
+                                <td>meeting_records</td>
+                                <td>
+                                    Customer meeting transcripts and summaries
+                                </td>
+                                <td>Zoom, Teams</td>
+                                <td>
+                                    ZoomTranscriptVectorizer, TeamsCallAnalyzer
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>AI-Processed Collections</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Collection Name</th>
+                                <th>Description</th>
+                                <th>Source Collections</th>
+                                <th>Generated By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>customer_profiles</td>
+                                <td>
+                                    AI-generated comprehensive customer profiles
+                                </td>
+                                <td>sales_activities, customer_interactions</td>
+                                <td>
+                                    CustomerProfileGenerator,
+                                    ExecutiveSummaryCreator
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>relationship_timelines</td>
+                                <td>
+                                    Customer journey maps and interaction
+                                    histories
+                                </td>
+                                <td>All raw collections</td>
+                                <td>CustomerJourneyMapper</td>
+                            </tr>
+                            <tr>
+                                <td>opportunity_insights</td>
+                                <td>
+                                    Sales opportunity analysis and
+                                    recommendations
+                                </td>
+                                <td>
+                                    sales_activities, meeting_records,
+                                    customer_profiles
+                                </td>
+                                <td>
+                                    OpportunityAnalyzer,
+                                    UpsellOpportunityDetector,
+                                    QuarterlyBusinessReviewer
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>risk_assessments</td>
+                                <td>Customer churn risk evaluations</td>
+                                <td>All raw collections</td>
+                                <td>ChurnRiskCalculator</td>
+                            </tr>
+                            <tr>
+                                <td>sentiment_analysis</td>
+                                <td>Customer sentiment trends over time</td>
+                                <td>customer_interactions, meeting_records</td>
+                                <td>SentimentTrendAnalyzer</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section id="raw-data-minds">
+                    <h2>Raw Data Collection Minds</h2>
+                    <p>
+                        These Minds extract and process data from various
+                        sources, then embed it into vector collections for
+                        further use.
+                    </p>
+
+                    <div class="minds-grid">
+                        <div
+                            class="mind-card"
+                            data-mind="EmailCommunicationProcessor"
+                        >
+                            <h3>EmailCommunicationProcessor</h3>
+                            <div class="mind-card-content">
+                                <p>
+                                    <strong>Source:</strong> Company Email
+                                    Server
+                                </p>
+                                <p>
+                                    <strong>Output:</strong>
+                                    customer_interactions
+                                </p>
+                                <p>
+                                    <strong>Purpose:</strong> Process customer
+                                    emails with metadata
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="mind-card" data-mind="SlackThreadExtractor">
+                            <h3>SlackThreadExtractor</h3>
+                            <div class="mind-card-content">
+                                <p><strong>Source:</strong> Slack API</p>
+                                <p>
+                                    <strong>Output:</strong>
+                                    internal_discussions
+                                </p>
+                                <p>
+                                    <strong>Purpose:</strong> Extract
+                                    customer-related Slack discussions
+                                </p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mind-card"
+                            data-mind="ZoomTranscriptVectorizer"
+                        >
+                            <h3>ZoomTranscriptVectorizer</h3>
+                            <div class="mind-card-content">
+                                <p><strong>Source:</strong> Zoom API</p>
+                                <p><strong>Output:</strong> meeting_records</p>
+                                <p>
+                                    <strong>Purpose:</strong> Process meeting
+                                    transcripts and metadata
+                                </p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mind-card"
+                            data-mind="SupportTicketProcessor"
+                        >
+                            <h3>SupportTicketProcessor</h3>
+                            <div class="mind-card-content">
+                                <p><strong>Source:</strong> Service Desk API</p>
+                                <p>
+                                    <strong>Output:</strong>
+                                    customer_interactions
+                                </p>
+                                <p>
+                                    <strong>Purpose:</strong> Process support
+                                    tickets with priority and status
+                                </p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mind-card"
+                            data-mind="QuoteProposalExtractor"
+                        >
+                            <h3>QuoteProposalExtractor</h3>
+                            <div class="mind-card-content">
+                                <p><strong>Source:</strong> Document Storage</p>
+                                <p><strong>Output:</strong> sales_activities</p>
+                                <p>
+                                    <strong>Purpose:</strong> Extract data from
+                                    sales proposals
+                                </p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mind-card"
+                            data-mind="SalesforceOpportunityIngestor"
+                        >
+                            <h3>SalesforceOpportunityIngestor</h3>
+                            <div class="mind-card-content">
+                                <p><strong>Source:</strong> Salesforce API</p>
+                                <p><strong>Output:</strong> sales_activities</p>
+                                <p>
+                                    <strong>Purpose:</strong> Extract and
+                                    vectorize opportunity data
+                                </p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mind-card"
+                            data-mind="SalesforceAccountProfiler"
+                        >
+                            <h3>SalesforceAccountProfiler</h3>
+                            <div class="mind-card-content">
+                                <p><strong>Source:</strong> Salesforce API</p>
+                                <p><strong>Output:</strong> sales_activities</p>
+                                <p>
+                                    <strong>Purpose:</strong> Extract customer
+                                    account information
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="mind-card" data-mind="TeamsCallAnalyzer">
+                            <h3>TeamsCallAnalyzer</h3>
+                            <div class="mind-card-content">
+                                <p><strong>Source:</strong> Teams API</p>
+                                <p><strong>Output:</strong> meeting_records</p>
+                                <p>
+                                    <strong>Purpose:</strong> Extract insights
+                                    from Teams calls
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="ai-processed-minds">
+                    <h2>AI-Processed Collection Minds</h2>
+                    <p>
+                        These Minds analyze vectorized data from raw collections
+                        to generate insights, profiles, and recommendations.
+                    </p>
+
+                    <div class="minds-grid">
+                        <div
+                            class="mind-card"
+                            data-mind="CustomerProfileGenerator"
+                        >
+                            <h3>CustomerProfileGenerator</h3>
+                            <div class="mind-card-content">
+                                <p>
+                                    <strong>Sources:</strong> sales_activities,
+                                    customer_interactions
+                                </p>
+                                <p>
+                                    <strong>Output:</strong> customer_profiles
+                                </p>
+                                <p>
+                                    <strong>Purpose:</strong> Create
+                                    comprehensive customer profiles
+                                </p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mind-card"
+                            data-mind="CustomerJourneyMapper"
+                        >
+                            <h3>CustomerJourneyMapper</h3>
+                            <div class="mind-card-content">
+                                <p>
+                                    <strong>Sources:</strong> All raw
+                                    collections
+                                </p>
+                                <p>
+                                    <strong>Output:</strong>
+                                    relationship_timelines
+                                </p>
+                                <p>
+                                    <strong>Purpose:</strong> Generate timeline
+                                    of customer interactions
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="mind-card" data-mind="OpportunityAnalyzer">
+                            <h3>OpportunityAnalyzer</h3>
+                            <div class="mind-card-content">
+                                <p>
+                                    <strong>Sources:</strong> sales_activities,
+                                    meeting_records
+                                </p>
+                                <p>
+                                    <strong>Output:</strong>
+                                    opportunity_insights
+                                </p>
+                                <p>
+                                    <strong>Purpose:</strong> Analyze sales
+                                    opportunities with win probability
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="mind-card" data-mind="ChurnRiskCalculator">
+                            <h3>ChurnRiskCalculator</h3>
+                            <div class="mind-card-content">
+                                <p>
+                                    <strong>Sources:</strong>
+                                    customer_interactions, sales_activities
+                                </p>
+                                <p><strong>Output:</strong> risk_assessments</p>
+                                <p>
+                                    <strong>Purpose:</strong> Identify churn
+                                    risk indicators
+                                </p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mind-card"
+                            data-mind="SentimentTrendAnalyzer"
+                        >
+                            <h3>SentimentTrendAnalyzer</h3>
+                            <div class="mind-card-content">
+                                <p>
+                                    <strong>Sources:</strong>
+                                    customer_interactions
+                                </p>
+                                <p>
+                                    <strong>Output:</strong> sentiment_analysis
+                                </p>
+                                <p>
+                                    <strong>Purpose:</strong> Track customer
+                                    sentiment over time
+                                </p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mind-card"
+                            data-mind="UpsellOpportunityDetector"
+                        >
+                            <h3>UpsellOpportunityDetector</h3>
+                            <div class="mind-card-content">
+                                <p>
+                                    <strong>Sources:</strong> customer_profiles,
+                                    sales_activities
+                                </p>
+                                <p>
+                                    <strong>Output:</strong>
+                                    opportunity_insights
+                                </p>
+                                <p>
+                                    <strong>Purpose:</strong> Identify potential
+                                    upsell opportunities
+                                </p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mind-card"
+                            data-mind="QuarterlyBusinessReviewer"
+                        >
+                            <h3>QuarterlyBusinessReviewer</h3>
+                            <div class="mind-card-content">
+                                <p>
+                                    <strong>Sources:</strong> customer_profiles,
+                                    opportunity_insights
+                                </p>
+                                <p>
+                                    <strong>Output:</strong>
+                                    opportunity_insights
+                                </p>
+                                <p>
+                                    <strong>Purpose:</strong> Generate QBR
+                                    materials automatically
+                                </p>
+                            </div>
+                        </div>
+
+                        <div
+                            class="mind-card"
+                            data-mind="ExecutiveSummaryCreator"
+                        >
+                            <h3>ExecutiveSummaryCreator</h3>
+                            <div class="mind-card-content">
+                                <p>
+                                    <strong>Sources:</strong> customer_profiles,
+                                    risk_assessments
+                                </p>
+                                <p>
+                                    <strong>Output:</strong> customer_profiles
+                                </p>
+                                <p>
+                                    <strong>Purpose:</strong> Create
+                                    executive-level customer summaries
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="mind-details">
+                    <h2>Mind Implementation Details</h2>
+                    <p>
+                        Click on a Mind card above to view detailed
+                        implementation information.
+                    </p>
+
+                    <div id="mind-detail-container" class="hidden">
+                        <button id="close-detail">✕</button>
+                        <div id="mind-detail-content"></div>
+                    </div>
+                </section>
+            </main>
+
+            <footer>
+                <div class="container">
+                    <p>
+                        Supply Chain SaaS - AI Studio Mind Workflows
+                        Documentation
+                    </p>
+                </div>
+            </footer>
+        </div>
+
+        <script src="script.js"></script>
+    </body>
+</html>
