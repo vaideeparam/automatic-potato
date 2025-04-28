@@ -1,0 +1,2561 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Supply Chain SaaS: Synthetic Data Strategy</title>
+        <style>
+            :root {
+                --primary: #2563eb;
+                --primary-dark: #1d4ed8;
+                --secondary: #64748b;
+                --light: #f8fafc;
+                --dark: #0f172a;
+                --success: #10b981;
+                --warning: #f59e0b;
+                --danger: #ef4444;
+                --border: #e2e8f0;
+                --muted: #94a3b8;
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    Helvetica, Arial, sans-serif;
+                color: var(--dark);
+                line-height: 1.6;
+                background-color: var(--light);
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 2rem;
+            }
+
+            header {
+                background-color: white;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+
+            header .container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+                font-weight: 700;
+                color: var(--primary);
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .logo svg {
+                width: 28px;
+                height: 28px;
+            }
+
+            nav {
+                display: flex;
+                gap: 1.5rem;
+            }
+
+            nav a {
+                color: var(--secondary);
+                text-decoration: none;
+                font-weight: 500;
+                padding: 0.5rem 0.25rem;
+                border-bottom: 2px solid transparent;
+                transition: all 0.2s;
+            }
+
+            nav a:hover,
+            nav a.active {
+                color: var(--primary);
+                border-bottom-color: var(--primary);
+            }
+
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                color: var(--dark);
+                font-weight: 600;
+                line-height: 1.3;
+                margin-bottom: 1rem;
+            }
+
+            h1 {
+                font-size: 2.25rem;
+            }
+
+            h2 {
+                font-size: 1.75rem;
+                margin-top: 2.5rem;
+            }
+
+            h3 {
+                font-size: 1.5rem;
+                margin-top: 2rem;
+            }
+
+            p {
+                margin-bottom: 1.5rem;
+            }
+
+            .hero {
+                background-color: white;
+                padding: 3rem 0;
+                margin-bottom: 2rem;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .hero h1 {
+                max-width: 700px;
+            }
+
+            .hero p {
+                max-width: 600px;
+                color: var(--secondary);
+                font-size: 1.15rem;
+            }
+
+            .card {
+                background-color: white;
+                border-radius: 0.5rem;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+                padding: 1.5rem;
+                margin-bottom: 2rem;
+            }
+
+            .card-header {
+                margin-bottom: 1.5rem;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .card-header h3 {
+                margin-top: 0;
+                margin-bottom: 0.5rem;
+            }
+
+            .grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .flex {
+                display: flex;
+            }
+
+            .justify-between {
+                justify-content: space-between;
+            }
+
+            .items-center {
+                align-items: center;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 2rem;
+                font-size: 0.9rem;
+            }
+
+            th,
+            td {
+                padding: 0.75rem 1rem;
+                text-align: left;
+                border-bottom: 1px solid var(--border);
+            }
+
+            th {
+                font-weight: 600;
+                color: var(--secondary);
+                background-color: #f8fafc;
+            }
+
+            tr:hover {
+                background-color: #f8fafc;
+            }
+
+            .badge {
+                display: inline-block;
+                padding: 0.25rem 0.5rem;
+                border-radius: 9999px;
+                font-size: 0.75rem;
+                font-weight: 500;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+
+            .badge-positive {
+                background-color: rgba(16, 185, 129, 0.1);
+                color: var(--success);
+            }
+
+            .badge-neutral {
+                background-color: rgba(100, 116, 139, 0.1);
+                color: var(--secondary);
+            }
+
+            .badge-negative {
+                background-color: rgba(239, 68, 68, 0.1);
+                color: var(--danger);
+            }
+
+            .badge-low {
+                background-color: rgba(16, 185, 129, 0.1);
+                color: var(--success);
+            }
+
+            .badge-medium {
+                background-color: rgba(245, 158, 11, 0.1);
+                color: var(--warning);
+            }
+
+            .badge-high {
+                background-color: rgba(239, 68, 68, 0.1);
+                color: var(--danger);
+            }
+
+            .btn {
+                display: inline-block;
+                padding: 0.5rem 1rem;
+                border-radius: 0.375rem;
+                font-weight: 500;
+                text-align: center;
+                cursor: pointer;
+                transition: all 0.2s;
+                border: none;
+            }
+
+            .btn-primary {
+                background-color: var(--primary);
+                color: white;
+            }
+
+            .btn-primary:hover {
+                background-color: var(--primary-dark);
+            }
+
+            .btn-outline {
+                background-color: transparent;
+                border: 1px solid var(--border);
+                color: var(--secondary);
+            }
+
+            .btn-outline:hover {
+                background-color: #f8fafc;
+            }
+
+            .tabs {
+                display: flex;
+                margin-bottom: 2rem;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .tab {
+                padding: 0.75rem 1.5rem;
+                font-weight: 500;
+                color: var(--secondary);
+                cursor: pointer;
+                border-bottom: 2px solid transparent;
+                margin-bottom: -1px;
+                transition: all 0.2s;
+            }
+
+            .tab:hover {
+                color: var(--primary);
+            }
+
+            .tab.active {
+                color: var(--primary);
+                border-bottom-color: var(--primary);
+            }
+
+            .tab-content {
+                display: none;
+            }
+
+            .tab-content.active {
+                display: block;
+            }
+
+            .journey-timeline {
+                position: relative;
+                padding-left: 2rem;
+            }
+
+            .journey-item {
+                position: relative;
+                padding-bottom: 2rem;
+            }
+
+            .journey-item:before {
+                content: "";
+                position: absolute;
+                left: -2rem;
+                top: 0.5rem;
+                width: 1rem;
+                height: 1rem;
+                border-radius: 50%;
+                background-color: var(--primary);
+                z-index: 2;
+            }
+
+            .journey-item:after {
+                content: "";
+                position: absolute;
+                left: -1.5rem;
+                top: 1.5rem;
+                width: 2px;
+                height: calc(100% - 0.5rem);
+                background-color: var(--border);
+                z-index: 1;
+            }
+
+            .journey-item:last-child:after {
+                display: none;
+            }
+
+            .journey-date {
+                font-size: 0.875rem;
+                font-weight: 600;
+                color: var(--primary);
+                margin-bottom: 0.25rem;
+            }
+
+            .journey-title {
+                font-size: 1.125rem;
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+            }
+
+            .journey-content {
+                color: var(--secondary);
+            }
+
+            .signal-tag {
+                display: inline-block;
+                padding: 0.25rem 0.5rem;
+                border-radius: 0.375rem;
+                font-size: 0.75rem;
+                background-color: #f8fafc;
+                color: var(--secondary);
+                margin-right: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            /* Basic chart container and canvas styling */
+            .chart-container {
+                position: relative;
+                height: 400px;
+                margin-bottom: 2rem;
+                padding: 20px;
+                background-color: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            }
+
+            .chart {
+                width: 100%;
+                height: 100%;
+            }
+
+            /* Fix for blurry canvas rendering */
+            canvas {
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+                -ms-interpolation-mode: nearest-neighbor;
+            }
+
+            /* Make canvas pixel-perfect */
+            canvas.chart {
+                width: 100% !important;
+                height: 100% !important;
+            }
+
+            /* Better mobile display */
+            @media (max-width: 768px) {
+                .chart-container {
+                    height: 300px;
+                    padding: 10px;
+                }
+            }
+
+            footer {
+                margin-top: 4rem;
+                padding: 2rem 0;
+                background-color: #f8fafc;
+                border-top: 1px solid var(--border);
+            }
+
+            footer p {
+                color: var(--secondary);
+                font-size: 0.875rem;
+                margin-bottom: 0;
+            }
+
+            @media (max-width: 768px) {
+                .container {
+                    padding: 1rem;
+                }
+
+                h1 {
+                    font-size: 1.75rem;
+                }
+
+                h2 {
+                    font-size: 1.5rem;
+                }
+
+                .grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .tabs {
+                    overflow-x: auto;
+                    white-space: nowrap;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <div class="logo">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path
+                            d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2m5.66 0H14a2 2 0 0 1 2 2v3.34l1 1L23 7v10"
+                        ></path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                    SupplyChain SaaS
+                </div>
+                <nav>
+                    <a href="#overview" class="active">Overview</a>
+                    <a href="#customers">Customer Profiles</a>
+                    <a href="#signals">Signal Coverage</a>
+                    <a href="#implementation">Implementation</a>
+                </nav>
+            </div>
+        </header>
+
+        <section class="hero">
+            <div class="container">
+                <h1>Synthetic Data Generation Strategy</h1>
+                <p>
+                    A comprehensive approach to simulating realistic customer
+                    interactions and sentiment signals for supply chain SaaS
+                    model training.
+                </p>
+            </div>
+        </section>
+
+        <main class="container">
+            <section id="overview">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Strategy Overview</h3>
+                        <p>
+                            Simulating realistic customer interactions across
+                            multiple channels with 100% signal coverage
+                        </p>
+                    </div>
+
+                    <p>
+                        This synthetic data generation strategy spans 5 diverse
+                        customers, 50 email conversations, 50 Slack threads, and
+                        50 Microsoft Teams meeting records to provide complete
+                        coverage of sentiment, risk, and escalation signals
+                        while maintaining realistic customer journeys.
+                    </p>
+
+                    <div class="flex justify-between">
+                        <div>
+                            <h4>Data Distribution</h4>
+                            <ul>
+                                <li>5 distinct customer profiles</li>
+                                <li>150 total communication points</li>
+                                <li>8 sentiment signal patterns</li>
+                                <li>9 risk signal patterns</li>
+                                <li>5 escalation signal patterns</li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h4>Coverage Goals</h4>
+                            <ul>
+                                <li>100% trigger phrase coverage</li>
+                                <li>Realistic sentiment progression</li>
+                                <li>Channel-appropriate content</li>
+                                <li>Coherent customer storylines</li>
+                                <li>Timeline-based sentiment evolution</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tabs">
+                    <div class="tab active" data-tab="communication-summary">
+                        Communication Summary
+                    </div>
+                    <div class="tab" data-tab="signal-distribution">
+                        Signal Distribution
+                    </div>
+                    <div class="tab" data-tab="customer-journeys">
+                        Customer Journeys
+                    </div>
+                </div>
+
+                <div id="communication-summary" class="tab-content active">
+                    <!-- div class="chart-container">
+                        <canvas id="communicationChart" class="chart"></canvas>
+                        </div -->
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Channel</th>
+                                <th>Total Count</th>
+                                <th>Primary Signal Types</th>
+                                <th>Coverage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Email</td>
+                                <td>50</td>
+                                <td>
+                                    Sentiment (all levels), Risk (Low, High),
+                                    Escalation (Informational)
+                                </td>
+                                <td>40%</td>
+                            </tr>
+                            <tr>
+                                <td>Slack</td>
+                                <td>50</td>
+                                <td>
+                                    Sentiment (Negative, Neutral), Risk (Medium,
+                                    High), Escalation (High)
+                                </td>
+                                <td>30%</td>
+                            </tr>
+                            <tr>
+                                <td>Teams Meetings</td>
+                                <td>50</td>
+                                <td>
+                                    Sentiment (Positive, Neutral), Risk (Low,
+                                    High), Escalation (High)
+                                </td>
+                                <td>30%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="signal-distribution" class="tab-content">
+                    <!-- div class="chart-container">
+                        <canvas id="signalChart" class="chart"></canvas>
+                        </div -->
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Signal Type</th>
+                                <th>Level</th>
+                                <th>Tag Examples</th>
+                                <th>Trigger Phrases</th>
+                                <th>Distribution</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="3">Sentiment</td>
+                                <td>
+                                    <span class="badge badge-positive"
+                                        >Positive</span
+                                    >
+                                </td>
+                                <td>happy_customer, praise, satisfaction</td>
+                                <td>
+                                    "Loved the demo", "Great experience", "Thank
+                                    you for the quick help"
+                                </td>
+                                <td>36%</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="badge badge-neutral"
+                                        >Neutral</span
+                                    >
+                                </td>
+                                <td>neutral, no_feedback, okay_experience</td>
+                                <td>
+                                    "Okay", "Need to think", "Let's revisit
+                                    later"
+                                </td>
+                                <td>32%</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="badge badge-negative"
+                                        >Negative</span
+                                    >
+                                </td>
+                                <td>
+                                    delay_complaint, rude_support, poor_quality
+                                </td>
+                                <td>
+                                    "Still not resolved", "Disappointed with
+                                    support", "Frustrating"
+                                </td>
+                                <td>32%</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">Risk</td>
+                                <td>
+                                    <span class="badge badge-low">Low</span>
+                                </td>
+                                <td>
+                                    renewal_doubt, budget_discussion,
+                                    switch_hints
+                                </td>
+                                <td>
+                                    "Considering options", "Need better pricing"
+                                </td>
+                                <td>24%</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="badge badge-medium"
+                                        >Medium</span
+                                    >
+                                </td>
+                                <td>feature_gap, contract_issue, low_usage</td>
+                                <td>
+                                    "We don't use it much", "This feature is
+                                    missing"
+                                </td>
+                                <td>27%</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="badge badge-high">High</span>
+                                </td>
+                                <td>budget_cut, churn_signals, legal_issue</td>
+                                <td>
+                                    "Cutting costs", "Legal team involved",
+                                    "Discontinuing"
+                                </td>
+                                <td>22%</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">Escalation</td>
+                                <td>
+                                    <span class="badge badge-low"
+                                        >Informational</span
+                                    >
+                                </td>
+                                <td>
+                                    internal_escalation,
+                                    followed_up_multiple_times
+                                </td>
+                                <td>
+                                    "This was raised earlier too", "Still
+                                    pending after 2 weeks"
+                                </td>
+                                <td>14%</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="badge badge-high">High</span>
+                                </td>
+                                <td>
+                                    external_escalation, VIP_client_alert,
+                                    executive_contacted
+                                </td>
+                                <td>"Spoke to your VP", "Client is upset"</td>
+                                <td>13%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="customer-journeys" class="tab-content">
+                    <!-- div class="chart-container">
+                        <canvas id="journeyChart" class="chart"></canvas>
+                        </div -->
+
+                    <p>
+                        Each customer follows a unique sentiment journey while
+                        collectively providing 100% signal coverage:
+                    </p>
+
+                    <ul>
+                        <li>
+                            <strong>TechLogistics Inc.</strong>: Positive start
+                            → Consistent satisfaction → Expanded usage
+                        </li>
+                        <li>
+                            <strong>QuickShip Solutions</strong>: Difficult
+                            implementation → Escalations → Resolution → Improved
+                            satisfaction
+                        </li>
+                        <li>
+                            <strong>Global Freight Partners</strong>: Strong
+                            start → Gradual decline → Budget concerns → Churn
+                            risk
+                        </li>
+                        <li>
+                            <strong>NextGen Supply</strong>: Enthusiastic
+                            adoption → Budget constraints → Limited usage →
+                            Targeted value
+                        </li>
+                        <li>
+                            <strong>MegaRetail Corp</strong>: High expectations
+                            → Feature gaps → Executive escalation →
+                            Stabilization
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="customers">
+                <h2>Customer Profiles</h2>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>TechLogistics Inc.</h3>
+                        <p>
+                            <strong>Industry:</strong> Transportation &
+                            Logistics
+                        </p>
+                        <p>
+                            <strong>Size:</strong> Enterprise (500+ employees)
+                        </p>
+                        <p><strong>Product:</strong> Full Platform</p>
+                        <p>
+                            <strong>Journey:</strong> The Stable Success Story
+                        </p>
+                        <div>
+                            <span class="badge badge-positive"
+                                >Success Story</span
+                            >
+                            <span class="badge badge-low">Expansion</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>QuickShip Solutions</h3>
+                        <p><strong>Industry:</strong> Last-mile Delivery</p>
+                        <p>
+                            <strong>Size:</strong> Mid-market (100-250
+                            employees)
+                        </p>
+                        <p>
+                            <strong>Product:</strong> Order Management, Route
+                            Optimization
+                        </p>
+                        <p><strong>Journey:</strong> The Turnaround Story</p>
+                        <div>
+                            <span class="badge badge-positive">Recovered</span>
+                            <span class="badge badge-high">Escalation</span>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>Global Freight Partners</h3>
+                        <p><strong>Industry:</strong> International Shipping</p>
+                        <p>
+                            <strong>Size:</strong> Enterprise (1000+ employees)
+                        </p>
+                        <p>
+                            <strong>Product:</strong> Inventory Management,
+                            Supplier Portal
+                        </p>
+                        <p>
+                            <strong>Journey:</strong> The Declining Relationship
+                        </p>
+                        <div>
+                            <span class="badge badge-high">Churn Risk</span>
+                            <span class="badge badge-negative"
+                                >Budget Cuts</span
+                            >
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>NextGen Supply</h3>
+                        <p><strong>Industry:</strong> E-commerce</p>
+                        <p><strong>Size:</strong> Startup (25-50 employees)</p>
+                        <p><strong>Product:</strong> Basic Platform</p>
+                        <p>
+                            <strong>Journey:</strong> The Budget-Conscious
+                            Startup
+                        </p>
+                        <div>
+                            <span class="badge badge-neutral">Right-sized</span>
+                            <span class="badge badge-medium"
+                                >Funding Delay</span
+                            >
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>MegaRetail Corp</h3>
+                        <p><strong>Industry:</strong> Retail</p>
+                        <p>
+                            <strong>Size:</strong> Large Enterprise (2500+
+                            employees)
+                        </p>
+                        <p><strong>Product:</strong> Custom Implementation</p>
+                        <p>
+                            <strong>Journey:</strong> The High-Maintenance
+                            Enterprise
+                        </p>
+                        <div>
+                            <span class="badge badge-neutral">Stabilized</span>
+                            <span class="badge badge-high">Executive</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="signals">
+                <h2>Timeline & Signals</h2>
+
+                <div class="tabs">
+                    <div class="tab active" data-tab="techlogistics">
+                        TechLogistics
+                    </div>
+                    <div class="tab" data-tab="quickship">QuickShip</div>
+                    <div class="tab" data-tab="global-freight">
+                        Global Freight
+                    </div>
+                    <div class="tab" data-tab="nextgen">NextGen</div>
+                    <div class="tab" data-tab="megaretail">MegaRetail</div>
+                </div>
+
+                <div id="techlogistics" class="tab-content active">
+                    <h3>TechLogistics Inc. - The Stable Success Story</h3>
+
+                    <div class="journey-timeline">
+                        <div class="journey-item">
+                            <div class="journey-date">Jan 10, 2025</div>
+                            <div class="journey-title">
+                                Initial Platform Launch
+                            </div>
+                            <div class="journey-content">
+                                <p>
+                                    Successful kickoff meeting with key
+                                    stakeholders. Client expressed enthusiasm
+                                    after previous demos.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Teams Meeting</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Positive</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Loved the demo"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Jan 25, 2025</div>
+                            <div class="journey-title">Training Completion</div>
+                            <div class="journey-content">
+                                <p>
+                                    Team completed onboarding with positive
+                                    feedback on the training program.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Email</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Positive</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Great experience with
+                                        training"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Feb 15, 2025</div>
+                            <div class="journey-title">Minor Support Issue</div>
+                            <div class="journey-content">
+                                <p>
+                                    Quick resolution of a small issue with LTL
+                                    shipment ETAs in the dashboard.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Slack</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Neutral</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Need to look into this"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Mar 5, 2025</div>
+                            <div class="journey-title">Quarterly Review</div>
+                            <div class="journey-content">
+                                <p>
+                                    Strong adoption metrics and positive
+                                    feedback on ROI during first quarterly
+                                    review.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Teams Meeting</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Positive</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Thank you for the quick
+                                        help"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Apr 12, 2025</div>
+                            <div class="journey-title">Feature Request</div>
+                            <div class="journey-content">
+                                <p>
+                                    Customer requesting load balancing
+                                    enhancement for multi-facility operations.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Email</span
+                                    >
+                                    <span class="signal-tag">Risk: Medium</span>
+                                    <span class="signal-tag"
+                                        >Trigger: "This feature is
+                                        missing"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">May 3, 2025</div>
+                            <div class="journey-title">Usage Expansion</div>
+                            <div class="journey-content">
+                                <p>
+                                    Added additional user licenses and planning
+                                    EMEA expansion.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Teams Meeting</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Positive</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Seeing great results"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Jun 10, 2025</div>
+                            <div class="journey-title">ROI Review</div>
+                            <div class="journey-content">
+                                <p>
+                                    Documented success metrics showing 22%
+                                    reduction in order processing time and $1.2M
+                                    in operational savings.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Email</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Positive</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Great experience
+                                        overall"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="quickship" class="tab-content">
+                    <h3>QuickShip Solutions - The Turnaround Story</h3>
+
+                    <div class="journey-timeline">
+                        <div class="journey-item">
+                            <div class="journey-date">Jan 5, 2025</div>
+                            <div class="journey-title">
+                                Implementation Start
+                            </div>
+                            <div class="journey-content">
+                                <p>
+                                    Cautious beginning with concerns about
+                                    timeline and integration complexity.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Teams Meeting</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Neutral</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Okay, let's see how this
+                                        goes"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Jan 20, 2025</div>
+                            <div class="journey-title">Integration Issue</div>
+                            <div class="journey-content">
+                                <p>
+                                    Significant data mapping problems with
+                                    custom delivery rules causing implementation
+                                    delays.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Slack</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Negative</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Frustrating integration
+                                        process"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Feb 3, 2025</div>
+                            <div class="journey-title">Support Ticket</div>
+                            <div class="journey-content">
+                                <p>
+                                    Formal support ticket created for unresolved
+                                    integration problems affecting timeline.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Email</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Negative</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Still not resolved"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Feb 15, 2025</div>
+                            <div class="journey-title">Follow-up Complaint</div>
+                            <div class="journey-content">
+                                <p>
+                                    Escalation to management about continuing
+                                    implementation issues.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Email</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Escalation: Informational</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "This was raised earlier
+                                        too"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Feb 28, 2025</div>
+                            <div class="journey-title">Executive Outreach</div>
+                            <div class="journey-content">
+                                <p>
+                                    COO contacted vendor CEO directly,
+                                    threatening to cancel the contract.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Slack</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Escalation: High</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Client is upset"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Mar 10, 2025</div>
+                            <div class="journey-title">Resolution Meeting</div>
+                            <div class="journey-content">
+                                <p>
+                                    Senior technical resources deployed a custom
+                                    solution addressing core issues.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Teams Meeting</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Neutral</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Let's revisit the
+                                        implementation"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Apr 22, 2025</div>
+                            <div class="journey-title">Success Check-in</div>
+                            <div class="journey-content">
+                                <p>
+                                    System now stable with significant
+                                    improvements in delivery efficiency metrics.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Email</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Positive</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Much better experience
+                                        now"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">May 30, 2025</div>
+                            <div class="journey-title">Expanded Usage</div>
+                            <div class="journey-content">
+                                <p>
+                                    Added route optimization module and
+                                    discussing further expansion.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Teams Meeting</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Positive</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Thank you for the
+                                        turnaround"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="global-freight" class="tab-content">
+                    <h3>
+                        Global Freight Partners - The Declining Relationship
+                    </h3>
+
+                    <div class="journey-timeline">
+                        <div class="journey-item">
+                            <div class="journey-date">Jan 15, 2025</div>
+                            <div class="journey-title">Year 2 Kickoff</div>
+                            <div class="journey-content">
+                                <p>
+                                    Strong relationship at the start of second
+                                    year with positive reflection on
+                                    achievements.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Teams Meeting</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Positive</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Great experience last
+                                        year"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Feb 20, 2025</div>
+                            <div class="journey-title">Minor Issue Report</div>
+                            <div class="journey-content">
+                                <p>
+                                    Issues with supplier onboarding for Eastern
+                                    European partners raising first concerns.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Slack</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Neutral</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Need to think about this
+                                        approach"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Mar 5, 2025</div>
+                            <div class="journey-title">Usage Review</div>
+                            <div class="journey-content">
+                                <p>
+                                    Declining usage patterns identified across
+                                    multiple departments.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Email</span
+                                    >
+                                    <span class="signal-tag">Risk: Medium</span>
+                                    <span class="signal-tag"
+                                        >Trigger: "We don't use it much"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Apr 10, 2025</div>
+                            <div class="journey-title">Budget Discussion</div>
+                            <div class="journey-content">
+                                <p>
+                                    First signs of renewal concerns due to
+                                    broader cost optimization initiative.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Teams Meeting</span
+                                    >
+                                    <span class="signal-tag">Risk: Low</span>
+                                    <span class="signal-tag"
+                                        >Trigger: "Considering options"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">May 1, 2025</div>
+                            <div class="journey-title">Competitor Demo</div>
+                            <div class="journey-content">
+                                <p>
+                                    Actively evaluating competitor solutions
+                                    with lower price points.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Email</span
+                                    >
+                                    <span class="signal-tag">Risk: Low</span>
+                                    <span class="signal-tag"
+                                        >Trigger: "Need better pricing"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">May 15, 2025</div>
+                            <div class="journey-title">Financial Review</div>
+                            <div class="journey-content">
+                                <p>
+                                    Significant budget pressure due to market
+                                    downturn affecting shipping volumes.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Slack</span
+                                    >
+                                    <span class="signal-tag">Risk: High</span>
+                                    <span class="signal-tag"
+                                        >Trigger: "Cutting costs across
+                                        departments"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Jun 5, 2025</div>
+                            <div class="journey-title">Pre-Renewal Call</div>
+                            <div class="journey-content">
+                                <p>
+                                    Executive team discussing partial
+                                    termination of services.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Teams Meeting</span
+                                    >
+                                    <span class="signal-tag">Risk: High</span>
+                                    <span class="signal-tag"
+                                        >Trigger: "Discontinuing some
+                                        services"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Jun 20, 2025</div>
+                            <div class="journey-title">Contract Dispute</div>
+                            <div class="journey-content">
+                                <p>
+                                    Formal contract dispute over amendment terms
+                                    and pricing structure.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Email</span
+                                    >
+                                    <span class="signal-tag">Risk: High</span>
+                                    <span class="signal-tag"
+                                        >Trigger: "Legal team involved"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="nextgen" class="tab-content">
+                    <h3>NextGen Supply - The Budget-Conscious Startup</h3>
+
+                    <div class="journey-timeline">
+                        <div class="journey-item">
+                            <div class="journey-date">Feb 1, 2025</div>
+                            <div class="journey-title">Initial Signup</div>
+                            <div class="journey-content">
+                                <p>
+                                    Enthusiastic adoption following impressive
+                                    product demonstration.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Teams Meeting</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Positive</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Loved the demo"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Feb 15, 2025</div>
+                            <div class="journey-title">
+                                Quick Implementation
+                            </div>
+                            <div class="journey-content">
+                                <p>
+                                    Smooth implementation completed in just 12
+                                    days with positive feedback.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Email</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Positive</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Thank you for the quick
+                                        help"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Mar 10, 2025</div>
+                            <div class="journey-title">Early Success</div>
+                            <div class="journey-content">
+                                <p>
+                                    Strong initial results with significant
+                                    improvements in operational efficiency.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Slack</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Positive</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Great experience so
+                                        far"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Mar 25, 2025</div>
+                            <div class="journey-title">Feature Question</div>
+                            <div class="journey-content">
+                                <p>
+                                    Exploring advanced analytics feature but
+                                    cautious about additional investment.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Email</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Neutral</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Need to think about
+                                        this"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Apr 5, 2025</div>
+                            <div class="journey-title">Funding Update</div>
+                            <div class="journey-content">
+                                <p>
+                                    Series A funding delayed by at least two
+                                    quarters, forcing budget review.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Teams Meeting</span
+                                    >
+                                    <span class="signal-tag">Risk: High</span>
+                                    <span class="signal-tag"
+                                        >Trigger: "Cutting costs"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Apr 20, 2025</div>
+                            <div class="journey-title">Plan Downgrade</div>
+                            <div class="journey-content">
+                                <p>
+                                    Downgrading from Premium to Essentials plan
+                                    to extend runway.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Slack</span
+                                    >
+                                    <span class="signal-tag">Risk: Low</span>
+                                    <span class="signal-tag"
+                                        >Trigger: "Need better pricing"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">May 15, 2025</div>
+                            <div class="journey-title">Targeted Usage</div>
+                            <div class="journey-content">
+                                <p>
+                                    Finding value in the scaled-back plan for
+                                    core business needs.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Email</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Positive</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Works well for our core
+                                        needs"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Jun 10, 2025</div>
+                            <div class="journey-title">Growth Planning</div>
+                            <div class="journey-content">
+                                <p>
+                                    Planning for future expansion once funding
+                                    is secured in Q3/Q4.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Teams Meeting</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Neutral</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Let's revisit later"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="megaretail" class="tab-content">
+                    <h3>MegaRetail Corp - The High-Maintenance Enterprise</h3>
+
+                    <div class="journey-timeline">
+                        <div class="journey-item">
+                            <div class="journey-date">Dec 15, 2024</div>
+                            <div class="journey-title">
+                                Enterprise Agreement
+                            </div>
+                            <div class="journey-content">
+                                <p>
+                                    Large-scale implementation kickoff with
+                                    aggressive timeline and high expectations.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Teams Meeting</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Positive</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Looking forward to
+                                        implementation"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Jan 10, 2025</div>
+                            <div class="journey-title">
+                                Implementation Delays
+                            </div>
+                            <div class="journey-content">
+                                <p>
+                                    Early friction with data migration issues
+                                    and timeline slippage.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Slack</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Negative</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Disappointing timeline"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Feb 1, 2025</div>
+                            <div class="journey-title">Integration Problem</div>
+                            <div class="journey-content">
+                                <p>
+                                    Critical integration issues with existing
+                                    ERP and inventory systems.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Email</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Negative</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Still not resolved"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Feb 20, 2025</div>
+                            <div class="journey-title">Support Escalation</div>
+                            <div class="journey-content">
+                                <p>
+                                    Formal escalation of support ticket blocking
+                                    user acceptance testing.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Email</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Escalation: Informational</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Still pending after 2
+                                        weeks"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Mar 5, 2025</div>
+                            <div class="journey-title">VP Escalation</div>
+                            <div class="journey-content">
+                                <p>
+                                    Executive-level escalation with threat to
+                                    reconsider the implementation.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Teams Meeting</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Escalation: High</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Spoke to your VP"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Mar 20, 2025</div>
+                            <div class="journey-title">War Room Session</div>
+                            <div class="journey-content">
+                                <p>
+                                    Critical gap in allocation engine
+                                    functionality requiring custom development.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Slack</span
+                                    >
+                                    <span class="signal-tag">Risk: Medium</span>
+                                    <span class="signal-tag"
+                                        >Trigger: "This feature is
+                                        missing"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Apr 10, 2025</div>
+                            <div class="journey-title">Resolution Meeting</div>
+                            <div class="journey-content">
+                                <p>
+                                    Issues addressed with enhanced support model
+                                    and executive attention.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Teams Meeting</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Neutral</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Let's move forward"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">May 1, 2025</div>
+                            <div class="journey-title">Success Review</div>
+                            <div class="journey-content">
+                                <p>
+                                    Stable performance in first phase of rollout
+                                    with minor remaining issues.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Email</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Neutral</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Making progress"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">May 20, 2025</div>
+                            <div class="journey-title">Feature Release</div>
+                            <div class="journey-content">
+                                <p>
+                                    Custom store-level demand forecasting
+                                    feature deployed successfully.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Slack</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Positive</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "This addresses our
+                                        needs"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="journey-item">
+                            <div class="journey-date">Jun 15, 2025</div>
+                            <div class="journey-title">Executive QBR</div>
+                            <div class="journey-content">
+                                <p>
+                                    Quarterly business review confirming
+                                    stabilization and strategic alignment.
+                                </p>
+                                <div>
+                                    <span class="signal-tag"
+                                        >Channel: Teams Meeting</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Sentiment: Positive</span
+                                    >
+                                    <span class="signal-tag"
+                                        >Trigger: "Better aligned with
+                                        expectations"</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="implementation">
+                <h2>Implementation Strategy</h2>
+
+                <div class="card">
+                    <h3>Synthetic Data Generation Approach</h3>
+
+                    <p>
+                        To implement this strategy for your supply chain SaaS
+                        company, follow these steps:
+                    </p>
+
+                    <ol>
+                        <li>
+                            <strong>Create Customer Profiles:</strong>
+                            <ul>
+                                <li>
+                                    Set up the 5 customers with appropriate
+                                    metadata
+                                </li>
+                                <li>
+                                    Assign realistic user counts, product
+                                    modules, and industry-specific
+                                    configurations
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong
+                                >Generate Communications
+                                Chronologically:</strong
+                            >
+                            <ul>
+                                <li>
+                                    Follow the provided timelines for each
+                                    customer
+                                </li>
+                                <li>
+                                    Create realistic content that incorporates
+                                    signal triggers
+                                </li>
+                                <li>
+                                    Ensure metadata includes proper timestamps
+                                    for trend analysis
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Distribution Considerations:</strong>
+                            <ul>
+                                <li>
+                                    Use email for formal communications,
+                                    contracts, and documented issues
+                                </li>
+                                <li>
+                                    Use Slack for internal team discussions
+                                    about customers
+                                </li>
+                                <li>
+                                    Use Teams for meeting transcripts and live
+                                    customer interactions
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>Contextual Richness:</strong>
+                            <ul>
+                                <li>
+                                    Reference relevant supply chain processes
+                                    (inventory management, order tracking)
+                                </li>
+                                <li>
+                                    Include industry-specific challenges
+                                    (customs delays, port congestion)
+                                </li>
+                                <li>
+                                    Mention integration with other systems (ERP,
+                                    WMS, TMS)
+                                </li>
+                            </ul>
+                        </li>
+                    </ol>
+
+                    <div class="flex justify-between items-center">
+                        <a href="#" class="btn btn-primary"
+                            >Download Detailed Specs</a
+                        >
+                        <a href="#" class="btn btn-outline"
+                            >View Sample Content</a
+                        >
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="container">
+                <p>Supply Chain SaaS - Synthetic Data Strategy © 2025</p>
+            </div>
+        </footer>
+
+        <script>
+            // Lightweight Chart.js-like implementation
+            class SimpleChart {
+                constructor(ctx, config) {
+                    this.ctx = ctx.getContext("2d");
+                    this.config = config;
+                    this.width = ctx.width || ctx.clientWidth;
+                    this.height = ctx.height || ctx.clientHeight;
+                    this.render();
+                }
+
+                render() {
+                    const { ctx, config, width, height } = this;
+                    ctx.clearRect(0, 0, width, height);
+
+                    if (config.type === "bar") {
+                        this.renderBarChart();
+                    } else if (config.type === "pie") {
+                        this.renderPieChart();
+                    } else if (config.type === "line") {
+                        this.renderLineChart();
+                    }
+                }
+
+                renderBarChart() {
+                    const { ctx, config, width, height } = this;
+                    const { data } = config;
+                    const datasets = data.datasets;
+                    const labels = data.labels;
+
+                    // Calculate dimensions
+                    const padding = 50;
+                    const chartWidth = width - padding * 2;
+                    const chartHeight = height - padding * 2;
+                    const barCount = labels.length;
+                    const datasetCount = datasets.length;
+                    const groupWidth = chartWidth / barCount;
+                    const barWidth = groupWidth / (datasetCount + 0.5);
+
+                    // Draw axes
+                    ctx.beginPath();
+                    ctx.moveTo(padding, height - padding);
+                    ctx.lineTo(width - padding, height - padding);
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.moveTo(padding, height - padding);
+                    ctx.lineTo(padding, padding);
+                    ctx.stroke();
+
+                    // Find max value
+                    let maxValue = 0;
+                    datasets.forEach((dataset) => {
+                        const dataMax = Math.max(...dataset.data);
+                        if (dataMax > maxValue) maxValue = dataMax;
+                    });
+
+                    // Add a bit of margin to the max
+                    maxValue = Math.ceil(maxValue * 1.1);
+
+                    // Draw y-axis labels
+                    ctx.textAlign = "right";
+                    ctx.textBaseline = "middle";
+                    const yLabelCount = 5;
+                    for (let i = 0; i <= yLabelCount; i++) {
+                        const value = Math.round(maxValue * (i / yLabelCount));
+                        const y =
+                            height - padding - (i / yLabelCount) * chartHeight;
+                        ctx.fillText(value.toString(), padding - 10, y);
+
+                        // Grid line
+                        ctx.beginPath();
+                        ctx.moveTo(padding, y);
+                        ctx.lineTo(width - padding, y);
+                        ctx.strokeStyle = "rgba(0,0,0,0.1)";
+                        ctx.stroke();
+                        ctx.strokeStyle = "black";
+                    }
+
+                    // Draw x-axis labels
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "top";
+                    labels.forEach((label, i) => {
+                        const x = padding + (i + 0.5) * groupWidth;
+                        ctx.fillText(label, x, height - padding + 10);
+                    });
+
+                    // Draw bars
+                    datasets.forEach((dataset, datasetIndex) => {
+                        ctx.fillStyle =
+                            dataset.backgroundColor || "rgba(0, 123, 255, 0.5)";
+
+                        dataset.data.forEach((value, i) => {
+                            const x =
+                                padding +
+                                i * groupWidth +
+                                datasetIndex * barWidth +
+                                barWidth / 2;
+                            const barHeight = (value / maxValue) * chartHeight;
+                            const y = height - padding - barHeight;
+
+                            ctx.fillRect(x, y, barWidth * 0.8, barHeight);
+                        });
+                    });
+
+                    // Draw legend
+                    if (
+                        config.options &&
+                        config.options.plugins &&
+                        config.options.plugins.legend &&
+                        config.options.plugins.legend.display !== false
+                    ) {
+                        const legendX = width - padding;
+                        const legendY = padding;
+                        const itemHeight = 20;
+
+                        datasets.forEach((dataset, i) => {
+                            const y = legendY + i * itemHeight;
+
+                            // Draw color box
+                            ctx.fillStyle =
+                                dataset.backgroundColor ||
+                                "rgba(0, 123, 255, 0.5)";
+                            ctx.fillRect(legendX - 100, y, 15, 15);
+
+                            // Draw label
+                            ctx.fillStyle = "black";
+                            ctx.textAlign = "left";
+                            ctx.fillText(dataset.label, legendX - 80, y + 7);
+                        });
+                    }
+
+                    // Draw title
+                    if (
+                        config.options &&
+                        config.options.plugins &&
+                        config.options.plugins.title &&
+                        config.options.plugins.title.display
+                    ) {
+                        ctx.fillStyle = "black";
+                        ctx.font = "bold 16px Arial";
+                        ctx.textAlign = "center";
+                        ctx.fillText(
+                            config.options.plugins.title.text,
+                            width / 2,
+                            20,
+                        );
+                        ctx.font = "12px Arial";
+                    }
+                }
+
+                renderPieChart() {
+                    const { ctx, config, width, height } = this;
+                    const { data } = config;
+                    const dataset = data.datasets[0];
+                    const labels = data.labels;
+
+                    // Calculate dimensions
+                    const centerX = width / 2;
+                    const centerY = height / 2;
+                    const radius = Math.min(centerX, centerY) - 60;
+
+                    // Calculate total
+                    const total = dataset.data.reduce(
+                        (sum, value) => sum + value,
+                        0,
+                    );
+
+                    // Draw slices
+                    let startAngle = 0;
+
+                    dataset.data.forEach((value, i) => {
+                        const sliceAngle = (value / total) * 2 * Math.PI;
+                        const endAngle = startAngle + sliceAngle;
+
+                        ctx.beginPath();
+                        ctx.moveTo(centerX, centerY);
+                        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                        ctx.closePath();
+
+                        const backgroundColor = Array.isArray(
+                            dataset.backgroundColor,
+                        )
+                            ? dataset.backgroundColor[i]
+                            : dataset.backgroundColor ||
+                              "rgba(0, 123, 255, 0.5)";
+
+                        ctx.fillStyle = backgroundColor;
+                        ctx.fill();
+
+                        // Draw label line and text
+                        const midAngle = startAngle + sliceAngle / 2;
+                        const labelRadius = radius * 0.7;
+                        const labelX =
+                            centerX + Math.cos(midAngle) * labelRadius;
+                        const labelY =
+                            centerY + Math.sin(midAngle) * labelRadius;
+
+                        ctx.fillStyle = "white";
+                        ctx.font = "bold 12px Arial";
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = "middle";
+
+                        // Only show label if slice is big enough
+                        if (sliceAngle > 0.2) {
+                            ctx.fillText(
+                                Math.round(value) + "%",
+                                labelX,
+                                labelY,
+                            );
+                        }
+
+                        startAngle = endAngle;
+                    });
+
+                    // Draw title
+                    if (
+                        config.options &&
+                        config.options.plugins &&
+                        config.options.plugins.title &&
+                        config.options.plugins.title.display
+                    ) {
+                        ctx.fillStyle = "black";
+                        ctx.font = "bold 16px Arial";
+                        ctx.textAlign = "center";
+                        ctx.fillText(
+                            config.options.plugins.title.text,
+                            width / 2,
+                            20,
+                        );
+                    }
+
+                    // Draw legend
+                    if (
+                        config.options &&
+                        config.options.plugins &&
+                        config.options.plugins.legend &&
+                        config.options.plugins.legend.display !== false
+                    ) {
+                        const legendX = width - 30;
+                        const legendY = height / 2 - (labels.length * 15) / 2;
+                        const itemHeight = 25;
+
+                        labels.forEach((label, i) => {
+                            const y = legendY + i * itemHeight;
+
+                            // Draw color box
+                            const backgroundColor = Array.isArray(
+                                dataset.backgroundColor,
+                            )
+                                ? dataset.backgroundColor[i]
+                                : dataset.backgroundColor ||
+                                  "rgba(0, 123, 255, 0.5)";
+
+                            ctx.fillStyle = backgroundColor;
+                            ctx.fillRect(legendX - 120, y, 15, 15);
+
+                            // Draw label
+                            ctx.fillStyle = "black";
+                            ctx.font = "12px Arial";
+                            ctx.textAlign = "left";
+                            ctx.fillText(label, legendX - 100, y + 7);
+                        });
+                    }
+                }
+
+                renderLineChart() {
+                    const { ctx, config, width, height } = this;
+                    const { data } = config;
+                    const datasets = data.datasets;
+                    const labels = data.labels;
+
+                    // Calculate dimensions
+                    const padding = 50;
+                    const chartWidth = width - padding * 2;
+                    const chartHeight = height - padding * 2;
+
+                    // Draw axes
+                    ctx.beginPath();
+                    ctx.moveTo(padding, height - padding);
+                    ctx.lineTo(width - padding, height - padding);
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.moveTo(padding, height - padding);
+                    ctx.lineTo(padding, padding);
+                    ctx.stroke();
+
+                    // Find max value
+                    let maxValue = 0;
+                    datasets.forEach((dataset) => {
+                        const dataMax = Math.max(...dataset.data);
+                        if (dataMax > maxValue) maxValue = dataMax;
+                    });
+
+                    // Add a bit of margin to the max
+                    maxValue = Math.ceil(maxValue * 1.1);
+
+                    // Draw y-axis labels
+                    ctx.textAlign = "right";
+                    ctx.textBaseline = "middle";
+                    const yLabelCount = 5;
+                    for (let i = 0; i <= yLabelCount; i++) {
+                        const value = Math.round(maxValue * (i / yLabelCount));
+                        const y =
+                            height - padding - (i / yLabelCount) * chartHeight;
+                        ctx.fillText(value.toString(), padding - 10, y);
+
+                        // Grid line
+                        ctx.beginPath();
+                        ctx.moveTo(padding, y);
+                        ctx.lineTo(width - padding, y);
+                        ctx.strokeStyle = "rgba(0,0,0,0.1)";
+                        ctx.stroke();
+                        ctx.strokeStyle = "black";
+                    }
+
+                    // Draw x-axis labels
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "top";
+                    const xStep = chartWidth / (labels.length - 1);
+                    labels.forEach((label, i) => {
+                        const x = padding + i * xStep;
+                        ctx.fillText(label, x, height - padding + 10);
+                    });
+
+                    // Draw lines
+                    datasets.forEach((dataset) => {
+                        ctx.strokeStyle =
+                            dataset.borderColor || "rgba(0, 123, 255, 1)";
+                        ctx.lineWidth = 2;
+
+                        ctx.beginPath();
+                        dataset.data.forEach((value, i) => {
+                            const x = padding + i * xStep;
+                            const y =
+                                height -
+                                padding -
+                                (value / maxValue) * chartHeight;
+
+                            if (i === 0) {
+                                ctx.moveTo(x, y);
+                            } else {
+                                ctx.lineTo(x, y);
+                            }
+                        });
+                        ctx.stroke();
+
+                        // Draw points
+                        dataset.data.forEach((value, i) => {
+                            const x = padding + i * xStep;
+                            const y =
+                                height -
+                                padding -
+                                (value / maxValue) * chartHeight;
+
+                            ctx.beginPath();
+                            ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                            ctx.fillStyle =
+                                dataset.borderColor || "rgba(0, 123, 255, 1)";
+                            ctx.fill();
+                        });
+                    });
+
+                    // Draw legend
+                    if (
+                        config.options &&
+                        config.options.plugins &&
+                        config.options.plugins.legend &&
+                        config.options.plugins.legend.display !== false
+                    ) {
+                        const legendX = width - padding;
+                        const legendY = padding;
+                        const itemHeight = 20;
+
+                        datasets.forEach((dataset, i) => {
+                            const y = legendY + i * itemHeight;
+
+                            // Draw color line
+                            ctx.strokeStyle =
+                                dataset.borderColor || "rgba(0, 123, 255, 1)";
+                            ctx.beginPath();
+                            ctx.moveTo(legendX - 100, y + 7);
+                            ctx.lineTo(legendX - 80, y + 7);
+                            ctx.stroke();
+
+                            // Draw point
+                            ctx.beginPath();
+                            ctx.arc(legendX - 90, y + 7, 4, 0, 2 * Math.PI);
+                            ctx.fillStyle =
+                                dataset.borderColor || "rgba(0, 123, 255, 1)";
+                            ctx.fill();
+
+                            // Draw label
+                            ctx.fillStyle = "black";
+                            ctx.textAlign = "left";
+                            ctx.fillText(dataset.label, legendX - 75, y + 7);
+                        });
+                    }
+
+                    // Draw title
+                    if (
+                        config.options &&
+                        config.options.plugins &&
+                        config.options.plugins.title &&
+                        config.options.plugins.title.display
+                    ) {
+                        ctx.fillStyle = "black";
+                        ctx.font = "bold 16px Arial";
+                        ctx.textAlign = "center";
+                        ctx.fillText(
+                            config.options.plugins.title.text,
+                            width / 2,
+                            20,
+                        );
+                        ctx.font = "12px Arial";
+                    }
+                }
+            }
+
+            // Tab switching functionality
+            document.addEventListener("DOMContentLoaded", function () {
+                const tabs = document.querySelectorAll(".tab");
+
+                tabs.forEach((tab) => {
+                    tab.addEventListener("click", () => {
+                        // Get the parent tabs container
+                        const tabsContainer = tab.parentElement;
+
+                        // Remove active class from all tabs in this container
+                        const siblingTabs =
+                            tabsContainer.querySelectorAll(".tab");
+                        siblingTabs.forEach((t) =>
+                            t.classList.remove("active"),
+                        );
+
+                        // Add active class to clicked tab
+                        tab.classList.add("active");
+
+                        // Get content container
+                        const tabContentId = tab.getAttribute("data-tab");
+                        const tabContent =
+                            document.getElementById(tabContentId);
+
+                        // Find parent section
+                        let parentSection = tabsContainer;
+                        while (
+                            parentSection &&
+                            !parentSection.classList.contains("container") &&
+                            !parentSection.id
+                        ) {
+                            parentSection = parentSection.parentElement;
+                        }
+
+                        // Hide all content with the same parent
+                        if (parentSection) {
+                            const allContents =
+                                parentSection.querySelectorAll(".tab-content");
+                            allContents.forEach((content) => {
+                                if (content.id !== tabContentId) {
+                                    content.classList.remove("active");
+                                }
+                            });
+                        }
+
+                        // Show selected content
+                        if (tabContent) {
+                            tabContent.classList.add("active");
+                        }
+                    });
+                });
+
+                // Initialize charts
+                const communicationChart =
+                    document.getElementById("communicationChart");
+                if (communicationChart) {
+                    new SimpleChart(communicationChart, {
+                        type: "bar",
+                        data: {
+                            labels: [
+                                "TechLogistics",
+                                "QuickShip",
+                                "Global Freight",
+                                "NextGen",
+                                "MegaRetail",
+                            ],
+                            datasets: [
+                                {
+                                    label: "Email",
+                                    data: [12, 10, 10, 8, 10],
+                                    backgroundColor: "rgba(37, 99, 235, 0.6)",
+                                },
+                                {
+                                    label: "Slack",
+                                    data: [14, 10, 8, 10, 8],
+                                    backgroundColor: "rgba(100, 116, 139, 0.6)",
+                                },
+                                {
+                                    label: "Teams",
+                                    data: [12, 8, 12, 8, 10],
+                                    backgroundColor: "rgba(16, 185, 129, 0.6)",
+                                },
+                            ],
+                        },
+                        options: {
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: "Communications by Customer and Channel",
+                                },
+                                legend: {
+                                    display: true,
+                                },
+                            },
+                        },
+                    });
+                }
+
+                const signalChart = document.getElementById("signalChart");
+                if (signalChart) {
+                    new SimpleChart(signalChart, {
+                        type: "pie",
+                        data: {
+                            labels: [
+                                "Positive",
+                                "Neutral",
+                                "Negative",
+                                "Risk-Low",
+                                "Risk-Medium",
+                                "Risk-High",
+                                "Escalation-Info",
+                                "Escalation-High",
+                            ],
+                            datasets: [
+                                {
+                                    label: "Signal Distribution",
+                                    data: [36, 32, 32, 24, 27, 22, 14, 13],
+                                    backgroundColor: [
+                                        "rgba(16, 185, 129, 0.6)",
+                                        "rgba(100, 116, 139, 0.6)",
+                                        "rgba(239, 68, 68, 0.6)",
+                                        "rgba(16, 185, 129, 0.6)",
+                                        "rgba(245, 158, 11, 0.6)",
+                                        "rgba(239, 68, 68, 0.6)",
+                                        "rgba(100, 116, 139, 0.6)",
+                                        "rgba(239, 68, 68, 0.6)",
+                                    ],
+                                },
+                            ],
+                        },
+                        options: {
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: "Signal Distribution",
+                                },
+                                legend: {
+                                    display: true,
+                                    position: "right",
+                                },
+                            },
+                        },
+                    });
+                }
+
+                const journeyChart = document.getElementById("journeyChart");
+                if (journeyChart) {
+                    new SimpleChart(journeyChart, {
+                        type: "line",
+                        data: {
+                            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+                            datasets: [
+                                {
+                                    label: "TechLogistics",
+                                    data: [90, 95, 97, 90, 95, 98],
+                                    borderColor: "rgba(37, 99, 235, 1)",
+                                },
+                                {
+                                    label: "QuickShip",
+                                    data: [60, 30, 40, 75, 85, 90],
+                                    borderColor: "rgba(245, 158, 11, 1)",
+                                },
+                                {
+                                    label: "Global Freight",
+                                    data: [95, 90, 80, 70, 40, 20],
+                                    borderColor: "rgba(239, 68, 68, 1)",
+                                },
+                                {
+                                    label: "NextGen",
+                                    data: [0, 95, 98, 60, 75, 80],
+                                    borderColor: "rgba(16, 185, 129, 1)",
+                                },
+                                {
+                                    label: "MegaRetail",
+                                    data: [70, 40, 20, 50, 75, 85],
+                                    borderColor: "rgba(139, 92, 246, 1)",
+                                },
+                            ],
+                        },
+                        options: {
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: "Customer Sentiment Journey",
+                                },
+                                legend: {
+                                    display: true,
+                                },
+                            },
+                        },
+                    });
+                }
+
+                // Navigation scroll
+                const navLinks = document.querySelectorAll("nav a");
+
+                navLinks.forEach((link) => {
+                    link.addEventListener("click", function (e) {
+                        e.preventDefault();
+
+                        // Remove active class from all links
+                        navLinks.forEach((l) => l.classList.remove("active"));
+
+                        // Add active class to clicked link
+                        this.classList.add("active");
+
+                        // Smooth scroll to section
+                        const targetId = this.getAttribute("href").substring(1);
+                        const targetSection = document.getElementById(targetId);
+
+                        if (targetSection) {
+                            window.scrollTo({
+                                top: targetSection.offsetTop - 80,
+                                behavior: "smooth",
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
+    </body>
+</html>
