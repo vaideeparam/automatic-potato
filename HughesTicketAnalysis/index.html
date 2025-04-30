@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hughes Network Analytics Documentation</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #0f172a;
+            --accent-color: #3b82f6;
+            --light-color: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-color: #334155;
+            --heading-color: #1e293b;
+            --muted-color: #64748b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-color);
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        section {
+            margin-bottom: 40px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        h3 {
+            color: var(--secondary-color);
+            font-size: 1.4rem;
+            margin: 25px 0 15px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        ul, ol {
+            margin: 0 0 20px 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .workflow-diagram {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        th {
+            background-color: var(--accent-color);
+            color: white;
+            text-align: left;
+            padding: 12px 15px;
+        }
+        
+        td {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        
+        code {
+            font-family: "SF Mono", "Segoe UI Mono", "Roboto Mono", monospace;
+            background-color: #f1f5f9;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        .analysis-block {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .analysis-block:last-child {
+            border-bottom: none;
+        }
+        
+        .note {
+            background-color: #f0f9ff;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .workflow-container {
+            text-align: center;
+            background-color: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .workflow-container img {
+            max-width: 100%;
+        }
+        
+        .diagram-box {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            background-color: white;
+        }
+        
+        .analysis-intro {
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        /* Navbar */
+        nav {
+            background-color: var(--secondary-color);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+            overflow-x: auto;
+        }
+        
+        nav li {
+            margin: 0 15px 0 0;
+            white-space: nowrap;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+            color: var(--muted-color);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        /* Diagram styling */
+        .diagram-container {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: white;
+            margin-bottom: 30px;
+        }
+        
+        .diagram {
+            width: 100%;
+            height: auto;
+            max-width: 1100px;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 20px 0;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            section {
+                padding: 20px;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            h3 {
+                font-size: 1.3rem;
+            }
+            
+            table {
+                font-size: 0.8rem;
+            }
+            
+            th, td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Hughes Network Analytics</h1>
+            <p>Implementation Documentation for Development Team</p>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#workflow">Analysis Workflow</a></li>
+                <li><a href="#analysis-details">Analysis Details</a></li>
+                <li><a href="#recommendations-mind">Recommendations Mind</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <section id="introduction">
+            <h2>Introduction to Dataset</h2>
+            <p>The Hughes Network dataset contains telecommunications network incident data with approximately 50,000 records tracking service tickets, network failures, and resolution activities. This dataset includes:</p>
+            
+            <ul>
+                <li><strong>Service Tickets</strong>: Each record represents a network incident with a unique RequestID</li>
+                <li><strong>Network Sites</strong>: Each incident is tied to a specific site (e.g., IWASON383)</li>
+                <li><strong>Problem Information</strong>: Details about the issue type, mainly "Unavailable by ICMP ping" (connectivity failures)</li>
+                <li><strong>Geographic Distribution</strong>: Sites across North, West, and South regions of India</li>
+                <li><strong>Time Metrics</strong>: Submission times, resolution times, hold times, and various handling stages</li>
+                <li><strong>Downtime</strong>: Measured in minutes for each incident</li>
+                <li><strong>Products</strong>: All incidents involve "Terrestrial" services with "IN500" equipment</li>
+                <li><strong>Resolution Information</strong>: Details about actions taken to resolve issues</li>
+            </ul>
+            
+            <p>Key fields in the dataset include:</p>
+            <ul>
+                <li><code>RequestID</code>: Unique identifier for each incident</li>
+                <li><code>Site</code>: Network site identifier</li>
+                <li><code>Problem Reported</code> & <code>Other Problems</code>: Description of the network issue</li>
+                <li><code>Region</code>, <code>State</code>, <code>City</code>: Geographic information</li>
+                <li><code>Submission time</code> & <code>Resolved Time-Active</code>: Incident lifecycle timestamps</li>
+                <li><code>Down Time</code>: Duration of outage in minutes</li>
+                <li><code>Current Status</code>: Status of the incident (e.g., Resolved)</li>
+                <li><code>Product/Services</code> & <code>Products Item</code>: Equipment information</li>
+                <li><code>Resolved Final Action taken</code>: Details about resolution actions</li>
+            </ul>
+            
+            <div class="note">
+                <p><strong>Note:</strong> The data will be imported from XLSX format into a SQL database for analysis using TextToSQL_Deep and PandasAIDf operators within the Quantum Minds platform.</p>
+            </div>
+        </section>
+        
+        <section id="workflow">
+            <h2>Analysis Workflow</h2>
+            <p>The analytics workflow consists of seven specialized analysis minds plus a recommendations mind that synthesizes insights from all analyses. Each mind follows a similar pattern:</p>
+            <ol>
+                <li>Extract relevant data using TextToSQL_Deep</li>
+                <li>Transform and analyze data using PandasAIDf</li>
+                <li>Generate insights using TextSummarize</li>
+            </ol>
+            
+            <div class="diagram-container">
+                <svg class="diagram" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Data Ingestion & Preparation -->
+                    <rect x="100" y="50" width="1000" height="100" rx="10" fill="#f0f9ff" stroke="#3b82f6" stroke-width="2"/>
+                    <text x="600" y="80" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">Data Ingestion & Preparation</text>
+                    <rect x="200" y="95" width="180" height="40" rx="5" fill="#3b82f6" stroke="#2563eb" stroke-width="1"/>
+                    <text x="290" y="120" text-anchor="middle" font-size="14" fill="white">Upload XLSX Data</text>
+                    <rect x="450" y="95" width="180" height="40" rx="5" fill="#3b82f6" stroke="#2563eb" stroke-width="1"/>
+                    <text x="540" y="120" text-anchor="middle" font-size="14" fill="white">Excel to SQL Operator</text>
+                    <rect x="700" y="95" width="180" height="40" rx="5" fill="#3b82f6" stroke="#2563eb" stroke-width="1"/>
+                    <text x="790" y="120" text-anchor="middle" font-size="14" fill="white">Import Data to SQL</text>
+                    <!-- Arrows -->
+                    <line x1="380" y1="115" x2="450" y2="115" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="630" y1="115" x2="700" y2="115" stroke="#64748b" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Analysis Minds -->
+                    <rect x="100" y="180" width="1000" height="420" rx="10" fill="#f8fafc" stroke="#64748b" stroke-width="1" stroke-dasharray="5,5"/>
+                    <text x="600" y="210" text-anchor="middle" font-size="18" font-weight="bold" fill="#1e293b">Analysis Minds</text>
+                    
+                    <!-- 7 Analysis Blocks -->
+                    <!-- Row 1 -->
+                    <rect x="150" y="230" width="280" height="120" rx="10" fill="#eef2ff" stroke="#818cf8" stroke-width="2"/>
+                    <text x="290" y="260" text-anchor="middle" font-size="16" font-weight="bold" fill="#4f46e5">Bandwidth Analysis</text>
+                    <text x="290" y="290" text-anchor="middle" font-size="12" fill="#4f46e5">TextToSQL_Deep → PandasAIDf</text>
+                    <text x="290" y="310" text-anchor="middle" font-size="12" fill="#4f46e5">→ TextSummarize</text>
+                    
+                    <rect x="460" y="230" width="280" height="120" rx="10" fill="#ecfdf5" stroke="#34d399" stroke-width="2"/>
+                    <text x="600" y="260" text-anchor="middle" font-size="16" font-weight="bold" fill="#059669">Upgrade Alerts</text>
+                    <text x="600" y="290" text-anchor="middle" font-size="12" fill="#059669">TextToSQL_Deep → PandasAIDf</text>
+                    <text x="600" y="310" text-anchor="middle" font-size="12" fill="#059669">→ TextSummarize</text>
+                    
+                    <rect x="770" y="230" width="280" height="120" rx="10" fill="#fef3c7" stroke="#fbbf24" stroke-width="2"/>
+                    <text x="910" y="260" text-anchor="middle" font-size="16" font-weight="bold" fill="#d97706">Service Delivery</text>
+                    <text x="910" y="290" text-anchor="middle" font-size="12" fill="#d97706">TextToSQL_Deep → PandasAIDf</text>
+                    <text x="910" y="310" text-anchor="middle" font-size="12" fill="#d97706">→ TextSummarize</text>
+                    
+                    <!-- Row 2 -->
+                    <rect x="150" y="370" width="280" height="120" rx="10" fill="#fee2e2" stroke="#f87171" stroke-width="2"/>
+                    <text x="290" y="400" text-anchor="middle" font-size="16" font-weight="bold" fill="#dc2626">Link Failure Prediction</text>
+                    <text x="290" y="430" text-anchor="middle" font-size="12" fill="#dc2626">TextToSQL_Deep → PandasAIDf</text>
+                    <text x="290" y="450" text-anchor="middle" font-size="12" fill="#dc2626">→ TextSummarize</text>
+                    
+                    <rect x="460" y="370" width="280" height="120" rx="10" fill="#f3e8ff" stroke="#c084fc" stroke-width="2"/>
+                    <text x="600" y="400" text-anchor="middle" font-size="16" font-weight="bold" fill="#9333ea">Site Pattern Analysis</text>
+                    <text x="600" y="430" text-anchor="middle" font-size="12" fill="#9333ea">TextToSQL_Deep → PandasAIDf</text>
+                    <text x="600" y="450" text-anchor="middle" font-size="12" fill="#9333ea">→ TextSummarize</text>
+                    
+                    <rect x="770" y="370" width="280" height="120" rx="10" fill="#e0f2fe" stroke="#38bdf8" stroke-width="2"/>
+                    <text x="910" y="400" text-anchor="middle" font-size="16" font-weight="bold" fill="#0284c7">Failure Analysis</text>
+                    <text x="910" y="430" text-anchor="middle" font-size="12" fill="#0284c7">TextToSQL_Deep → PandasAIDf</text>
+                    <text x="910" y="450" text-anchor="middle" font-size="12" fill="#0284c7">→ TextSummarize</text>
+                    
+                    <!-- Recommendations Mind -->
+                    <rect x="100" y="630" width="1000" height="100" rx="10" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
+                    <text x="600" y="660" text-anchor="middle" font-size="18" font-weight="bold" fill="#166534">Recommendations Mind</text>
+                    <rect x="200" y="675" width="340" height="40" rx="5" fill="#22c55e" stroke="#16a34a" stroke-width="1"/>
+                    <text x="370" y="700" text-anchor="middle" font-size="14" fill="white">Consolidate & Prioritize Insights</text>
+                    <rect x="650" y="675" width="340" height="40" rx="5" fill="#22c55e" stroke="#16a34a" stroke-width="1"/>
+                    <text x="820" y="700" text-anchor="middle" font-size="14" fill="white">Generate Actionable Recommendations</text>
+                    <!-- Arrows -->
+                    <line x1="540" y1="695" x2="650" y2="695" stroke="#166534" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Connecting Arrows -->
+                    <line x1="290" y1="350" x2="290" y2="630" stroke="#64748b" stroke-width="2" stroke-dasharray="5,5"/>
+                    <line x1="600" y1="350" x2="600" y2="630" stroke="#64748b" stroke-width="2" stroke-dasharray="5,5"/>
+                    <line x1="910" y1="350" x2="910" y2="630" stroke="#64748b" stroke-width="2" stroke-dasharray="5,5"/>
+                    <line x1="290" y1="490" x2="290" y2="630" stroke="#64748b" stroke-width="2" stroke-dasharray="5,5"/>
+                    <line x1="600" y1="490" x2="600" y2="630" stroke="#64748b" stroke-width="2" stroke-dasharray="5,5"/>
+                    <line x1="910" y1="490" x2="910" y2="630" stroke="#64748b" stroke-width="2" stroke-dasharray="5,5"/>
+                    
+                    <!-- Data Flow -->
+                    <line x1="790" y1="135" x2="790" y2="180" stroke="#2563eb" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Arrow Definitions -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+            
+            <p>The complete analytics solution performs seven key analyses:</p>
+            <ol>
+                <li><strong>Bandwidth Usage Pattern Analysis</strong>: Identify usage patterns, trends, and anomalies</li>
+                <li><strong>Upgrade Alerts Prediction</strong>: Predict when infrastructure upgrades are needed</li>
+                <li><strong>Service Delivery Analysis</strong>: Evaluate service performance across regions and partners</li>
+                <li><strong>Link Failure Prediction</strong>: Predict potential network failures before they occur</li>
+                <li><strong>Site Pattern Analysis</strong>: Identify site-specific patterns and vulnerabilities</li>
+                <li><strong>Failure Analysis</strong>: Determine common reasons for failures and their impact</li>
+                <li><strong>Recommendations</strong>: Generate actionable improvements with expected ROI</li>
+            </ol>
+        </section>
+        
+        <section id="analysis-details">
+            <h2>Analysis Details</h2>
+            
+            <div class="analysis-block">
+                <h3>1. Bandwidth Usage Pattern Analysis</h3>
+                <p class="analysis-intro">This analysis focuses on understanding bandwidth consumption patterns across sites and regions, identifying temporal trends, and highlighting potential bottlenecks.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Prompt</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>TextToSQL_Deep</strong></td>
+                            <td>"Select Site, 'Problem Reported', 'Other Problems', 'Down Time', 'Submission time', 'Resolved Time-Active', Region, State, City, 'Product/Services', 'Products Item' from network_incidents where 'Down Time' is not null order by 'Down Time' desc"</td>
+                            <td>Retrieve all incidents with downtime information, ordered by severity</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"Create a pivot table analyzing bandwidth usage patterns. Group by Region and Site, and calculate: average downtime, total number of incidents, median resolution time, and incident frequency. Sort the results by average downtime in descending order. Also identify any sites with recurring issues by counting incidents per site."</td>
+                            <td>Generate a pivot table of bandwidth usage patterns by region and site</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"Analyze the temporal patterns in network incidents. Group the data by hour of day, day of week, and month. Calculate the number of incidents, average downtime, and average resolution time for each group. Create a time series visualization showing incident frequency and severity over time."</td>
+                            <td>Analyze temporal patterns in bandwidth issues</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"For the top 10 sites with highest downtime, create a detailed analysis showing each incident, problem description, resolution time, and downtime. Calculate the percentage of total downtime these sites represent."</td>
+                            <td>Focus on high-impact sites</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="analysis-block">
+                <h3>2. Upgrade Alerts Prediction</h3>
+                <p class="analysis-intro">This analysis predicts when infrastructure upgrades will be needed based on incident patterns and equipment performance.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Prompt</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>TextToSQL_Deep</strong></td>
+                            <td>"Select Site, 'Problem Reported', 'Other Problems', 'Down Time', 'Submission time', 'Resolved Time-Active', 'TTR', 'Resolved Final Action taken', Region, State, 'Product/Services', 'Products Item', count(*) as incident_count from network_incidents group by Site order by incident_count desc, 'Down Time' desc"</td>
+                            <td>Retrieve sites with frequent incidents or high downtime</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"Identify sites that may need equipment upgrades based on: 1) sites with more than 3 incidents, 2) sites with average downtime exceeding 300 minutes, 3) sites with consistently increasing downtime trends. Create a risk score for each site based on these factors, and categorize sites as 'Critical' (immediate upgrade), 'Warning' (plan upgrade), or 'Stable' (no action needed)."</td>
+                            <td>Calculate upgrade alert scores for each site</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"For sites with multiple incidents, analyze the time between incidents and determine if the frequency is increasing. Calculate a 'time to next failure' prediction for each site based on historical patterns. Flag sites where the predicted next failure is within the next 7 days."</td>
+                            <td>Predict time to next failure for preventive action</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="analysis-block">
+                <h3>3. Service Delivery Analysis and Partner Performance</h3>
+                <p class="analysis-intro">This analysis evaluates service delivery performance across regions and partners to identify best practices and improvement opportunities.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Prompt</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>TextToSQL_Deep</strong></td>
+                            <td>"Select Region, State, 'Work Group', 'Assign to TAC Time-Active', 'Assign to FS Time-Active', 'Assign to FE Time-Active', 'Resolved Time-Active', 'Down Time', 'Call on Hold Time(Active)', 'TTR', 'TTA', 'SLA Duration', 'Current Status', 'Owner' from network_incidents"</td>
+                            <td>Retrieve service delivery and response time metrics</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"Create a service delivery analysis by region and work group. Calculate average response times (from submission to first assignment), average resolution times, SLA compliance percentage, and hold time ratios. Compare performance across regions and identify the top and bottom performers."</td>
+                            <td>Analyze service delivery performance by region</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"Analyze partner performance by comparing metrics across different owners and work groups. Calculate: average resolution time, percentage of SLA compliance, average hold time, and first response time. Create a ranking of partners by overall performance."</td>
+                            <td>Compare partner performance</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"Calculate the service efficiency ratio (resolution time / downtime) for each incident. Group by region and partner, and identify combinations with the best and worst efficiency ratios. Analyze what factors correlate with better service efficiency."</td>
+                            <td>Identify factors affecting service efficiency</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="analysis-block">
+                <h3>4. Link Failure Prediction</h3>
+                <p class="analysis-intro">This analysis identifies patterns in network failures and develops predictive models to anticipate future issues.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Prompt</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>TextToSQL_Deep</strong></td>
+                            <td>"Select Site, 'Problem Reported', 'Other Problems', 'Problem Related To', 'Problem Classification', 'Failure Type', 'Hardware Associated', 'Down Time', 'Region', 'State', 'Product/Services', 'Products Item', 'Resolved Final Action taken' from network_incidents"</td>
+                            <td>Get detailed problem information for failure analysis</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"Analyze patterns in link failures by grouping similar problem descriptions. Create failure categories based on the problem descriptions and resolution actions. For each category, calculate the frequency, average downtime, and most common hardware associations."</td>
+                            <td>Categorize types of link failures</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"Identify correlations between link failures and environmental factors such as region, state, product type, and hardware. Calculate the failure rate for each combination of factors and determine which combinations have the highest risk of failure."</td>
+                            <td>Identify high-risk factor combinations</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"For each site with multiple failures, analyze the sequence of failures and identify any patterns in the progression. Calculate the probability of different types of failures following each other, and create a failure sequence prediction model."</td>
+                            <td>Analyze failure sequences for prediction</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="analysis-block">
+                <h3>5. Site Pattern Analysis</h3>
+                <p class="analysis-intro">This analysis identifies patterns in site performance and groups sites with similar characteristics to develop targeted improvements.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Prompt</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>TextToSQL_Deep</strong></td>
+                            <td>"Select Site, Region, State, City, 'Product/Services', 'Products Item', 'Problem Reported', 'Problem Classification', 'Hardware Associated', 'Down Time', count(*) as incident_count from network_incidents group by Site"</td>
+                            <td>Retrieve site-specific metrics and characteristics</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"Cluster sites based on their performance characteristics including: incident frequency, average downtime, types of problems, hardware associations, and resolution patterns. Identify 3-5 distinct site profiles and describe the key characteristics of each cluster."</td>
+                            <td>Create site profile clusters</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"For each site, calculate a reliability score based on incident frequency, average downtime, and time between failures. Compare sites within the same region and with similar hardware configurations. Identify outlier sites with significantly better or worse performance than their peers."</td>
+                            <td>Compare site reliability within peer groups</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"Analyze the geographic distribution of site issues. Group sites by state and region, and calculate average performance metrics for each geographic area. Identify any geographic patterns in failure rates or problem types."</td>
+                            <td>Geographic pattern analysis</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="analysis-block">
+                <h3>6. Possible Reasons for Failures</h3>
+                <p class="analysis-intro">This analysis examines failure descriptions and resolution actions to identify common causes and effective resolution strategies.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Prompt</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>TextToSQL_Deep</strong></td>
+                            <td>"Select 'Problem Reported', 'Other Problems', 'Problem Related To', 'Problem Classification', 'Failure Type', 'Hardware Associated', 'Resolved Final Action taken', 'Close Comment', 'Call on Hold Comment', 'Under Progress by FE Comment', 'Down Time' from network_incidents"</td>
+                            <td>Retrieve detailed failure descriptions and comments</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"Extract common phrases and patterns from the problem descriptions, resolution actions, and comments. Group similar descriptions and identify the most common failure reasons. Quantify the frequency and impact (in terms of downtime) of each failure reason."</td>
+                            <td>Extract common failure reasons</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"Analyze the relationship between problem types and their resolution actions. Create a mapping of problems to typical resolutions, and calculate the success rate of different resolution approaches for each problem type."</td>
+                            <td>Map problems to effective resolutions</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"For incidents with 'Call on Hold Comment' or other comments, extract delay reasons and categorize them. Calculate the frequency and impact of different types of delays on overall resolution time."</td>
+                            <td>Analyze causes of resolution delays</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="analysis-block">
+                <h3>7. Suggestions for Improvement</h3>
+                <p class="analysis-intro">This analysis identifies specific improvement opportunities with potential impact estimates.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Prompt</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>TextToSQL_Deep</strong></td>
+                            <td>"Select * from network_incidents"</td>
+                            <td>Retrieve all incident data for comprehensive analysis</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"Identify the top 10 opportunities for improvement based on: 1) Sites with repeat failures, 2) Common failure patterns with high downtime, 3) Service delivery bottlenecks, 4) Partner performance gaps, and 5) Hardware or product-specific issues. For each opportunity, calculate the potential impact in terms of reduced downtime and improved SLA compliance."</td>
+                            <td>Identify high-impact improvement opportunities</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"Calculate the economic impact of network downtime by site and region. Estimate the cost per minute of downtime, and prioritize improvement opportunities based on their potential financial impact."</td>
+                            <td>Calculate financial impact of improvements</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PandasAIDf</strong></td>
+                            <td>"Compare the performance of the best-performing sites/regions with the worst-performing ones. Identify the key differences in service approach, hardware configurations, or problem resolution techniques. Create a 'best practices' summary based on the top performers."</td>
+                            <td>Derive best practices from top performers</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <section id="recommendations-mind">
+            <h2>Recommendations Mind</h2>
+            
+            <p>The Recommendations Mind is the culmination of all analyses, synthesizing insights to generate actionable recommendations. It takes inputs from all previous analysis minds and produces prioritized, impact-driven suggestions for improvement.</p>
+            
+            <h3>Required Inputs from Analysis Minds</h3>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Analysis Type</th>
+                        <th>Output to Use as Input</th>
+                        <th>Key Data Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Bandwidth Analysis</strong></td>
+                        <td>Bandwidth Pattern Pivot Table</td>
+                        <td>Top 10 sites by bandwidth usage, temporal patterns, anomalous usage patterns, bandwidth trend analysis</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Upgrade Alerts</strong></td>
+                        <td>Site Risk Score Table</td>
+                        <td>Sites categorized as 'Critical'/'Warning'/'Stable', risk scores, predicted time to next failure</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Service Delivery</strong></td>
+                        <td>Regional Performance Comparison</td>
+                        <td>Performance metrics by region, SLA compliance rates, response time analysis</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Link Failure</strong></td>
+                        <td>Failure Category Analysis</td>
+                        <td>Categorized failure types, frequency and impact of each failure type, high-risk factor combinations</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Site Pattern Analysis</strong></td>
+                        <td>Site Cluster Profiles</td>
+                        <td>Site cluster characteristics, performance patterns by cluster, outlier sites</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Failure Analysis</strong></td>
+                        <td>Common Failure Reasons</td>
+                        <td>Categorized failure reasons, impact assessment, problem-resolution mapping</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Processing Flow</h3>
+            
+            <ol>
+                <li><strong>Consolidate Site-Level Data</strong>: Merge site-specific insights from all analyses</li>
+                <li><strong>Prioritize Issues</strong>: Rank problems by impact (downtime, cost, customer experience)</li>
+                <li><strong>Group Similar Recommendations</strong>: Combine related recommendations</li>
+                <li><strong>Calculate ROI</strong>: Estimate impact and cost for each recommendation</li>
+                <li><strong>Generate Tiered Recommendations</strong>:
+                    <ul>
+                        <li>Critical (immediate action required)</li>
+                        <li>High Priority (action within 30 days)</li>
+                        <li>Medium Priority (action within quarter)</li>
+                        <li>Long-term Improvements (strategic initiatives)</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <h3>TextSummarize Operator Prompt</h3>
+            
+            <div class="diagram-box">
+                <code>
+                Based on the comprehensive network analysis data provided, generate actionable recommendations addressing:<br><br>
+                
+                1. BANDWIDTH OPTIMIZATION: Identify sites requiring bandwidth upgrades or optimization based on usage patterns and congestion indicators.<br><br>
+                
+                2. PROACTIVE MAINTENANCE: Recommend preventive maintenance schedules for sites with predicted failures or recurring issues.<br><br>
+                
+                3. SERVICE DELIVERY IMPROVEMENTS: Suggest process improvements for regions or partners with below-average performance metrics.<br><br>
+                
+                4. HARDWARE UPGRADES: Recommend specific hardware replacements based on failure patterns and reliability issues.<br><br>
+                
+                5. OPERATIONAL CHANGES: Suggest changes to monitoring, response procedures, or SLA structures to improve overall service delivery.<br><br>
+                
+                For each recommendation:<br>
+                - Provide clear rationale based on the analyzed data<br>
+                - Quantify the expected impact (reduced downtime, improved SLA compliance)<br>
+                - Assign a priority level (Critical, High, Medium, Low)<br>
+                - Suggest an implementation timeframe<br>
+                - Identify which team or department should be responsible<br><br>
+                
+                Format the recommendations as a structured action plan that can be directly implemented by the operations team.
+                </code>
+            </div>
+            
+            <h3>Output Format</h3>
+            
+            <p>The Recommendations Mind should produce the following outputs:</p>
+            
+            <ol>
+                <li><strong>Executive Summary</strong>: High-level overview of key recommendations</li>
+                <li><strong>Detailed Recommendations Table</strong>: Specific actions with priority, impact, and rationale</li>
+                <li><strong>Implementation Roadmap</strong>: Suggested timeline for implementing recommendations</li>
+                <li><strong>Cost-Benefit Analysis</strong>: Expected ROI for each recommendation</li>
+                <li><strong>Performance Monitoring Plan</strong>: KPIs to track improvement after implementation</li>
+            </ol>
+            
+            <div class="note">
+                <p><strong>Implementation Note:</strong> When building the Recommendations Mind, ensure you use the PandasAIDf operator to properly consolidate and transform outputs from all other minds before passing to TextSummarize. This may require careful management of input/output variables between minds.</p>
+            </div>
+        </section>
+        
+        <footer>
+            <p>Hughes Network Analytics Implementation Documentation | Dev Team Reference | Generated on April 30, 2025</p>
+        </footer>
+    </div>
+</body>
+</html>
