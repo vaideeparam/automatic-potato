@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSM5 - Analytics that actually make sense</title>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #6366F1;
+            --primary-light: #818CF8;
+            --primary-dark: #4F46E5;
+            --primary-gradient: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+            --secondary: #10B981;
+            --secondary-light: #34D399;
+            --accent: #F59E0B;
+            --accent-dark: #D97706;
+            --dark: #171717;
+            --dark-blue: #1E293B;
+            --light: #FAFAFA;
+            --light-purple: #EEF2FF;
+            --gray: #6B7280;
+            --gray-light: #E5E7EB;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+            --bubble1: #EBF4FF;
+            --bubble2: #EEF2FF;
+            --bubble3: #F3F4F6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            color: var(--dark);
+            background-color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background-color: rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+        
+        .btn:hover::after {
+            height: 100%;
+        }
+        
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.2);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -3px rgba(99, 102, 241, 0.3);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary-light);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(99, 102, 241, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            background-color: var(--light-purple);
+            margin-bottom: 1rem;
+        }
+        
+        .section {
+            padding: 6rem 0;
+            position: relative;
+        }
+        
+        .section-dark {
+            background-color: var(--dark-blue);
+            color: white;
+        }
+        
+        .section-light {
+            background-color: var(--light-purple);
+            color: var(--dark);
+        }
+        
+        .section-white {
+            background-color: white;
+        }
+        
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary-gradient);
+            border-radius: 2px;
+        }
+        
+        .section-title-center {
+            text-align: center;
+            display: block;
+            margin: 0 auto 2rem;
+        }
+        
+        .section-title-center::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .section-subtitle {
+            font-size: 1.3rem;
+            color: var(--gray);
+            max-width: 800px;
+            margin-bottom: 3rem;
+            font-weight: 400;
+        }
+        
+        .section-subtitle-center {
+            text-align: center;
+            margin: -1rem auto 3rem;
+        }
+        
+        /* Header */
+        header {
+            padding: 1.2rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        header.scrolled {
+            padding: 0.8rem 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logo-icon {
+            height: 32px;
+            width: auto;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+        
+        .nav-link {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-gradient);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .header-btns {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+        
+        /* Hero */
+        .hero {
+            padding: 12rem 0 8rem;
+            background: radial-gradient(circle at 10% 10%, var(--bubble1) 0%, transparent 30%),
+                        radial-gradient(circle at 90% 90%, var(--bubble2) 0%, transparent 30%),
+                        var(--light);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-badge {
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.6s ease;
+        }
+        
+        .hero-title {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        .hero-title span {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+        }
+        
+        .hero-desc {
+            font-size: 1.25rem;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero-btns {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 1.2s ease;
+        }
+        
+        .hero-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2.5rem;
+            animation: fadeInUp 1.4s ease;
+        }
+        
+        .hero-stat {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .hero-stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+        }
+        
+        .hero-stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .hero-image {
+            position: relative;
+            z-index: 1;
+            animation: float 5s ease-in-out infinite;
+        }
+        
+        .hero-dashboard {
+            width: 100%;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+        
+        .floating-card {
+            position: absolute;
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            animation: float 5s ease-in-out infinite;
+        }
+        
+        .floating-card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+        
+        .floating-card-content {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .floating-card-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .floating-card-value {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--success);
+        }
+        
+        .floating-card.card-1 {
+            top: -2rem;
+            left: -3rem;
+            animation-delay: 0s;
+        }
+        
+        .floating-card.card-2 {
+            bottom: -1.5rem;
+            right: -2rem;
+            animation-delay: 1s;
+        }
+        
+        /* Problem Section */
+        .problem {
+            padding: 8rem 0;
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .problem-content {
+            position: relative;
+        }
+        
+        .problem-list {
+            margin-top: 2rem;
+            list-style: none;
+        }
+        
+        .problem-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .problem-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .problem-icon {
+            background-color: var(--light-purple);
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .problem-text {
+            flex: 1;
+        }
+        
+        .problem-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .problem-desc {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        .problem-image {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .problem-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Solution Section */
+        .solution {
+            padding: 8rem 0;
+            background-color: var(--light-purple);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .solution::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%236366f1' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            background-size: 200px;
+            opacity: 0.5;
+            z-index: 0;
+        }
+        
+        .solution-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .solution-content {
+            order: 2;
+        }
+        
+        .solution-image {
+            order: 1;
+            position: relative;
+        }
+        
+        .solution-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transform: perspective(1000px) rotateY(-10deg) rotateX(5deg);
+            transition: all 0.5s ease;
+        }
+        
+        .solution-image:hover img {
+            transform: perspective(1000px) rotateY(0deg) rotateX(0deg);
+        }
+        
+        .solution-features {
+            margin-top: 2rem;
+        }
+        
+        .solution-feature {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-icon {
+            font-size: 1.3rem;
+            color: var(--success);
+            margin-top: 0.2rem;
+        }
+        
+        .feature-text {
+            flex: 1;
+        }
+        
+        .feature-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        
+        .feature-desc {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        /* For Who Section */
+        .for-who {
+            padding: 8rem 0;
+            background-color: white;
+        }
+        
+        .for-who-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .persona-card {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .persona-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.12);
+        }
+        
+        .persona-banner {
+            height: 100px;
+            background: var(--primary-gradient);
+            position: relative;
+        }
+        
+        .persona-banner::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: white;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+        }
+        
+        .persona-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            font-size: 2rem;
+            color: var(--primary);
+        }
+        
+        .persona-content {
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .persona-title {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+        
+        .persona-desc {
+            color: var(--gray);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+        
+        .persona-pain {
+            padding: 1rem;
+            background-color: var(--light-purple);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-top: auto;
+            position: relative;
+        }
+        
+        .persona-pain::before {
+            content: "❝";
+            font-size: 1.5rem;
+            color: var(--primary-light);
+            opacity: 0.3;
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 8rem 0;
+            background: linear-gradient(135deg, var(--dark-blue) 0%, #2D3A58 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .how-it-works::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .how-it-works .section-title::after {
+            background: white;
+        }
+        
+        .how-it-works .section-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+        
+        .step-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .step-card:hover {
+            transform: translateY(-5px);
+            background-color: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 8rem;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.03);
+            line-height: 1;
+        }
+        
+        .step-icon {
+            font-size: 2rem;
+            color: var(--primary-light);
+            margin-bottom: 1.5rem;
+        }
+        
+        .step-title {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .step-desc {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+        
+        /* Comparison Section */
+        .comparison {
+            padding: 8rem 0;
+            background-color: white;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+            margin-top: 4rem;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .comparison-table th {
+            background-color: var(--dark-blue);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 1.5rem;
+        }
+        
+        .comparison-table th:first-child {
+            text-align: left;
+        }
+        
+        .comparison-table td:first-child {
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: var(--bubble3);
+        }
+        
+        .comparison-table tr:hover {
+            background-color: var(--light-purple);
+        }
+        
+        .comparison-table th.highlight {
+            background: var(--primary-gradient);
+            position: relative;
+        }
+        
+        .comparison-table th.highlight::after {
+            content: "Best Choice";
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--accent);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.3rem 0.7rem;
+            border-bottom-left-radius: 8px;
+            transform: translateY(-100%);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .comparison-table:hover th.highlight::after {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .check-icon {
+            color: var(--success);
+            font-size: 1.2rem;
+        }
+        
+        .times-icon {
+            color: var(--error);
+            font-size: 1.2rem;
+        }
+        
+        .partial-icon {
+            color: var(--warning);
+            font-size: 1.2rem;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 8rem 0;
+            background-color: var(--light-purple);
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+        
+        .testimonial-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .testimonial-content {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-top: 1.5rem;
+        }
+        
+        .testimonial-content::before {
+            content: """;
+            position: absolute;
+            top: -0.5rem;
+            left: -0.5rem;
+            font-size: 4rem;
+            color: var(--primary-light);
+            opacity: 0.2;
+            line-height: 1;
+            font-family: serif;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--light-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .author-info {
+            flex: 1;
+        }
+        
+        .author-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        .author-role {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .author-rating {
+            display: flex;
+            gap: 0.2rem;
+            margin-top: 0.5rem;
+        }
+        
+        .star-icon {
+            color: var(--accent);
+            font-size: 0.9rem;
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: 8rem 0;
+            background: var(--primary-gradient);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 60%);
+            animation: pulse 15s linear infinite;
+        }
+        
+        .cta-content {
+            position: relative;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .cta-title {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+        }
+        
+        .cta-btns {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .cta .btn-primary {
+            background-color: white;
+            color: var(--primary);
+        }
+        
+        .cta .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border-color: white;
+        }
+        
+        .cta-features {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .cta-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .cta-feature i {
+            color: white;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark-blue);
+            color: white;
+            padding: 5rem 0 2rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(3, 1fr);
+            gap: 3rem;
+        }
+        
+        .footer-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+        
+        .footer-desc {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .footer-heading {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .footer-heading::after {
+            content: "";
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-link {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-link a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-link a:hover {
+            color: white;
+            padding-left: 0.3rem;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .hero-title {
+                font-size: 3.5rem;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .section {
+                padding: 5rem 0;
+            }
+            
+            .hero {
+                padding: 10rem 0 5rem;
+            }
+            
+            .hero-grid, .solution-grid, .problem-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            
+            .solution-content {
+                order: 1;
+            }
+            
+            .solution-image {
+                order: 2;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 2rem;
+            }
+            
+            .comparison-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-toggle {
+                display: block;
+            }
+            
+            .cta-title {
+                font-size: 2.5rem;
+            }
+            
+            .cta-btns {
+                flex-direction: column;
+            }
+            
+            .cta-btns .btn {
+                width: 100%;
+            }
+            
+            .floating-card {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .section {
+                padding: 4rem 0;
+            }
+            
+            .hero {
+                padding: 8rem 0 4rem;
+            }
+            
+            .hero-title {
+                font-size: 2.3rem;
+            }
+            
+            .hero-btns {
+                flex-direction: column;
+            }
+            
+            .hero-btns .btn {
+                width: 100%;
+            }
+            
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header id="header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="#" class="logo">
+                    <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 0C7.163 0 0 7.163 0 16C0 24.837 7.163 32 16 32C24.837 32 32 24.837 32 16C32 7.163 24.837 0 16 0ZM22.5 22.5C20.567 24.433 17.9 25.5 15 25.5C9.201 25.5 4.5 20.799 4.5 15C4.5 12.1 5.567 9.433 7.5 7.5L15 15V6.5C20.799 6.5 25.5 11.201 25.5 17C25.5 19.9 24.433 22.567 22.5 24.5V22.5Z" fill="#6366F1"/>
+                    </svg>
+                    OSM5
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#problem" class="nav-link">Why OSM5</a></li>
+                    <li><a href="#solution" class="nav-link">Features</a></li>
+                    <li><a href="#for-who" class="nav-link">For Teams</a></li>
+                    <li><a href="#comparison" class="nav-link">Compare</a></li>
+                    <li><a href="#" class="nav-link">Pricing</a></li>
+                </ul>
+                <div class="header-btns">
+                    <a href="#" class="btn btn-secondary">Log In</a>
+                    <a href="#" class="btn btn-primary">Start Free</a>
+                    <button class="mobile-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero" id="hero">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <div class="hero-badge">
+                        <span class="badge"><i class="fas fa-bolt"></i> Analytics, reimagined</span>
+                    </div>
+                    <h1 class="hero-title">Analytics that <span>actually make sense</span> for your business</h1>
+                    <p class="hero-desc">No more data silos. No more privacy headaches. Just one view that shows you how visitors become customers and customers become fans.</p>
+                    <div class="hero-btns">
+                        <a href="#" class="btn btn-primary">Try OSM5 Free for 14 Days</a>
+                        <a href="#" class="btn btn-secondary">See How It Works</a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <div class="hero-stat-number">5 min</div>
+                            <div class="hero-stat-label">Setup Time</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-number">100%</div>
+                            <div class="hero-stat-label">Cookie-Free</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-number">3x</div>
+                            <div class="hero-stat-label">Faster Insights</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <svg class="hero-dashboard" width="500" height="400" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="500" height="400" rx="12" fill="#F8FAFC"/>
+                        <rect x="20" y="20" width="460" height="360" rx="8" fill="white" stroke="#E2E8F0" stroke-width="2"/>
+                        <rect x="20" y="20" width="460" height="40" rx="8" fill="#EBF4FF"/>
+                        <circle cx="40" cy="40" r="8" fill="#6366F1"/>
+                        <circle cx="60" cy="40" r="8" fill="#F87171"/>
+                        <circle cx="80" cy="40" r="8" fill="#FBBF24"/>
+                        <rect x="40" y="80" width="160" height="100" rx="6" fill="#EEF2FF"/>
+                        <rect x="40" y="200" width="160" height="100" rx="6" fill="#EEF2FF"/>
+                        <rect x="220" y="80" width="160" height="100" rx="6" fill="#EEF2FF"/>
+                        <rect x="220" y="200" width="160" height="100" rx="6" fill="#EEF2FF"/>
+                        <rect x="40" y="320" width="340" height="40" rx="6" fill="#6366F1" fill-opacity="0.1"/>
+                        <rect x="400" y="80" width="40" height="280" rx="6" fill="#6366F1" fill-opacity="0.1"/>
+                        <circle cx="420" cy="110" r="10" fill="#6366F1"/>
+                        <circle cx="420" cy="170" r="10" fill="#E2E8F0"/>
+                        <circle cx="420" cy="230" r="10" fill="#E2E8F0"/>
+                        <circle cx="420" cy="290" r="10" fill="#E2E8F0"/>
+                        <circle cx="420" cy="350" r="10" fill="#E2E8F0"/>
+                        <path d="M60 120L80 130L100 100L120 110L140 90L160 110" stroke="#6366F1" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M60 240L80 250L100 220L120 230L140 210L160 230" stroke="#10B981" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M240 120L260 130L280 100L300 110L320 90L340 110" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M240 240L260 250L280 220L300 230L320 210L340 230" stroke="#6366F1" stroke-width="2" stroke-linecap="round"/>
+                        <rect x="60" y="340" width="300" height="10" rx="4" fill="#6366F1" fill-opacity="0.3"/>
+                        <rect x="60" y="340" width="200" height="10" rx="4" fill="#6366F1"/>
+
+                        <rect x="50" y="90" width="140" height="20" rx="4" fill="#6366F1" fill-opacity="0.1"/>
+                        <rect x="230" y="90" width="140" height="20" rx="4" fill="#6366F1" fill-opacity="0.1"/>
+                        <rect x="50" y="210" width="140" height="20" rx="4" fill="#6366F1" fill-opacity="0.1"/>
+                        <rect x="230" y="210" width="140" height="20" rx="4" fill="#6366F1" fill-opacity="0.1"/>
+                    </svg>
+                    <div class="floating-card card-1">
+                        <div class="floating-card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="floating-card-content">
+                            <div class="floating-card-title">Conversion Rate</div>
+                            <div class="floating-card-value">+24%</div>
+                        </div>
+                    </div>
+                    <div class="floating-card card-2">
+                        <div class="floating-card-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="floating-card-content">
+                            <div class="floating-card-title">Revenue</div>
+                            <div class="floating-card-value">$12,450</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem" id="problem">
+        <div class="container">
+            <div class="problem-grid">
+                <div class="problem-content">
+                    <h2 class="section-title">Tired of data chaos?</h2>
+                    <p class="section-subtitle">Every growth team faces these analytics frustrations:</p>
+                    
+                    <ul class="problem-list">
+                        <li class="problem-item">
+                            <div class="problem-icon">
+                                <i class="fas fa-puzzle-piece"></i>
+                            </div>
+                            <div class="problem-text">
+                                <h3 class="problem-title">Data Silos Everywhere</h3>
+                                <p class="problem-desc">Your web data is in GA, product usage in Mixpanel, and revenue in Shopify. Piecing it together? That's a full-time job.</p>
+                            </div>
+                        </li>
+                        <li class="problem-item">
+                            <div class="problem-icon">
+                                <i class="fas fa-cookie"></i>
+                            </div>
+                            <div class="problem-text">
+                                <h3 class="problem-title">Cookie Consent Killing Conversion</h3>
+                                <p class="problem-desc">Those giant cookie banners are driving visitors away before they even see your product. And they're getting worse.</p>
+                            </div>
+                        </li>
+                        <li class="problem-item">
+                            <div class="problem-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <div class="problem-text">
+                                <h3 class="problem-title">Engineer-Dependent Insights</h3>
+                                <p class="problem-desc">Need to track a new conversion event? That's a ticket, a sprint, and weeks of waiting—time you don't have.</p>
+                            </div>
+                        </li>
+                        <li class="problem-item">
+                            <div class="problem-icon">
+                                <i class="fas fa-question-circle"></i>
+                            </div>
+                            <div class="problem-text">
+                                <h3 class="problem-title">Data Without Answers</h3>
+                                <p class="problem-desc">You've got charts and numbers, but the "why" behind sudden changes remains a mystery. What caused that drop?</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="problem-image">
+                    <svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="300" height="300" rx="12" fill="#F1F5F9"/>
+                        <circle cx="200" cy="200" r="120" fill="#EEF2FF"/>
+                        
+                        <!-- First frustrated person -->
+                        <circle cx="120" cy="160" r="40" fill="#E2E8F0"/>
+                        <circle cx="120" cy="140" r="15" fill="#6366F1"/>
+                        <path d="M100 170C100 170 110 160 120 160C130 160 140 170 140 170" stroke="#1E293B" stroke-width="3" stroke-linecap="round" transform="rotate(180 120 165)"/>
+                        
+                        <!-- Second frustrated person -->
+                        <circle cx="280" cy="160" r="40" fill="#E2E8F0"/>
+                        <circle cx="280" cy="140" r="15" fill="#6366F1"/>
+                        <path d="M260 170C260 170 270 160 280 160C290 160 300 170 300 170" stroke="#1E293B" stroke-width="3" stroke-linecap="round" transform="rotate(180 280 165)"/>
+                        
+                        <!-- Third frustrated person -->
+                        <circle cx="200" cy="280" r="40" fill="#E2E8F0"/>
+                        <circle cx="200" cy="260" r="15" fill="#6366F1"/>
+                        <path d="M180 290C180 290 190 280 200 280C210 280 220 290 220 290" stroke="#1E293B" stroke-width="3" stroke-linecap="round" transform="rotate(180 200 285)"/>
+                        
+                        <!-- Data confusion elements -->
+                        <rect x="180" y="120" width="40" height="40" rx="4" fill="#F59E0B" fill-opacity="0.6"/>
+                        <rect x="150" y="170" width="30" height="30" rx="4" fill="#6366F1" fill-opacity="0.6"/>
+                        <rect x="220" y="170" width="30" height="30" rx="4" fill="#10B981" fill-opacity="0.6"/>
+                        <rect x="190" y="200" width="20" height="20" rx="4" fill="#EF4444" fill-opacity="0.6"/>
+                        
+                        <!-- Confusion symbols -->
+                        <path d="M120 110C120 110 110 100 120 90C130 80 140 90 140 90" stroke="#1E293B" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M280 110C280 110 270 100 280 90C290 80 300 90 300 90" stroke="#1E293B" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M200 230C200 230 190 220 200 210C210 200 220 210 220 210" stroke="#1E293B" stroke-width="2" stroke-linecap="round"/>
+                        
+                        <!-- Question marks -->
+                        <text x="117" y="120" font-family="Arial" font-size="20" fill="#1E293B">?</text>
+                        <text x="277" y="120" font-family="Arial" font-size="20" fill="#1E293B">?</text>
+                        <text x="197" y="240" font-family="Arial" font-size="20" fill="#1E293B">?</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="solution">
+        <div class="container">
+            <div class="solution-grid">
+                <div class="solution-content">
+                    <h2 class="section-title">One platform. All your metrics.</h2>
+                    <p class="section-subtitle">OSM5 unifies the marketing, product, and revenue data you need to make better decisions, faster—without IT tickets or privacy concerns.</p>
+                    
+                    <div class="solution-features">
+                        <div class="solution-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-gauge-high"></i>
+                            </div>
+                            <div class="feature-text">
+                                <h3 class="feature-title">The Complete Customer Journey</h3>
+                                <p class="feature-desc">From first visit to repeat purchase, see how people move through your funnel in one view—not three different dashboards.</p>
+                            </div>
+                        </div>
+                        <div class="solution-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="feature-text">
+                                <h3 class="feature-title">AI Insights That Explain "Why"</h3>
+                                <p class="feature-desc">Ask conversational questions about your data and get immediate answers. "Why did sign-ups drop last week?" "Which campaign had the best ROI?"</p>
+                            </div>
+                        </div>
+                        <div class="solution-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield"></i>
+                            </div>
+                            <div class="feature-text">
+                                <h3 class="feature-title">Privacy-First by Design</h3>
+                                <p class="feature-desc">Zero cookies required. Goodbye consent banners, hello higher conversion rates and global privacy compliance.</p>
+                            </div>
+                        </div>
+                        <div class="solution-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <div class="feature-text">
+                                <h3 class="feature-title">Set Up in Minutes, Not Weeks</h3>
+                                <p class="feature-desc">One-line JavaScript code or a Shopify plug-in, and you're live. No engineers needed, no long implementation projects.</p>
+                            </div>
+                        </div>
+                        <div class="solution-feature">
+                            <div class="feature-icon">
+                                <i class="fas fa-wand-magic-sparkles"></i>
+                            </div>
+                            <div class="feature-text">
+                                <h3 class="feature-title">Anyone Can Create Insights</h3>
+                                <p class="feature-desc">Point-and-click interface lets marketers and product managers build their own funnels and reports—no SQL required.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="solution-image">
+                    <svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Main Dashboard -->
+                        <rect width="400" height="300" rx="12" fill="#F8FAFC"/>
+                        <rect x="10" y="10" width="380" height="280" rx="8" fill="white" stroke="#E2E8F0" stroke-width="2"/>
+
+                        <!-- Header Bar -->
+                        <rect x="10" y="10" width="380" height="40" rx="8" fill="#EEF2FF"/>
+                        <circle cx="30" cy="30" r="8" fill="#6366F1"/>
+                        <circle cx="50" cy="30" r="8" fill="#F87171"/>
+                        <circle cx="70" cy="30" r="8" fill="#FBBF24"/>
+                        <rect x="90" y="25" width="200" height="10" rx="5" fill="#E2E8F0"/>
+                        <rect x="350" y="25" width="20" height="10" rx="5" fill="#E2E8F0"/>
+
+                        <!-- Left Panel - Funnel View -->
+                        <rect x="20" y="60" width="180" height="210" rx="8" fill="#F8FAFC"/>
+                        <rect x="30" y="70" width="160" height="20" rx="4" fill="#6366F1" fill-opacity="0.1"/>
+                        <rect x="30" y="70" width="80" height="20" rx="4" fill="#6366F1" fill-opacity="0.3"/>
+                        <path d="M30 110L70 110L90 180L130 180L150 230L190 230" stroke="#6366F1" stroke-width="2" stroke-linecap="round"/>
+                        
+                        <!-- Funnel Steps -->
+                        <rect x="30" y="100" width="40" height="20" rx="4" fill="#EEF2FF"/>
+                        <rect x="80" y="170" width="50" height="20" rx="4" fill="#EEF2FF"/>
+                        <rect x="140" y="220" width="50" height="20" rx="4" fill="#EEF2FF"/>
+                        
+                        <!-- Right Panel - Metrics -->
+                        <rect x="210" y="60" width="170" height="100" rx="8" fill="#F8FAFC"/>
+                        <rect x="220" y="70" width="150" height="20" rx="4" fill="#6366F1" fill-opacity="0.1"/>
+                        <path d="M220 110L240 120L260 90L280 100L300 80L320 100L340 90L360 110" stroke="#10B981" stroke-width="2" stroke-linecap="round"/>
+                        
+                        <!-- AI Chat Box -->
+                        <rect x="210" y="170" width="170" height="100" rx="8" fill="#F8FAFC"/>
+                        <rect x="220" y="180" width="150" height="10" rx="5" fill="#6366F1" fill-opacity="0.1"/>
+                        <rect x="220" y="200" width="120" height="10" rx="5" fill="#E2E8F0"/>
+                        <rect x="220" y="220" width="150" height="10" rx="5" fill="#E2E8F0"/>
+                        <rect x="220" y="240" width="100" height="10" rx="5" fill="#E2E8F0"/>
+                        <rect x="330" y="240" width="40" height="20" rx="10" fill="#6366F1"/>
+                        
+                        <!-- Floating Elements -->
+                        <rect x="40" y="310" width="120" height="80" rx="8" fill="white" stroke="#E2E8F0" stroke-width="2" filter="drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.1))"/>
+                        <rect x="50" y="320" width="100" height="10" rx="5" fill="#6366F1" fill-opacity="0.1"/>
+                        <path d="M50 340L70 350L90 330L110 340L130 330" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/>
+                        <rect x="50" y="360" width="80" height="20" rx="4" fill="#EEF2FF"/>
+                        
+                        <rect x="240" y="310" width="120" height="80" rx="8" fill="white" stroke="#E2E8F0" stroke-width="2" filter="drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.1))"/>
+                        <rect x="250" y="320" width="100" height="10" rx="5" fill="#6366F1" fill-opacity="0.1"/>
+                        <rect x="250" y="340" width="100" height="10" rx="5" fill="#E2E8F0"/>
+                        <rect x="250" y="360" width="70" height="10" rx="5" fill="#E2E8F0"/>
+                        <circle cx="340" cy="360" r="10" fill="#10B981"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="for-who" id="for-who">
+        <div class="container">
+            <h2 class="section-title section-title-center">Built for teams who need results, not complexity</h2>
+            <p class="section-subtitle section-subtitle-center">OSM5 makes data accessible to the people who need it most—without requiring a data science degree.</p>
+            
+            <div class="for-who-grid">
+                <div class="persona-card">
+                    <div class="persona-banner"></div>
+                    <div class="persona-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="persona-content">
+                        <h3 class="persona-title">Growing SaaS Teams</h3>
+                        <p class="persona-desc">You're moving fast, scaling your product, and need to understand what's working across marketing, product, and revenue without building a data team.</p>
+                        <div class="persona-pain">
+                            "We're spending more time exporting CSVs and building dashboards than actually analyzing our growth levers."
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="persona-card">
+                    <div class="persona-banner"></div>
+                    <div class="persona-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <div class="persona-content">
+                        <h3 class="persona-title">Digital-First Brands</h3>
+                        <p class="persona-desc">Your Shopify or Magento store needs to connect ad spend to product views to checkout to repeat purchases in one seamless view.</p>
+                        <div class="persona-pain">
+                            "We can't tell which marketing campaigns actually drive profitable customers vs. one-time buyers who never return."
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="persona-card">
+                    <div class="persona-banner"></div>
+                    <div class="persona-icon">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <div class="persona-content">
+                        <h3 class="persona-title">Digital Marketing Agencies</h3>
+                        <p class="persona-desc">You need to show clients real results fast, with beautiful white-labeled reports that go beyond basic traffic metrics to show true ROI.</p>
+                        <div class="persona-pain">
+                            "Our clients are frustrated with GA4's complexity and cookie consent issues. We need something they'll actually use."
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title section-title-center">How OSM5 works</h2>
+            <p class="section-subtitle section-subtitle-center">Simple setup, powerful results. Here's how we unify your data without the complexity.</p>
+            
+            <div class="steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 class="step-title">Quick Installation</h3>
+                    <p class="step-desc">Add one line of JavaScript to your site, or install our Shopify/Magento app. No cookies, no consent banners, no slowdowns.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">
+                        <i class="fas fa-wand-magic-sparkles"></i>
+                    </div>
+                    <h3 class="step-title">Automatic Data Collection</h3>
+                    <p class="step-desc">OSM5 intelligently captures visitor journeys, product interactions, and purchase data without manual tagging. Add custom events with clicks, not code.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="step-title">AI-Powered Analysis</h3>
+                    <p class="step-desc">Our AI engine connects the dots between marketing, product, and revenue data, surfacing insights and anomalies automatically.</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="step-title">Actionable Answers</h3>
+                    <p class="step-desc">Ask questions in plain English, share insights with your team, and make data-driven decisions faster than ever before.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="comparison" id="comparison">
+        <div class="container">
+            <h2 class="section-title section-title-center">How we compare</h2>
+            <p class="section-subtitle section-subtitle-center">The perfect balance of simplicity, depth, and privacy that other analytics tools can't match.</p>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Google Analytics</th>
+                        <th>Mixpanel/Amplitude</th>
+                        <th>Privacy-First Tools</th>
+                        <th class="highlight">OSM5</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Setup Time</td>
+                        <td>Hours</td>
+                        <td>Days-Weeks</td>
+                        <td>Minutes</td>
+                        <td><i class="fas fa-check check-icon"></i> Minutes</td>
+                    </tr>
+                    <tr>
+                        <td>Cookie-Free Analytics</td>
+                        <td><i class="fas fa-times times-icon"></i></td>
+                        <td><i class="fas fa-times times-icon"></i></td>
+                        <td><i class="fas fa-check check-icon"></i></td>
+                        <td><i class="fas fa-check check-icon"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Web + Product Analytics</td>
+                        <td><i class="fas fa-minus-circle partial-icon"></i></td>
+                        <td><i class="fas fa-check check-icon"></i></td>
+                        <td><i class="fas fa-times times-icon"></i></td>
+                        <td><i class="fas fa-check check-icon"></i></td>
+                    </tr>
+                    <tr>
+                        <td>Revenue Analytics</td>
+                        <td><i class="fas fa-minus-circle partial-icon"></i></td>
+                        <td><i class="fas fa-minus-circle partial-icon"></i></td>
+                        <td><i class="fas fa-times times-icon"></i></td>
+                        <td><i class="fas fa-check check-icon"></i></td>
+                    </tr>
+                    <tr>
+                        <td>AI-Powered Insights</td>
+                        <td><i class="fas fa-minus-circle partial-icon"></i></td>
+                        <td><i class="fas fa-minus-circle partial-icon"></i></td>
+                        <td><i class="fas fa-times times-icon"></i></td>
+                        <td><i class="fas fa-check check-icon"></i></td>
+                    </tr>
+                    <tr>
+                        <td>No-Code Event Tracking</td>
+                        <td><i class="fas fa-times times-icon"></i></td>
+                        <td><i class="fas fa-times times-icon"></i></td>
+                        <td><i class="fas fa-minus-circle partial-icon"></i></td>
+                        <td><i class="fas fa-check check-icon"></i></td>
+                    </tr>
+                    <tr>
+                        <td>E-commerce Integration</td>
+                        <td><i class="fas fa-minus-circle partial-icon"></i></td>
+                        <td><i class="fas fa-minus-circle partial-icon"></i></td>
+                        <td><i class="fas fa-minus-circle partial-icon"></i></td>
+                        <td><i class="fas fa-check check-icon"></i></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <h2 class="section-title section-title-center">What our customers say</h2>
+            <p class="section-subtitle section-subtitle-center">Teams that switched to OSM5 are saving time and driving better results.</p>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        OSM5 changed how we make decisions. We went from arguing about data to actually using it. The AI insights have spotted trends we would have missed for weeks.
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">SR</div>
+                        <div class="author-info">
+                            <div class="author-name">Sarah Rodriguez</div>
+                            <div class="author-role">Growth Lead, Propellr</div>
+                            <div class="author-rating">
+                                <i class="fas fa-star star-icon"></i>
+                                <i class="fas fa-star star-icon"></i>
+                                <i class="fas fa-star star-icon"></i>
+                                <i class="fas fa-star star-icon"></i>
+                                <i class="fas fa-star star-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        After struggling with GA4 for months, switching to OSM5 was like a breath of fresh air. Setup took minutes, not days, and our conversion rates improved by 15% just by removing cookie banners.
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">MJ</div>
+                        <div class="author-info">
+                            <div class="author-name">Michael Johnson</div>
+                            <div class="author-role">Marketing Director, WaveCommerce</div>
+                            <div class="author-rating">
+                                <i class="fas fa-star star-icon"></i>
+                                <i class="fas fa-star star-icon"></i>
+                                <i class="fas fa-star star-icon"></i>
+                                <i class="fas fa-star star-icon"></i>
+                                <i class="fas fa-star star-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        As an agency, we now impress clients with reports they actually understand and use. The white-label dashboards make us look like data wizards, and clients love seeing their entire funnel in one view.
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">AP</div>
+                        <div class="author-info">
+                            <div class="author-name">Aisha Patel</div>
+                            <div class="author-role">Founder, Visibily Agency</div>
+                            <div class="author-rating">
+                                <i class="fas fa-star star-icon"></i>
+                                <i class="fas fa-star star-icon"></i>
+                                <i class="fas fa-star star-icon"></i>
+                                <i class="fas fa-star star-icon"></i>
+                                <i class="fas fa-star star-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to unify your analytics?</h2>
+                <p class="cta-subtitle">Join hundreds of growing businesses using OSM5 to make smarter decisions, faster.</p>
+                <div class="cta-btns">
+                    <a href="#" class="btn btn-primary">Start Your 14-Day Free Trial</a>
+                    <a href="#" class="btn btn-secondary">Schedule a Demo</a>
+                </div>
+                <div class="cta-features">
+                    <div class="cta-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>No credit card required</span>
+                    </div>
+                    <div class="cta-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>5-minute setup</span>
+                    </div>
+                    <div class="cta-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Full access to all features</span>
+                    </div>
+                    <div class="cta-feature">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Cancel anytime</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h3 class="footer-logo">OSM5</h3>
+                    <p class="footer-desc">The AI-powered, privacy-first analytics platform that unifies your web, product, and revenue data in one beautiful dashboard.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="footer-heading">Product</h4>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">Features</a></li>
+                        <li class="footer-link"><a href="#">Pricing</a></li>
+                        <li class="footer-link"><a href="#">Integrations</a></li>
+                        <li class="footer-link"><a href="#">Roadmap</a></li>
+                        <li class="footer-link"><a href="#">Changelog</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-heading">Resources</h4>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">Documentation</a></li>
+                        <li class="footer-link"><a href="#">Guides</a></li>
+                        <li class="footer-link"><a href="#">Blog</a></li>
+                        <li class="footer-link"><a href="#">Case Studies</a></li>
+                        <li class="footer-link"><a href="#">API</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="footer-heading">Company</h4>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#">About Us</a></li>
+                        <li class="footer-link"><a href="#">Careers</a></li>
+                        <li class="footer-link"><a href="#">Contact</a></li>
+                        <li class="footer-link"><a href="#">Privacy</a></li>
+                        <li class="footer-link"><a href="#">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2025 OSM5. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
