@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Guideline Reviewer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .app-container {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .upload-section, .analysis-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .image-container {
+            position: relative;
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f8f9fa;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .uploaded-image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 10px;
+        }
+
+        .annotation-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .upload-zone {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-zone:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .upload-zone.dragover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .demo-images {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .demo-thumb {
+            width: 80px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .demo-thumb:hover {
+            transform: scale(1.05);
+            border-color: #667eea;
+        }
+
+        .analysis-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .analysis-table th {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .analysis-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .analysis-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-pass {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+        }
+
+        .annotation-point {
+            fill: #ff4757;
+            stroke: white;
+            stroke-width: 2;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .demo-images {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <h2 style="margin-bottom: 30px; color: #333;">Brand Guideline Reviewer</h2>
+            <input type="password" id="passwordInput" class="input-field" placeholder="Enter password" />
+            <button onclick="login()" class="btn">Access App</button>
+            <div id="loginError" style="color: #e74c3c; margin-top: 15px; display: none;">Incorrect password</div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="app-container">
+        <div class="header">
+            <h1 style="color: #333; margin-bottom: 10px;">Brand Guideline Reviewer</h1>
+            <p style="color: #666;">Upload an image to analyze brand compliance and get detailed insights</p>
+        </div>
+
+        <div class="main-content">
+            <!-- Upload Section -->
+            <div class="upload-section">
+                <h3 style="margin-bottom: 20px; color: #333;">Upload Image</h3>
+                
+                <div id="uploadZone" class="upload-zone">
+                    <div style="font-size: 48px; margin-bottom: 15px; color: #ddd;">📷</div>
+                    <p>Drag and drop an image here or click to select</p>
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                </div>
+
+                <div>
+                    <h4 style="margin: 20px 0 10px; color: #333;">Or try these demo images:</h4>
+                    <div class="demo-images">
+                        <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400" class="demo-thumb" onclick="loadDemoImage(this.src)" alt="Logo Design">
+                        <img src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=400" class="demo-thumb" onclick="loadDemoImage(this.src)" alt="Business Card">
+                        <img src="https://images.unsplash.com/photo-1542744094-3a31f272c490?w=400" class="demo-thumb" onclick="loadDemoImage(this.src)" alt="Website Design">
+                        <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?w=400" class="demo-thumb" onclick="loadDemoImage(this.src)" alt="Branding Material">
+                    </div>
+                </div>
+
+                <div class="image-container" id="imageContainer">
+                    <div id="placeholderText" style="color: #999; text-align: center;">
+                        <div style="font-size: 64px; margin-bottom: 15px;">🎨</div>
+                        <p>No image selected</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Section -->
+            <div class="analysis-section">
+                <h3 style="margin-bottom: 20px; color: #333;">Brand Analysis Report</h3>
+                
+                <div class="loading" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <p>Analyzing brand guidelines...</p>
+                </div>
+
+                <div id="analysisResults" style="display: none;">
+                    <table class="analysis-table">
+                        <thead>
+                            <tr>
+                                <th>Guideline</th>
+                                <th>Status</th>
+                                <th>Details</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="analysisTableBody">
+                            <!-- Results will be populated here -->
+                        </tbody>
+                    </table>
+
+                    <div style="margin-top: 30px; padding: 20px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 10px; text-align: center;">
+                        <h4>Overall Brand Compliance Score</h4>
+                        <div id="overallScore" style="font-size: 36px; font-weight: bold; margin-top: 10px;">--</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <a href="#">divum.ai</a> | <a href="#">paramai.studio</a>
+    </div>
+
+    <script>
+        // Simple password hashing (not cryptographically secure, just for demo)
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return hash.toString();
+        }
+
+        function login() {
+            const password = document.getElementById('passwordInput').value;
+            const expectedHash = simpleHash('divum.ai');
+            
+            if (simpleHash(password) === expectedHash) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('loginError').style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        // Handle Enter key in password input
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                login();
+            }
+        });
+
+        // File upload handling
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadZone.addEventListener('click', () => fileInput.click());
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleImageUpload(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleImageUpload(e.target.files[0]);
+            }
+        });
+
+        function handleImageUpload(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                displayImage(e.target.result);
+                analyzeImage();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function loadDemoImage(src) {
+            displayImage(src);
+            analyzeImage();
+        }
+
+        function displayImage(src) {
+            const container = document.getElementById('imageContainer');
+            container.innerHTML = `
+                <img src="${src}" class="uploaded-image" alt="Uploaded image">
+                <svg class="annotation-overlay" id="annotationOverlay">
+                    <!-- Annotations will be added here -->
+                </svg>
+            `;
+        }
+
+        function analyzeImage() {
+            document.getElementById('loadingIndicator').style.display = 'block';
+            document.getElementById('analysisResults').style.display = 'none';
+
+            // Simulate analysis delay
+            setTimeout(() => {
+                performBrandAnalysis();
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.getElementById('analysisResults').style.display = 'block';
+            }, 2000);
+        }
+
+        function performBrandAnalysis() {
+            // Simulated brand analysis results
+            const analysisData = [
+                {
+                    guideline: 'Logo Placement',
+                    status: 'pass',
+                    details: 'Logo positioned correctly with adequate spacing',
+                    score: 95,
+                    annotation: { x: '20%', y: '15%' }
+                },
+                {
+                    guideline: 'Color Consistency',
+                    status: 'warning',
+                    details: 'Minor deviation from brand color palette',
+                    score: 78,
+                    annotation: { x: '60%', y: '40%' }
+                },
+                {
+                    guideline: 'Typography',
+                    status: 'pass',
+                    details: 'Correct font family and sizing used',
+                    score: 88,
+                    annotation: { x: '50%', y: '70%' }
+                },
+                {
+                    guideline: 'Spacing & Layout',
+                    status: 'pass',
+                    details: 'Proper margins and alignment maintained',
+                    score: 92,
+                    annotation: { x: '80%', y: '25%' }
+                },
+                {
+                    guideline: 'Brand Voice',
+                    status: 'fail',
+                    details: 'Messaging tone doesn\'t align with brand guidelines',
+                    score: 45,
+                    annotation: { x: '30%', y: '85%' }
+                }
+            ];
+
+            // Populate table
+            const tableBody = document.getElementById('analysisTableBody');
+            tableBody.innerHTML = '';
+
+            let totalScore = 0;
+            
+            analysisData.forEach(item => {
+                totalScore += item.score;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${item.guideline}</strong></td>
+                    <td><span class="status-badge status-${item.status}">${item.status.toUpperCase()}</span></td>
+                    <td>${item.details}</td>
+                    <td><strong>${item.score}%</strong></td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Calculate overall score
+            const overallScore = Math.round(totalScore / analysisData.length);
+            document.getElementById('overallScore').textContent = overallScore + '%';
+
+            // Add SVG annotations
+            addAnnotations(analysisData);
+        }
+
+        function addAnnotations(analysisData) {
+            const overlay = document.getElementById('annotationOverlay');
+            if (!overlay) return;
+
+            overlay.innerHTML = '';
+
+            analysisData.forEach((item, index) => {
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', item.annotation.x);
+                circle.setAttribute('cy', item.annotation.y);
+                circle.setAttribute('r', '8');
+                circle.classList.add('annotation-point');
+                
+                // Different colors for different statuses
+                const colors = { pass: '#2ecc71', warning: '#f39c12', fail: '#e74c3c' };
+                circle.style.fill = colors[item.status];
+
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', item.annotation.x);
+                text.setAttribute('y', `calc(${item.annotation.y} - 15px)`);
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('fill', colors[item.status]);
+                text.setAttribute('font-size', '12px');
+                text.setAttribute('font-weight', 'bold');
+                text.textContent = index + 1;
+
+                overlay.appendChild(circle);
+                overlay.appendChild(text);
+            });
+        }
+    </script>
+</body>
+</html>
